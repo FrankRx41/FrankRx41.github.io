@@ -1,0 +1,97 @@
+﻿<!DOCTYPE HTML>
+<HTML>
+<HEAD>
+<META CHARSET="UTF-8"/>
+<META NAME="VIEWPORT" CONTENT="WIDTH=DEVICE-WIDTH, INITIAL-SCALE=1, MINIMUM-SCALE=1, MAXIMUM-SCALE=2"/>
+<LINK TYPE="TEXT/CSS" HREF="../css/normalize.css" REL="stylesheet"/>
+<LINK TYPE="TEXT/CSS" HREF="../css/style.css" REL="stylesheet"/>
+<SCRIPT LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT" SRC="../js/window.js"></SCRIPT>
+<SCRIPT LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT" SRC="../js/main.js"></SCRIPT>
+<SCRIPT LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT" SRC="../js/code.js"></SCRIPT>
+<LINK REL="shortcut icon" TYPE="image/x-icon" HREF="../favicon.ico"/>
+<TITLE>frankrx's blog</TITLE>
+</HEAD>
+
+<BODY>
+
+<HEADER>
+<H1>EiSnow</H1>
+<H2>心の言葉</H2>
+<UL>
+<LI><A HREF="https://frankrx41.github.io">home</A></LI>
+<LI><A HREF="https://frankrx41.github.io/experience">experience</A></LI>
+<LI><A HREF="https://frankrx41.github.io/blog">blog</A></LI>
+<LI><A HREF="https://frankrx41.github.io/review">review</A></LI>
+<LI><A HREF="https://frankrx41.github.io/script">script</A></LI>
+</UL>
+</HEADER>
+
+<CONTENT>
+<ASIDE>
+<DIV>
+<H1>Calendar</H1>
+</DIV>
+<DIV>
+<H1>QR code</H1>
+</DIV>
+</ASIDE>
+
+<ARTICLE>
+<H1>Everything</H1>
+
+<P>Everything應該是我最常用的軟體了。 其出色的文件檢索速度，是我這一種大硬盤用戶查找文件的利器。不過呢，使用過程中，也還是難免會有一點問題。</P>
+
+
+<H2>Everything startup</H2>
+
+<P>每次啟動Everything，都要等待一段時間的文件檢索時間。這個問題可以通過禁用自動更新文檔數據庫解決。方法如下：</P>
+
+<!--<P>這個問題，我曾經使用過一個老版本來解決，那是一個不自動更新數據庫的版本。不過那個版本很老，很多我常用的新功能都不完善，所以最後我又換回了新版本。</P>-->
+
+<P>在<I>TOOLS - OPTIONS - INDEXES - NTFS</I>中取消勾選</P>
+<UL>
+<LI>Auto include new fiexed volumes</LI>
+<LI>Auto include new removable volumes</LI>
+</UL>
+
+<P>並且，對所有的local NTFS volumes中硬盤分區取消勾選</P>
+<UL>
+<LI>nclude USN Journal in recent changes</LI>
+<LI>Monitor changes</LI>
+</UL>
+
+<P>這樣子，雖然不能自動監視文件的更新。但我覺得比每次啟動，都花費1分鐘左右的時間｢因為我的文件比較多｣來重新建立索引數據庫要好。</P>
+
+<P>對於文檔數量多的同學，可以在<I>Tools-Options-Indexes</I>中，勾選</P>
+<UL>
+<LI>Compress database</LI>
+</UL>
+
+<!--<P>我不確定該選項會不會對讀取數據庫的時間有影響，只是我的文件太多，而感覺他數據庫是有大小上限的，所以我選擇了這個選項。</P>-->
+
+
+<H2>Update database</H2>
+
+<P>如果按照上面的設置，Everything便不會自動對硬盤進行索引。當需要查看硬盤文檔存儲的最新狀態時，只需要在<I>Tools-Options-Indexes</I>中，選擇<KBD>Force Rebuild</KBD>。就可以對其進行更新。</P>
+
+<P>P.S. 等待Everything數據庫的重建花費的時間和每次啟動Everything的文件檢索時間基本相同。</P>
+
+
+<H2>Control the window</H2>
+
+<P>我有一個管理我桌面窗體的程式，他在大部分情況下都能正常的工作，但是，對於Everything的窗體，他沒有任何效果，不管是移動窗體還是改變窗體的大小。即Everything不會響應SendMessage發送的消息。</P>
+
+<P>出現這個問題，是因為Everything為了檢索NTFS分區，獲取了管理員權限。而一般的Window應用程序並沒有該權限。所以我們發送的窗口控制消息因為權限不足，所以不會被Everything窗體響應。</P>
+
+<P>解決方法只需要讓發送的窗口控制消息的程序以管理員方式運行，即擁有管理員權限。</P>
+</ARTICLE>
+</CONTENT>
+
+<FOOTER>
+<P>EiSnow</P>
+<P>心の言葉</P>
+<P>Copyright © 2017-2018 <A>EiSnow</A> All Rights Reserved.</P>
+</FOOTER>
+
+</BODY>
+</HTML>

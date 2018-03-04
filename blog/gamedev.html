@@ -1,0 +1,1717 @@
+﻿<!DOCTYPE html>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8" />
+<STYLE>
+body{
+  font-family:'方正粗雅宋_GBK';
+  font-size: 16px;
+  margin: auto;
+  overflow-y:scroll;
+  max-width: 800px;
+}
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #939393;
+  font-size: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 6px 10px;
+  border-radius: 3px;
+  box-sizing:content-box;
+  margin-top: 0px;
+}
+code, tt {
+  font-family:'Fixedsys Excelsior 3.01'; 
+  line-height: 100%;
+  margin: 0px 1px;
+  padding: 0px 1px;
+  white-space: nowrap;
+  border: 1px solid #939393;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+kbd {
+  line-height: 100%;
+	display: inline-block;
+	margin: 0 2px 0 2px;
+	padding: 2px 5px 2px 5px;
+	font-family: Consolas, "Liberation Mono", Courier, monospace;
+	font-size: 90%;
+	color: #242729;
+	text-shadow: 0 1px 0 #fff;
+	background-color: #eee;
+	border: 1px solid #abb;
+	border-radius: 2px;
+	box-shadow: 0 1px 0 rgba(12,13,14,0.2), 0 0 0 2px #fff inset;
+  box-sizing:content-box;
+	white-space: nowrap;
+}
+.code-control-div{
+  margin-bottom: -1px;
+}
+.code-control-button{
+  background-color: #f8f8f8;
+  color: #1e75bb;
+  text-align: center;
+  text-decoration: none;
+  margin-left: 0px;
+  margin-right: 1px;
+  font-size: 13px;
+  padding: 2px 6px;
+  width:50px;
+  display: inline-block;
+  padding: 2px;
+  
+  /* msdn.microsoft.com */
+  border-left: solid 1px #939393;
+  border-top: 1px solid #939393;
+  
+  border-top-left-radius: 4px;
+  border-right: 1px solid #939393;
+  border: 1px solid #939393;
+  border-top-right-radius: 4px;
+  border-bottom: 0px;
+  /*float: left;*/
+}
+.code-control-button:hover{
+  color: #00bcf2;
+  text-decoration: underline;
+  cursor: default;
+}
+.code-control-button
+</STYLE>
+<SCRIPT>
+window.onload = function(){
+	var pre = document.getElementsByTagName("pre");
+	for(var i=0;i<pre.length;i++){
+	if(pre.item(i).firstChild.tagName != undefined && pre.item(i).firstChild.tagName.toLowerCase() == "code"){
+		var div = document.createElement("div");
+		pre.item(i).parentNode.insertBefore(div,pre.item(i));
+		div.classList.add('code-control-div');
+		
+		var btn = document.createElement("A");
+		btn.innerHTML = "Select";
+		btn.classList.add('code-control-button');
+		btn.onclick = function() {
+			var range = document.createRange();
+			var referenceNode = this.parentNode.nextSibling.firstChild;
+			range.selectNode(referenceNode);
+			window.getSelection().removeAllRanges();
+			window.getSelection().addRange(range);
+		};
+		div.appendChild(btn);
+		
+		var btn = document.createElement("A");
+		btn.innerHTML = "roll";
+		btn.classList.add('code-control-button');
+		btn.onclick = function() {
+			var pre = this.parentNode.nextSibling;
+			console.log(pre.style.maxHeight);
+			if(pre.style.maxHeight == ""){
+				pre.style.maxHeight = "300px";
+			}else{
+				pre.style.maxHeight = "";
+			}
+		};
+		if(pre.item(i).offsetHeight > 300){
+			div.appendChild(btn);
+		}
+		console.log(pre.item(i).offsetHeight);
+		pre.item(i).style.maxHeight = "300px";
+	}
+	}
+};
+</SCRIPT>
+
+<LINK HREF="http://cdn.bootcss.com/highlight.js/8.0/styles/vs.min.css" REL="stylesheet">
+<STYLE>
+.hljs{
+  background:inherit;
+}
+</STYLE>
+<SCRIPT SRC="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></SCRIPT>  
+<SCRIPT >hljs.initHighlightingOnLoad();</SCRIPT>  
+
+</HEAD>
+
+<BODY>
+<H1>基於Windows系統的DOS遊戲開發</H1>
+<H2>前言</H2>
+<P>我是一個立志從事遊戲開發行業的在校大學生，可以稱呼我為「符」。我曾經在大二時擔任過科協遊戲組組長，但是，那個時候的我還不夠成熟，很多的東西都只懂皮毛，所以那個時候給大一的學生上課中有很多的地方沒有講好，我感覺非常的遺憾。一年後之後，在重新學習了C語言，編程藝術，代碼重構，遊戲框架，WIN32API這些知識後，我感覺是時候彌補大二那會兒的遺憾了。所以，打算把我遊戲開發的經驗全部寫在這裡。</P>
+<P>這些經驗，我打算留給想從事遊戲開發的讀者。在接著讀下去之前，我期望讀者您已經具備C語言的編程的基礎。後面的文章，我會以Windows平台為基礎，用C語言跟各位讀者講授我的遊戲編程經驗。我不會去和讀者談論編程語言的語法，那些不是遊戲開發的重點，他們可以從很多的地方學到，談論他們會浪費很多的時間，很抱歉。</P>
+<P>這裡，我在推薦幾本書給各位讀者，「C語言的編程與藝術」，「C語言專家編程」，「Windows程序設計第5版」。現在的我遺憾還在學習中，難免會有錯誤和不足，還望各位讀者包含，指正。</P>
+<P>閱讀這篇教程，我推薦的文本字體是「方正粗雅宋_GBK」，代碼字體是「Fixedsys Excelsior 3.01」。分別可以從<A HREF="http://www.sozi.cn/downdetail.php?aid=2106">這裡</A>和<A HREF="http://www.fixedsysexcelsior.com/fonts/FSEX300.ttf">這裡</A>下載。<!--或許我應該把這兩個字體上傳到我的博客上？-->本網站啟用了語法突顯來自於highlightjs.org，需要接入互聯網才能啟用。</P>
+<H2>特別鳴謝</H2>
+<P>這篇文章能夠順利地發表，離不開支持我的人給我的幫助。在此，我特別感謝何科技同學能夠在百忙之中騰出時間幫助審閱我的文檔。</P>
+<H2>第零課 熟悉我們的IDE</H2>
+<P>聲明，本教程中所有的代碼是用C語言在Visual Studio 2013中編寫的。我堅決不用C++！原因我們有時間再討論。</P>
+<P>先讓我們來熟悉一下編譯環境IDE，後面出現的代碼在Visual Studio中編譯出現的錯誤及解決方法。</P>
+<P>C4996：這個錯誤出現的原因是因為某些函式不安全，運行的時候可能會出現內存溢出問題。解決方法可以通過簡單的禁用警告<CODE>#pragma warning(disable:4996)</CODE>或者關閉SDL檢查或者使用對應的安全函式替代不安全函式。</P>
+<P>C4716：這個錯誤的原因是因為某個有返回值的函式沒有顯示的給出返回值。解決方法可以通過禁用警告<CODE>#pragma warning(disable:4716)</CODE>或者將代碼的擴展名由「cpp」改為「c」。</P>
+<P>後面運行的代碼，可能需要以下頭標檔的支援。我比較懶，後面的代碼如果只使用了這幾個頭標檔我可能就不會貼出來了。還請讀者自己補完。</P>
+<PRE><CODE>#include < Windows.h >
+#include < math.h >
+#include < stdio.h ></CODE></PRE>
+<P>如果是C語言編譯器，那麼一些基礎的頭標檔「stdio.h」裡面的函式甚至可以在不包含頭標檔的前提下直接使用。詳請參考<A HREF="https://en.wikipedia.org/wiki/C_(programming_language)#K&R_C">K&R C</A>的技術說明。而「math.h」這個頭標檔在使用其函式時，請絕對要包含之。不然編譯器會假設「math.h」中的函式返回值為<CODE>int</CODE>而非<CODE>double</CODE>。</P>
+<P>對於非Windows系統的同學，我只能說抱歉了。我這裡的代碼，完完全全是對著Windows系統寫的，沒有任何跨平台性可言，而我目前也不打算涉獵其他平台的遊戲編程，只想專心在Windows上開發遊戲。所以，非Windows系統的同學，要不裝虛擬機，要不就放棄吧~</P>
+<H2>第一課 C語言遊戲開發基礎</H2>
+<H3>清除已經在屏幕中存在的內容</H3>
+<P>遊戲，自然離不開和玩家的交互。交互最基礎的，也就是屏幕。通過對屏幕的更新，我們可以傳達給玩家當前的遊戲狀態。而更新屏幕最基礎的方法，自然是「stdio.h」中提供的<CODE>printf</CODE>函式。但是，這個函式似乎只能不斷的往後寫數據，而不能清除已經存在的數據。</P>
+<P>其實不然。<CODE>printf</CODE>函式的新功能中存在一個轉譯字元「<CODE>\b</CODE>」，其功能為使光標後退一步。不過不會刪除掉已經存在的字元，只會簡單的移動光標。所以，要做出退格的效果，需要在<CODE>printf(&quot;\b&quot;)</CODE>之後再輸出一個空格以覆蓋已經存在的字元。</P>
+<PRE><CODE>int backspace(){
+    return printf("\b \b");
+}</CODE></PRE>
+<P>而默認模式下，一行的寬度為80字元「在Windows10中為120」，所以我們還可以寫一個這樣的函數：</P>
+<PRE><CODE>int backtohead(){
+    for(int i=0;i<80;i++){
+        printf("\b");
+    }
+    return 80;
+}</CODE></PRE>
+<P>這些東西，現在還沒有甚麼用。不如說，一點用都沒有，除了後面的幾個程序會用到以外。因為「<CODE>\b</CODE>」不能夠回到上一行，也不能夠移動光標到指定的位置。</P>
+<H3>暫停進程</H3>
+<P>暫停其實很簡單，至少在Windows系統裡是這樣。只需要調用一個函式即可：<CODE>Sleep</CODE>。這個函式包含在「Windows.h」頭標檔中。其參數為暫停的時間，單位是毫秒。注意，「S」為大寫。在「Windows.h」中存在的函式首字母都是大寫，這就是傳說中的匈牙利命名法的一個應用。而「Windows.h」裡面的函式也就是通常說的WIN32API。</P>
+<P>一個簡單的倒計時程序，每秒鐘輸出提示消息，5秒後結束。</P>
+<PRE><CODE>int main(){
+    int sec = 5;
+    for(int i=sec;i>0;i--){
+        printf("wait %d second(s) exit.\n",i);
+        Sleep(1000);
+    }
+}</CODE></PRE>
+<P>當然也可以在<CODE>printf</CODE>後加上<CODE>backtohead</CODE>，讓效果更加的華麗(?)。</P>
+<PRE><CODE>int backtohead(){
+    for(int i=0;i<80;i++){
+        printf("\b");
+    }
+}
+
+int main(){
+    int sec = 5;
+    for(int i=sec;i>0;i--){
+        printf("wait %d second%s to exit.",i,i>1 ? "s" : "" );
+        backtohead();
+        Sleep(1000);
+    }
+}</CODE></PRE>
+<P>我還加上了一個三目運算符<CODE> ? : </CODE>以判second後面是否要跟著s。</P>
+<H3>動態HelloWorld</H3>
+<P>現在，讓我們寫一個千年不變的程序「HelloWorld」。我們的這個「HelloWorld」和一般的「HelloWorld」不同，他會在每一毫秒動態的改變每一個字元大小寫。</P>
+<PRE><CODE>char str[] = "hello world";
+
+int backtohead(){
+    for(int i=0;i<80;i++){
+        printf("\b");
+    }
+}
+
+int main(){
+    int i = 0;
+    while(1){
+        str[i] = toupper(str[i]);
+        
+        backtohead();
+        printf("%s",str);
+        
+        str[i] = tolower(str[i]);
+
+        i++;
+        i%=strlen(str);
+        Sleep(100);
+    }
+}</CODE></PRE>
+<P>其實，這個程序也就是一個簡單的遊戲框架中的主迴圈。</P>
+<P>遊戲的迴圈其實很簡單，做遊戲的各種處理，刷新屏幕，然後進入下一次迴圈的處理。但是，為了讓遊戲在各種不同的CPU的作業系統中都能夠以相同的速度運行，還會進行延遲等待。本程序也是如此。首先轉化<CODE>str</CODE>中的大小寫，然後輸出他們，在將<CODE>str</CODE>還原，最後做休眠。</P>
+<P>P.S.這個程序中的<CODE>str</CODE>如果宣告為指針，運行會出錯，原因可以參考<A HREF="https://stackoverflow.com/a/12122385/7661038">這裡</A>。</P>
+<H3>移動光標</H3>
+<P>既然<CODE>printf</CODE>中的「<CODE>\b</CODE>」不能夠滿足光標換行的要求，那麼應該怎麼做呢？在以前的DOS系統中，有一個函式<CODE>gotoxy</CODE>，其兩個參數分別是列和行。其在「conio.h」中宣告。不過，在Windows系統中並沒有實現這個函數，取而代之的是一個<CODE>SetConsoleCursorPosition</CODE>的API。這個API比較複雜，其中還涉及到一些Windows系統的高級數據結構。不過我們可以這樣子對其進行一個封裝：</P>
+<PRE><CODE>int gotoxy(int x,int y){
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD coord = {x,y};
+    return SetConsoleCursorPosition(consoleHandle,coord);
+}</CODE></PRE>
+<H3>隱藏和顯示光標</H3>
+<P>雖然設置光標在一般程序中並不重要，但是，在遊戲中這可是決定了遊戲的美觀。同樣，我們可以通過Windows提供的API對光標的樣式進行設置。</P>
+<P>隱藏光標</P>
+<PRE><CODE>int hidecursor(){
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO info;
+    GetConsoleCursorInfo(consoleHandle,&info);
+    info.bVisible = FALSE;
+    return SetConsoleCursorInfo(consoleHandle,&info);
+}</CODE></PRE>
+<P>顯示光標 </P>
+<PRE><CODE>int showcursor(){
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO info;
+    GetConsoleCursorInfo(consoleHandle,&info);
+    info.bVisible = TRUE;
+    return SetConsoleCursorInfo(consoleHandle,&info);
+}</CODE></PRE>
+<P>第一課的基礎內容就這麼多，讀者感覺強度如何？以及被封裝的代碼，WIN32API的使用沒必要完全的理解，只要知道怎麼用就行了。我們再提點有趣的內容。<CODE>printf</CODE>函式的那些事。這也是我在大二上課那會兒曾經講過的我感覺很有趣的內容。</P>
+<P><CODE>printf</CODE>函式其實是有返回值的，你可以猜猜看其返回值是甚麼。答案是<FONT COLOR="#FFFFFF">輸出的字元的長度</FONT>。那麼，下面的這個程序跑出的結果會是多少呢？</P>
+<PRE><CODE>int main(){
+    printf("%d",printf("0123456"));
+    getchar();
+}</CODE> </PRE>
+<P>答案是<FONT COLOR="#FFFFFF">01234567</FONT>。提示，用滑鼠選取後可查看答案。</P>
+<H2>第二課 讀取鍵盤</H2>
+<H3>新的getchar方法</H3>
+<P>P.S.我不得不說，就我個人感覺，遊戲組授課期間我講得最爛的課就是這一節了。沒有把握好強度和時間是最大的原因。這次，我決定要血洗前恥。</P>
+<P>遊戲中最常用的鍵是哪幾個？<KBD>Q</KBD> <KBD>W</KBD> <KBD>E</KBD> <KBD>R</KBD>？<KBD>↑</KBD> <KBD>↓</KBD> <KBD>←</KBD> <KBD>→</KBD> ？<KBD>F1</KBD>~<KBD>F12</KBD>？說白了，就是兩種，一種是可以用<CODE>scanf</CODE>，<CODE>getchar</CODE>這類函式讀取的鍵，另一種則是書本上從來沒有教過如何讀取的鍵。</P>
+<P><CODE>getchar</CODE>必須要接受到<KBD>enter</KBD>後才能夠返回，這在遊戲中顯得非常的尷尬。這裡介紹一個可以不用按下<KBD>enter</KBD>就能返回的函式，<CODE>getch</CODE>。其在「conio.h」中宣告。基本與<CODE>getchar</CODE>相同，除了不用按下<KBD>enter</KBD>以外。</P>
+<P>結合上節課講授的迴圈，我們寫一個檢測當前所按下的鍵的程式。</P>
+<PRE><CODE>int backtohead(){
+    for(int i=0;i<80;i++){
+        printf("\b");
+    }
+    return 80;
+}
+
+int main(){
+    while(1){
+        int c = getch();
+        printf("you press: %c",c);
+        backtohead();
+    }
+}</CODE></PRE>
+<P>不過，這個程式有一個很嚴重的問題：當沒有鍵所按下的時候，會陷入等待狀態。或者說，他不能顯示「unpress any key」。他只能檢測按下的鍵，而不能檢測沒有按下的鍵。</P>
+<P>追其原因，就在<CODE>getch</CODE>函式是阻塞型函式，所謂阻塞，就是會中斷當前進度，等待其返回。順帶一提，<CODE>getchar</CODE>也是阻塞型函式，雖然我們不使用他。因為這個原因，我們在每次調用<CODE>getch</CODE>前，應該先判斷一下是否有鍵被按下，如果有，就用<CODE>getch</CODE>來讀，否者輸出「unpress any key」。而判斷有沒有鍵被按下的函式就是今天的主角：<CODE>kbhit</CODE>。其在「conio.h」中宣告，沒有參數，有鍵按下返回1(?)，否則返回0。</P>
+<P>這次，我們寫一個能夠判斷沒有鍵被按下的程式。</P>
+<PRE><CODE>int backtohead(){
+    for(int i=0;i<80;i++){
+        printf("\b");
+    }
+    return 80;
+}
+
+int main(){
+    while(1){
+        if(kbhit()){
+            int c = getch();
+            printf("you press: %c    ",c);
+        }else{
+            printf("unpress any key.");
+        }
+        backtohead();
+        Sleep(64);
+    }
+}</CODE></PRE>
+<P>要在VS中編譯這個程式，除了要加入「conio.h」這個頭標檔以外，還需要關閉C4996這個錯誤警告，關閉方法可以參考第零課。</P>
+<P>如果不加入<CODE>Sleep</CODE>,那麼，可能就看不到按下的鍵的情況。而休眠的64毫秒，只是我的個人願望。</P>
+<P>順帶一提，如果按下的鍵沒有被<CODE>getch</CODE>之類的函式讀走，<CODE>kbhit</CODE>的返回值會一直為1直到鍵被讀走。</P>
+<P>繼續<CODE>getch</CODE>的話題。那個程式中，可以發現，不單單<KBD>A</KBD>~<KBD>Z</KBD>這樣的一般鍵有反應，<KBD>ESC</KBD> <KBD>F1</KBD>~<KBD>F12</KBD> <KBD>↑</KBD> <KBD>↓</KBD> <KBD>←</KBD><KBD>→</KBD>這些鍵也都是會返回的。我們稍微修改一下程式，同時打印出字元和編碼。</P>
+<PRE><CODE>int main(){
+    while(1){
+        int c = getch();
+        printf("you press: %c %d\n",c,c);
+    }
+}</CODE></PRE>
+<P>用這個程式可以讀到這樣一張表：</P>
+<PRE>you press: � 224
+you press: H 72
+you press: � 224
+you press: P 80
+you press: � 224
+you press: K 75
+you press: � 224
+you press: M 77
+you press:   27</PRE>
+<P>這些是我依次按下<KBD>↑</KBD> <KBD>↓</KBD> <KBD>←</KBD> <KBD>→</KBD> <KBD>ESC</KBD>後的結果，其餘的鍵請讀者自行測試後補完這張表。可以看到，有些鍵返回了兩次，而有些鍵只會返回一次。</P>
+<P>返回一次的一般是可見字元，而返回兩次的一般是功能鍵。而功能鍵的第一個返回值為224或者是0。讓我們寫一個可以讀取一些功能鍵的程式。</P>
+<PRE><CODE>#define arraylen(x) (sizeof(x)/sizeof(x[0]))
+
+struct
+{
+    unsigned char id1;
+    unsigned char id2;
+    char * name;
+}key[] = {
+    224,72, "UP",
+    224,80, "Down",
+    224,75, "Left",
+    224,77, "Right",
+    0,  59, "F1",
+    0,  60, "F2",
+    27, 0,  "Esc",
+    9,  0,  "Table",
+};
+
+int main(){
+    while(1){
+        if(kbhit()){
+            int c = getch();
+            int d = 0;
+            if(c==224 || c==0){
+                d = getch();
+            }
+
+            int i;
+            for(i=0;i < arraylen(key);i++){
+                if(c==key[i].id1 && d==key[i].id2){
+                    printf("you press: %s\n",key[i].name);
+                    break;
+                }
+            }
+            if(i==arraylen(key)){
+                printf("you press: %c %d\n",c,c);
+            }
+        }
+    }
+}</CODE></PRE>
+<P>可以通過補充key表加入更多鍵的消息。</P>
+<P><CODE>arraylen</CODE>是我定義的一個獲取數組長度的巨集。這個方法非常的好用，希望讀者能夠理解。後面我還會多次用到它。順便一提,在「windows.h」中也定義了一個類似的巨集<CODE>ARRAYSIZE</CODE>，用法和我所寫的這個相同。</P>
+<H3>簡單應用：貪吃蛇引擎</H3>
+<P>最後，讓我們結合<CODE>gotoxy</CODE>和方向鍵寫一個移動點的小遊戲。</P>
+<PRE><CODE>int hidecursor()
+{
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO info;
+    GetConsoleCursorInfo(consoleHandle,&info);
+    info.bVisible = FALSE;
+    return SetConsoleCursorInfo(consoleHandle,&info);
+}
+
+int gotoxy(int x,int y)
+{
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD coord = {x,y};
+    return SetConsoleCursorPosition(consoleHandle,coord);
+}
+
+int main(){
+    int x = 0,
+        y = 0,
+        oldx = -1,
+        oldy = -1;
+    hidecursor();
+
+    while(1){
+
+        if(kbhit()){
+            int c = getch();
+            switch(c){
+            case 72:
+                y-=1;
+                break;
+            case 80:
+                y+=1;
+                break;
+            case 75:
+                x-=2;
+                break;
+            case 77:
+                x+=2;
+                break;
+            }
+        }
+
+        if(!(oldx==x && oldy==y)){
+            gotoxy(oldx,oldy);
+            printf("  ");
+            
+            gotoxy(x,y);
+            printf("+");
+
+            oldx=x;
+            oldy=y;
+        }
+    }
+}</CODE></PRE>
+<P>讓我們在為其加入貪吃蛇那樣的，沿默認方向自動移動的功能，以及按下<KBD>ESC</KBD>結束程式。</P>
+<PRE><CODE>int main(){
+    int x = 0,
+        y = 0,
+        oldx = -1,
+        oldy = -1;
+
+    int dir = 77;
+    hidecursor();
+
+    while(1){
+        
+        if(kbhit()){
+            int c = getch();
+            int olddir = dir;
+            dir = c;
+            switch(c){
+            case 72:
+                y-=1;
+                break;
+            case 80:
+                y+=1;
+                break;
+            case 75:
+                x-=2;
+                break;
+            case 77:
+                x+=2;
+                break;
+            case 27:
+                return 0;
+            default:
+                dir = olddir;
+            }
+        }
+
+        switch(dir)
+        {
+        case 72:
+            y-=1;
+            break;
+        case 80:
+            y+=1;
+            break;
+        case 75:
+            x-=2;
+            break;
+        case 77:
+            x+=2;
+            break;
+        }
+
+        if(!(oldx==x && oldy==y)){
+            gotoxy(oldx,oldy);
+            printf("  ");
+            
+            gotoxy(x,y);
+            printf("+");
+
+            oldx=x;
+            oldy=y;
+        }
+
+        Sleep(64);
+    }
+}</CODE></PRE>
+<P>讓我們對鍵盤進行一次封裝，以及再加入一些高級功能：讓動作函式和鍵綁定。</P>
+<PRE><CODE>#define arraylen(x) (sizeof(x)/sizeof(x[0]))
+
+int hidecursor()
+{
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO info;
+    GetConsoleCursorInfo(consoleHandle,&info);
+    info.bVisible = FALSE;
+    return SetConsoleCursorInfo(consoleHandle,&info);
+}
+
+int gotoxy(int x,int y)
+{
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD coord = {x,y};
+    return SetConsoleCursorPosition(consoleHandle,coord);
+}
+
+int x = 0,
+    y = 0;
+
+int moveup(){
+    y -= 1;
+}
+int movedown(){
+    y += 1;
+}
+int moveleft(){
+    x -= 2;
+}
+int moveright(){
+    x += 2;
+}
+int gameover(){
+    exit(0);
+}
+
+struct{
+    int key;
+    int (*func)(void);
+}key[] = {
+    72,moveup,
+    80,movedown,
+    75,moveleft,
+    77,moveright,
+    27,gameover,
+};
+
+int keypress(){
+    int c = 0;
+    while(kbhit()){
+        c = getch();
+    }
+    return c;
+}
+
+int main(){
+    int oldx = -1,
+        oldy = -1;
+
+    int dir = 77;
+    hidecursor();
+
+    while(1){
+        int c = keypress();
+        for(int i=0;i < arraylen(key);i++){
+            if(c == key[i].key){
+                key[i].func();
+                dir = key[i].key;
+            }
+        }
+
+        for(int i=0;i < arraylen(key);i++){
+            if(dir == key[i].key){
+                key[i].func();
+            }
+        }
+
+        if(!(oldx==x && oldy==y)){
+            gotoxy(oldx,oldy);
+            printf("  ");
+            
+            gotoxy(x,y);
+            printf("+");
+
+            oldx=x;
+            oldy=y;
+        }
+
+        Sleep(64);
+    }
+}</CODE></PRE>
+<H3>高級應用：修改鍵映射</H3>
+<P>您或許會對這樣的代碼抱有疑問，為甚麼要這樣寫？像之前那樣把每一個鍵寫在一個<CODE>switch</CODE>中不好嗎？答案是，為了以後的擴展和維護，這樣的代碼是絕對比前一份代碼要好的。比如說，我們可以加入修改鍵映射的功能。</P>
+<PRE><CODE>#define arraylen(x) (sizeof(x)/sizeof(x[0]))
+
+int hidecursor()
+{
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO info;
+    GetConsoleCursorInfo(consoleHandle,&info);
+    info.bVisible = FALSE;
+    return SetConsoleCursorInfo(consoleHandle,&info);
+}
+
+int gotoxy(int x,int y)
+{
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD coord = {x,y};
+    return SetConsoleCursorPosition(consoleHandle,coord);
+}
+
+int x = 0,
+    y = 0;
+
+int moveup(){
+    y -= 1;
+}
+int movedown(){
+    y += 1;
+}
+int moveleft(){
+    x -= 2;
+}
+int moveright(){
+    x += 2;
+}
+int gameover(){
+    exit(0);
+}
+
+struct{
+    int key;
+    int keyname;
+    int (*func)(void);
+}key[] = {
+    72, "up",   moveup,
+    80, "down", movedown,
+    75, "left", moveleft,
+    77, "right",moveright,
+    27, "exit", gameover,
+};
+
+int keypress(){
+    int c = 0;
+    while(kbhit()){
+        c = getch();
+    }
+    return c;
+}
+
+int mapkey(){
+    for(int i=0;i < arraylen(key);i++){
+        printf("%s:\t%d\n",key[i].keyname,key[i].key);
+    }
+
+    for(int i=0;i < arraylen(key);i++){
+        printf("Input %s key: ",key[i].keyname);
+
+        int c;
+        while(!(c=keypress()));
+
+        key[i].key = c;
+        printf("%d\n",c);
+    }
+    
+    printf("press Enter to continue...");
+    getchar();
+    system("cls");
+}
+
+int main(){
+    int oldx = -1,
+        oldy = -1;
+
+    int dir = 77;
+    hidecursor();
+    
+    mapkey();
+
+    while(1){
+        int c = keypress();
+        for(int i=0;i < arraylen(key);i++){
+            if(c == key[i].key){
+                key[i].func();
+                dir = key[i].key;
+            }
+        }
+
+        for(int i=0;i < arraylen(key);i++){
+            if(dir == key[i].key){
+                key[i].func();
+            }
+        }
+
+        if(!(oldx==x && oldy==y)){
+            gotoxy(oldx,oldy);
+            printf("  ");
+            
+            gotoxy(x,y);
+            printf("+");
+
+            oldx=x;
+            oldy=y;
+        }
+
+        Sleep(64);
+    }
+}</CODE></PRE>
+<P>這個程式我使用了一個函式<CODE>system("cls")</CODE>，簡單的理解為清除屏幕就行，等下我會詳細討論(?)。現在我們可以運行一下這個程式，把鍵由<KBD>↑</KBD> <KBD>↓</KBD> <KBD>←</KBD> <KBD>→</KBD> <KBD>esc</KBD>改為<KBD>W</KBD> <KBD>S</KBD> <KBD>A</KBD> <KBD>D</KBD> <KBD>esc</KBD>。enjoy！</P>
+<H3>Windows系統中的keypress寫法</H3>
+<P>P.S.我說實話，在Windows系統中根本沒有必要去學這麼複雜的東西來判斷鍵盤的狀態，只需要一個<CODE>GetAsyncKeyState</CODE>就能夠輕鬆判斷出所有鍵的狀態，而且<CODE>GetAsyncKeyState</CODE>比<CODE>getch</CODE>好用得多。但是，我還是想要講一下<CODE>getch</CODE>這個函式，這純粹只是我的願望，很抱歉。</P>
+<P>而如果想用Windows系統中處理鍵盤的方法，對於我們已經寫好的封裝來說，只需要簡單的更改一下<CODE>keypress</CODE>函式即可。</P>
+<PRE><CODE>int keypress(){
+    for(int i=0;i < 0xFF;i++){
+        if(i == 35)continue;
+        if(GetAsyncKeyState(i)&0x8000){
+            return i;
+        }
+    }
+    return 0;
+}</CODE></PRE>
+<P>因為一些比較奇怪的原因，我的Windows系統在沒有鍵按下的時候總是返回35，所以，我做了一點小處理。而<CODE>mapkey</CODE>函式也要更改，全部改完後的代碼如下。</P>
+<PRE><CODE>#define arraylen(x) (sizeof(x)/sizeof(x[0]))
+
+int hidecursor()
+{
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO info;
+    GetConsoleCursorInfo(consoleHandle,&info);
+    info.bVisible = FALSE;
+    return SetConsoleCursorInfo(consoleHandle,&info);
+}
+
+int gotoxy(int x,int y)
+{
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD coord = {x,y};
+    return SetConsoleCursorPosition(consoleHandle,coord);
+}
+
+int x = 0,
+    y = 0;
+
+int moveup(){
+    y -= 1;
+}
+int movedown(){
+    y += 1;
+}
+int moveleft(){
+    x -= 2;
+}
+int moveright(){
+    x += 2;
+}
+int gameover(){
+    exit(0);
+}
+
+struct{
+    int key;
+    int keyname;
+    int (*func)(void);
+}key[] = {
+    VK_UP,      "up",   moveup,
+    VK_DOWN,    "down", movedown,
+    VK_LEFT,    "left", moveleft,
+    VK_RIGHT,   "right",moveright,
+    VK_ESCAPE,  "exit", gameover,
+};
+
+int keypress(){
+    for(int i=0;i < 0xFF;i++){
+        if(i == 35)continue;
+        if(GetAsyncKeyState(i)&0x8000){
+            return i;
+        }
+    }
+    return 0;
+}
+
+int mapkey(){
+    for(int i=0;i < arraylen(key);i++){
+        printf("%s:\t%d\n",key[i].keyname,key[i].key);
+    }
+
+    for(int i=0;i < arraylen(key);i++){
+        Sleep(128);
+        printf("Input %s key: ",key[i].keyname);
+
+        int c;
+        while(!(c=keypress()));
+
+        key[i].key = c;
+        printf("%d\n",c);
+    }
+    
+    printf("press Enter to continue...");
+    getchar();
+    system("cls");
+}
+
+int main(){
+    int oldx = -1,
+        oldy = -1;
+
+    int dir = 77;
+    hidecursor();
+    
+    mapkey();
+
+    while(1){
+        int c = keypress();
+        for(int i=0;i < arraylen(key);i++){
+            if(c == key[i].key){
+                key[i].func();
+                dir = key[i].key;
+            }
+        }
+
+        for(int i=0;i < arraylen(key);i++){
+            if(dir == key[i].key){
+                key[i].func();
+            }
+        }
+
+        if(!(oldx==x && oldy==y)){
+            gotoxy(oldx,oldy);
+            printf("  ");
+            
+            gotoxy(x,y);
+            printf("+");
+
+            oldx=x;
+            oldy=y;
+        }
+
+        Sleep(64);
+    }
+}</CODE></PRE>
+<P>我稍微也改了一下<CODE>key</CODE>的初始值，<CODE>mapkey</CODE>中加入的<CODE>Sleep(128)</CODE>非常重要，讀者可以註釋之查看效果。其餘主函式，每一個動作子函式都沒有做任何的修改。這就是封裝到位的好處。</P>
+<P>在Windows系統中還有一個函式<CODE>GetKeyState</CODE>，他們的區別可以看<A HREF="https://stackoverflow.com/a/25893231/7661038">這裡</A>。</P>
+<P>第二課就這樣結束了，是不是覺得難度非常的大？我承認，我使用了C語言函式指針這樣的高級結構是很大的提高了本課的難度。我還是希望讀者能夠理解這種寫法。這種寫法對於後期的引擎設計是有很大的幫助的。</P>
+<H2>第三課 刷新屏幕和遊戲迴圈</H2>
+<H3>清除屏幕</H3>
+<P>可以看到之前那個程式是通過保留上一次的位置，然後清除上一個位置的點來做到更新的。這樣不夠完美，如果有一個清除所有字元的函式存在，那就可以省掉保存上次位置的兩個變數了。</P>
+<PRE><CODE>int clearscreen(){
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    DWORD count;
+    DWORD cellCount;
+    COORD coord = {0,0};
+    GetConsoleScreenBufferInfo(consoleHandle,&csbi);
+    cellCount = csbi.dwSize.X *csbi.dwSize.Y;
+    FillConsoleOutputCharacter(consoleHandle,' ',cellCount,coord,&count);
+    FillConsoleOutputAttribute(consoleHandle,csbi.wAttributes,cellCount,coord,&count);
+    SetConsoleCursorPosition(consoleHandle,coord);
+}</CODE></PRE>
+<P>還有另一種寫法</P>
+<PRE><CODE>int clearscreen(){
+    return system("cls");
+}</CODE></PRE>
+<P>可惜的是，這些函式會產生一個屏幕閃爍的現象。下面的程式，可以看到固定位置的hello world有閃爍的現象。</P>
+<PRE><CODE>int clearscreen()
+{
+    return system("cls");
+}
+
+int gotoxy(int x,int y)
+{
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD coord = {x,y};
+    return SetConsoleCursorPosition(consoleHandle,coord);
+}
+
+int main(){
+    while(1){
+        clearscreen();
+
+        gotoxy(0,0);
+        printf("hello world");
+
+        for(int i=0;i<50;i++){
+            gotoxy(rand()%80,rand()%23+1);
+            printf("fuck");
+        }
+    }
+}</CODE></PRE>
+<P>emm，我也不知道自己抱著甚麼樣的心態寫的這個程式。</P>
+<H3>雙緩衝</H3>
+<P>要解決上面的程式中hello world的閃爍可以使用的方法就是雙緩衝。其實就是不停的判斷該位置的字元是否有更新，有則更新，無則不做任何事情。</P>
+<PRE><CODE>int f = 0,b = 1;
+int buffer[2][25*80] = {0};
+
+int gotoxy(int x,int y)
+{
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD coord = {x,y};
+    return SetConsoleCursorPosition(consoleHandle,coord);
+}
+
+int clearscreen()
+{
+    memset(buffer[b],0,sizeof(buffer[b]));
+}
+
+int printxyf(int x,int y,char * s){
+    for(int i=0;i < strlen(s);i++){
+        buffer[b][y*80+x+i] = s[i];
+    }
+}
+
+int swapbuffer(){
+    for(int i=0;i<25*80;i++){
+        if(buffer[f][i] != buffer[b][i]){
+            gotoxy(i%80,i/80);
+            printf("%c",buffer[b][i]);
+            buffer[f][i] = buffer[b][i];
+        }
+    }
+    int t = f;
+    f = b;
+    b = t;
+}
+
+int main(){
+    while(1){
+        clearscreen();
+
+        printxyf(0,0,"hello world");
+
+        for(int i=0;i<50;i++){
+            printxyf(rand()%80,rand()%23+1,&quot;fuck %d&quot;,i);
+        }
+
+        swapbuffer();
+    }
+}</CODE></PRE>
+<P>每次<CODE>print</CODE>不是直接輸出在屏幕上，而是輸出在一個緩衝區中。在每次回圈時，再把緩衝區中的字元輸出到屏幕上。<CODE>swapbuffer</CODE>就是一個交換緩衝區並且更新屏幕的函式。我還寫了一個<CODE>printxyf</CODE>，將字元輸出到指定的位置的函式。</P>
+<P>可以明顯的看出，hello world字元沒有再出現閃爍的現象。</P>
+<P>不過，<CODE>printxyf</CODE>還不完善，前面的代碼會輸出「<CODE>%d</CODE>」而不是我們想顯示的i的值。讓我們修改雙緩衝的<CODE>printxyf</CODE>函式，使其可以支援格式化輸出。</P>
+<PRE><CODE>int printxyf(int x,int y,char * s,...){
+    char buf[255];
+    va_list va;
+    va_start(va,s);
+    vsprintf(buf,s,va);
+    va_end(va);
+
+    for(int i=0;i < strlen(buf);i++){
+        buffer[b][y*80+x+i] = buf[i];
+    }
+}</CODE></PRE>
+<P>emm，這份代碼，如果能理解，就理解吧，理解不了，會用就行。再一提，編譯這份代碼需要加入新的頭標檔「stdarg.h」。這個頭標檔的意思不是「darg」，而是「std-argument  	」。</P>
+<H3>控制台的顏色</H3>
+<P>要想讓遊戲更加的華麗，只有黑白兩色是遠遠不夠的。Windows系統允許我們最多在控制台中顯示16種顏色。我們先寫一個改變控制台字體顏色的函式。</P>
+<PRE><CODE>int color(int c){
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    return SetConsoleTextAttribute(consoleHandle,c);
+}
+
+int main(){
+    for(int i=0;i<16;i++){
+        color(i);
+        printf("# 0x%02X\n",i);
+    }
+}</CODE></PRE>
+<P>讓我們在寫一個華麗的HelloWorld。</P>
+<PRE><CODE>char str[] = "hello world";
+
+int backtohead(){
+    for(int i=0;i<80;i++){
+        printf("\b");
+    }
+    return 80;
+}
+
+int color(int c){
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    return SetConsoleTextAttribute(consoleHandle,c);
+}
+
+int main(){
+    int c = 0;
+
+    while(1){
+        if(c++>14)c=1;
+
+        color(c);
+        printf("%s 0x%02X",str,c);
+        backtohead();
+
+        Sleep(100);
+    }
+}</CODE></PRE>
+<P>再引入第一節課的內容，簡單的修改一下<CODE>main</CODE>函式。</P>
+<PRE><CODE>int main(){
+    int c = 0;
+    int i = 0;
+
+    while(1){
+        if(c++>14)c=1;
+        str[i] = toupper(str[i]);
+
+        color(c);
+        printf("%s 0x%02X",str,c);
+        backtohead();
+
+        str[i] = tolower(str[i]);
+
+        i++;
+        i%=strlen(str);
+        Sleep(100);
+    }
+}</CODE></PRE>
+<P>我感覺已經快閃瞎我的雙眼了，「笑」。</P>
+<H3>為緩衝區加入顏色</H3>
+<P>還是之前的那個f*ck程式。</P>
+<PRE><CODE>int f = 0,b = 1;
+unsigned int buffer[2][25*80] = {0};
+unsigned int color;
+
+int clearscreen()
+{
+    memset(buffer[b],0,sizeof(buffer[b]));
+}
+
+int setcolor(int c){
+    color = c;
+}
+
+int printxyf(int x,int y,char * s,...){
+    char buf[255];
+    va_list va;
+    va_start(va,s);
+    vsprintf(buf,s,va);
+    va_end(va);
+
+    for(int i=0;i < strlen(s);i++){
+        buffer[b][y*80+x+i] = buf[i] + (color << 8);
+    }
+}
+int swapbuffer(){
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    for(int i=0;i<25*80;i++){
+        if(buffer[f][i] != buffer[b][i]){
+            COORD coord = {i%80,i/80};
+            SetConsoleCursorPosition(consoleHandle,coord);
+            SetConsoleTextAttribute(consoleHandle,(buffer[b][i] >> 8));
+            printf("%c",buffer[b][i]);
+            buffer[f][i] = buffer[b][i];
+        }
+    }
+    int t = f;
+    f = b;
+    b = t;
+}
+
+int main(){
+    while(1){
+        clearscreen();
+
+        setcolor(7);
+        printxyf(0,0,"hello world");
+
+        for(int i=0;i<50;i++){
+            setcolor(rand()%15);
+            printxyf(rand()%80,rand()%23+1,"fuck %d",i);
+        }
+
+        swapbuffer();
+    }
+}</CODE></PRE>
+<P>注意，<CODE>&gt;&gt;</CODE>元算的優先級特別的低，基本上都需要放在括號裡。</P>
+<H3>遊戲迴圈</H3>
+<P>現在終於到了我們的重頭戲，遊戲迴圈。關於甚麼fps，人眼視覺暫留這些東西自己去網路上看吧。我只需要告訴讀者們，約每16毫秒刷新一次屏幕，基本就能達到fps60的效果。</P>
+<P>對，如果你想到了以前我提到過的<CODE>Sleep</CODE>函式，那麼，你想對了。確實，在講這節課之前的程式，我讓程式停止的方法都用的是在主迴圈中加入<CODE>Sleep</CODE>。但是，這也是不完善的。</P>
+<P>如果在每次回圈加入<CODE>Sleep(16)</CODE>，這是在假設本次迴圈的運算時間為0毫秒的前提下才是正確的。然而，0毫秒的運算時間，到後期3D遊戲中是基本不可能的。</P>
+<P>我們要做的，應該是在迴圈開始前獲取一次時間，在運算結束後再獲取一次時間。然後等待16-那兩次時間差的值。</P>
+<P><CODE>time</CODE>函式可以獲取到秒的精度。他的返回值並不重要，我們需要的是兩次調用<CODE>time</CODE>的時間差。</P>
+<P>如果我們寫一個每1秒更新一次的程式，大概是這個樣子。</P>
+<PRE><CODE>char loding[] = {'-','\\','|','/'};
+
+int main(){
+    int i=0;
+    while(1){
+        int t = time(NULL);
+        
+        printf("%c\b",loding[i++%4]);
+
+        int x = time(NULL);
+        while(x-t < 1){
+            x = time(NULL);
+        }
+    }
+}</CODE></PRE>
+<P>這裡我沒有使用<CODE>Sleep</CODE>，而是不停的獲取當前的時間，直到相差大於1跳出等待<CODE>while</CODE>。</P>
+<P>在Windows系統中，提供了<CODE>GetTickCount</CODE>函式，能夠獲取到毫秒的精度。我們的程序可以改成這樣。</P>
+<PRE><CODE>int gettime(){
+    return GetTickCount();
+}
+
+char loding[] = {'-','\\','|','/'};
+
+int main(){
+    int i=0;
+    while(1){
+        int t = gettime();
+        
+        printf("%c\b",loding[i++%4]);
+
+        int x = gettime();
+        while(x-t < 1000){
+            x = gettime();
+        }
+    }
+}</CODE></PRE>
+<P>這就是遊戲迴圈中最重要的等待了。</P>
+<P>等待的加入，主要是確保了不同的CPU運行相同的遊戲都能夠以遊戲預設的速度進行，不會發生一些CPU運算速度很快而導致遊戲速度快的情況。但是，等待並不能使運算速度慢的CPU高速運行。而不能夠答到遊戲要求的最低速度CPU運行遊戲，就會產生熟稱「掉幀」的情況。</P>
+<P>第三課的內容也就這麼多了。到此，我們已經學完了寫一個沒有聲音的遊戲必須具備的技能要求了。如果讀者願意，希望能夠把寫一個貪吃蛇遊戲作為本課的作業以及到此為止的總結。</P>
+<H2>第四課 聲音</H2>
+<H3>讓聲音卡發出聲音</H3>
+<P>我覺得我們差不多可以正式開始寫一個遊戲了。但是，我還想講一個有趣的東西，那就是音樂。</P>
+<P>我不知道為什麼,也許是因為很有難度吧，我不得不說，我學這個方面也花了我很多的時間。但是，技巧還是有的。而且，如果前期規劃引擎時不考慮好音樂，後期想加入音樂效果的話，遊戲引擎會進行很大的改動，所以這裡我簡單的講兩句。</P>
+<P>關於發聲的知識可以看「Windows程序設計第5版」第二十二章  声音与音乐。不才的我就不在此浪費口舌了，我們就直接寫代碼吧。</P>
+<P><CODE>Beep</CODE>函式有兩個參數，第一個是赫茲，第二個是持續時間。我們可以通過<CODE>Beep(750,300)</CODE>這種方式讓我們的音響發出聲音。在結合<CODE>Sleep</CODE>函式讓音響安靜，我們甚至可以聽到超級瑪莉的原聲音樂。</P>
+<PRE><CODE>int main(){
+    Beep(330,100);Sleep(100);
+    Beep(330,100);Sleep(300);
+    Beep(330,100);Sleep(300);
+    Beep(262,100);Sleep(100);
+    Beep(330,100);Sleep(300);
+    Beep(392,100);Sleep(700);
+    Beep(196,100);Sleep(700);
+    Beep(262,300);Sleep(300);
+    Beep(196,300);Sleep(300);
+    Beep(164,300);Sleep(300);
+    Beep(220,300);Sleep(100);
+    Beep(246,100);Sleep(300);
+    Beep(233,200);
+}</CODE></PRE>
+<P>我節選了一段放在這裡，完整代碼可以從<A HREF="http://cncpp.divilabs.com/2013/12/c-code-for-mario-theme-intro-song.html">這裡</A>拷貝。</P>
+<P>除了動聽的音樂，我們還可以聽到禁忌的音樂，比如紫苑鎮BGM或者第13隻眼睛。</P>
+<P>當然，我們還可以寫一個鋼琴。代碼idea和其中的數據我參考了<A HREF="https://stackoverflow.com/q/36500510/7661038">這裡</A>。</P>
+<PRE><CODE>#define arraylen(x) (sizeof(x)/sizeof(x[0]))
+
+struct
+{
+    char k;
+    float hz;
+}key[] = {
+    'a',    261.626,
+    's',    293.665,
+    'd',    329.628,
+    'f',    349.228,
+    'g',    391.995,
+    'h',    440.000,
+    'j',    493.883,
+    'k',    523.251,
+};
+
+
+void main()
+{
+    while(1){
+        int c = getch();
+        c = tolower(c);
+
+        for(int i=0;i < arraylen(key);i++){
+            if(key[i].k == c){
+                Beep(key[i].hz,64);
+            }
+        }
+    }
+}</CODE></PRE>
+<P>不過，有一點，非常嚴重的一點，就是<CODE>Beep</CODE>函式不會立即返回，而會等到聲音播放完成後才返回。也就是，他是一個阻塞型函式。這對於我們寫遊戲的人來說，是非常危險的。記得<CODE>getch</CODE>的阻塞我們是怎麼避免的嗎？我們加入了<CODE>kbhit</CODE>檢測是否有鍵盤被按下。可惜，在聲音中，並沒有這樣的函式。</P>
+<P>在那之前，讓我們先解決<CODE>Beep</CODE>中有爆破音的問題。</P>
+<PRE><CODE>#pragma comment(lib, "winmm.lib")
+
+#define arraylen(x) (sizeof(x)/sizeof(x[0]))
+
+#define SECOND 30
+#define PI 3.14159
+
+#define SAMPLE_RATE 8000
+
+BYTE buffer[SAMPLE_RATE * SECOND] = {0};
+WAVEHDR header = {buffer,sizeof(buffer),0,0,0,0,0,0};
+HWAVEOUT hWaveOut = 0;
+WAVEFORMATEX wfx = {WAVE_FORMAT_PCM,1,SAMPLE_RATE,SAMPLE_RATE,1,8,0};
+int volume = 50;
+
+int init(){
+    waveOutOpen(&hWaveOut,WAVE_MAPPER,&wfx,NULL,0,CALLBACK_NULL);
+    header.dwFlags=WHDR_BEGINLOOP | WHDR_ENDLOOP;
+    header.dwLoops=1;
+    waveOutPrepareHeader(hWaveOut,&header,sizeof(WAVEHDR));
+}
+
+int beep(int iFreq,int ms){
+    static double fAngle;
+    static DWORD t,n;
+    int vol = 0;
+    int byte = min(SAMPLE_RATE*ms/1000,sizeof(buffer));
+
+    for(int i=0;i < sizeof(buffer);i++)
+    {
+        if(i < byte){
+            BYTE b = (BYTE)(127 + vol * sin(fAngle));
+
+            buffer[i] = b;
+    
+            if(i > byte-volume){
+                vol -- ;
+            }
+            if(i < volume){
+                vol ++ ;
+            }
+        }else{
+            buffer[i] = 127;
+        }
+    
+        fAngle += 2 * PI * iFreq / SAMPLE_RATE;
+        if(fAngle > 2 * PI)fAngle -= 2 * PI;
+    }
+    
+    waveOutReset(hWaveOut);
+    t = GetTickCount();
+    waveOutWrite(hWaveOut,&header,sizeof(WAVEHDR));
+    while(n = GetTickCount(),n - t < ms);
+    t = GetTickCount();
+    n = ms;
+}</CODE></PRE>
+<P>我不想細講這份代碼。因為它是在是太難了。我們只要知道，用<CODE>beep</CODE>替代<CODE>Beep</CODE>就行了。還有，在使用<CODE>beep</CODE>前，必須要先調用一次<CODE>init</CODE>函式。否則聲卡不可能工作。</P>
+<P>在<CODE>beep</CODE>中有一行<CODE>while(n = GetTickCount(),n - t < ms)</CODE>，學過遊戲迴圈，也就是第三課的人，應該能猜到這是在等待聲音播放完畢。我們只需要刪除掉這行，就能夠得到非阻塞的<CODE>beep</CODE>了。</P>
+<PRE><CODE>#pragma comment(lib, "winmm.lib")
+
+#define arraylen(x) (sizeof(x)/sizeof(x[0]))
+
+#define SECOND 3
+#define PI 3.14159
+
+#define SAMPLE_RATE 8000
+
+BYTE buffer[SAMPLE_RATE * SECOND] = {0};
+WAVEHDR header = {buffer,sizeof(buffer),0,0,0,0,0,0};
+HWAVEOUT hWaveOut = 0;
+WAVEFORMATEX wfx = {WAVE_FORMAT_PCM,1,SAMPLE_RATE,SAMPLE_RATE,1,8,0};
+int volume = 50;
+
+int init(){
+    waveOutOpen(&hWaveOut,WAVE_MAPPER,&wfx,NULL,NULL,CALLBACK_NULL);
+    header.dwFlags=WHDR_BEGINLOOP | WHDR_ENDLOOP;
+    header.dwLoops=1;
+    waveOutPrepareHeader(hWaveOut,&header,sizeof(WAVEHDR));
+}
+
+int beep(int iFreq,int ms){
+    static double fAngle;
+    int vol = volume;
+    for(int i = 0; i < sizeof(buffer); i++)
+    {
+        buffer[i] = (BYTE)(127 + vol * sin(fAngle));
+        if(i > sizeof(buffer)-volume){
+            vol--;
+        }
+
+        fAngle += 2 * PI * iFreq / SAMPLE_RATE;
+
+        if(fAngle > 2 * PI)fAngle -= 2 * PI;
+    }
+    header.dwBufferLength = 8*ms;
+    waveOutWrite(hWaveOut,&header,sizeof(WAVEHDR));
+}
+
+struct
+{
+    char k;
+    float hz;
+}key[] = {
+    'a',    261.626,
+    's',    293.665,
+    'd',    329.628,
+    'f',    349.228,
+    'g',    391.995,
+    'h',    440.000,
+    'j',    493.883,
+    'k',    523.251,
+};
+
+
+void main()
+{
+    init();
+    while(1){
+        int c = getch();
+        c = tolower(c);
+
+        for(int i=0;i < arraylen(key);i++){
+            if(key[i].k == c){
+                beep(key[i].hz,64);
+            }
+        }
+    }
+}</CODE></PRE>
+<P>好吧，我不得不承認這份代碼非常的複雜，不過沒有關係，我們可以寫一個頭標檔「music.h」，我自己寫的如下：</P>
+<PRE><CODE>#include < Windows.h >
+#include < math.h >
+
+#pragma comment(lib, "winmm.lib")
+
+#define PI 3.14159
+
+#define MUSIC_BUFFER_SECOND 60
+#define MUSIC_RATE          8000
+
+BYTE        g_music_buffer[MUSIC_RATE * MUSIC_BUFFER_SECOND] = {0};
+WAVEHDR     grHeader    = {g_music_buffer,sizeof(g_music_buffer),0,0,0,0,0,0};
+HWAVEOUT    hWaveOut    = 0;
+int         g_volume    = 50;
+
+int music_init(){
+    WAVEFORMATEX wfx = {WAVE_FORMAT_PCM,1,MUSIC_RATE,MUSIC_RATE,1,8,0};
+    waveOutOpen(&hWaveOut,WAVE_MAPPER,&wfx,NULL,0,CALLBACK_FUNCTION);
+    waveOutPrepareHeader(hWaveOut,&grHeader,sizeof(WAVEHDR));
+    return 0;
+}
+
+
+int beep(int iFreq,int ms){
+    static DWORD t;
+    static int totalbyte = 0;
+
+    // 計算播放過的時間
+    int hadplaybyte = GetTickCount()-t;
+#ifndef MUSIC_USE_GETPOS
+    hadplaybyte *= MUSIC_RATE/1000;
+    if(hadplaybyte >= totalbyte)hadplaybyte = totalbyte;
+#else
+    MMTIME mmt;
+    waveOutGetPosition(hWaveOut,&mmt,sizeof(MMTIME));
+    if(mmt.wType == TIME_BYTES){
+        hadplaybyte = mmt.u.cb;
+        if(hadplaybyte >= totalbyte)hadplaybyte = totalbyte;
+    }
+#endif
+    //printf("%d \t",hadplaybyte);
+
+    // 移動未播放的數據
+    for(int i=0;i < totalbyte-hadplaybyte;i++){
+        g_music_buffer[i] = g_music_buffer[hadplaybyte+i];
+    }
+    totalbyte -= hadplaybyte;
+    //printf("%f \n",totalbyte/8000.0);
+
+    // 如果曾經播放過，重置播放器
+    if(hadplaybyte)waveOutReset(hWaveOut);
+
+    // 拷貝新數據到末尾
+    int vol = 0;
+    int byte = min(MUSIC_RATE*ms/1000,sizeof(g_music_buffer)-totalbyte);
+    static double angle;
+    for(int i=0;i < sizeof(g_music_buffer)-totalbyte;i++)
+    {
+        if(i < byte){
+            //if(i==34)printf("%.17f\n",fAngle);
+            BYTE b = (BYTE)(127 + vol * sin(angle));
+            g_music_buffer[i+totalbyte] = b;
+            // 調整音量
+            if(i > byte-g_volume){
+                vol -- ;
+            }
+            if(i < g_volume){
+                vol ++ ;
+            }
+            // 產生sin波
+            angle += 2 * PI * iFreq / MUSIC_RATE;
+            if(angle > 2 * PI)angle -= 2 * PI;
+        }else{
+            // 靜音
+            g_music_buffer[i+totalbyte] = 127;
+        }
+    }
+    totalbyte += byte;
+    
+    // 播放聲音並紀錄時間
+    t = GetTickCount();
+    waveOutWrite(hWaveOut,&grHeader,sizeof(WAVEHDR));
+}</CODE></PRE>
+<P>我感覺自己非常迫切的需要一套標準的命名風格。匈牙利命名法和標準C命名法衝突啊。而且，兩種命名法混在一起，真的好亂，「暈」。</P>
+<P>算了，先讓我們來欣賞一下8bit機中的聲音吧。</P>
+<PRE><CODE>#include "music.h"
+#include < stdio.h >
+
+int hidecursor()
+{
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO info;
+    GetConsoleCursorInfo(consoleHandle,&info);
+    info.bVisible = FALSE;
+    return SetConsoleCursorInfo(consoleHandle,&info);
+}
+
+int gettime(){
+    return GetTickCount();
+}
+char loding[] = {'-','\\','|','/'};
+
+int music[] = {
+    261,293,329,349,391,440,493,523,
+};
+
+int main(){
+
+    music_init();
+    hidecursor();
+
+    int i=0;
+    while(1){
+        int t = gettime();
+
+        printf("%c\b",loding[i++%4]);
+
+        beep(music[i%8],100);
+        while(gettime()-t < 100);
+    }
+}</CODE></PRE>
+<P>說點題外話，以前Windows系統還沒有出現的時候，各種不同的聲音卡在市場上流行。那一年程序員要想讓不同的聲音卡都發出相同的聲音，就要分別為每個不同廠家出場的聲卡寫相應的代碼。那一年流行的聲卡就我知道的有「Fx」和「Midi」。一些古老的DOS遊戲啟動前會出現一個設置界面，讓玩家選擇聲卡的類型。顯示卡也一樣。不過「graphic.h」標準的出現輕鬆了很多程序員。很多顯示卡廠商都為這個頭標檔提供了硬體支援。使用這個頭標檔寫出的程序，只要顯卡支援，就擁有跨平台的能力。這就像今日的「openGL」和「directX」。不過，聲卡似乎沒有一個統一的標準。</P>
+<H3>封裝其他的函式</H3>
+<P>既然已經封裝了和聲音有關的函式，我們就順便把其他的函式也都封裝一下吧。其實就是寫在一個頭標檔中，省得我每次貼代碼都要在拷貝一遍那個函式。</P>
+<PRE><CODE>#include < stdio.h >
+#include < windows.h >
+
+#define arraylen(x) (sizeof(x)/sizeof(x[0]))
+
+int hidecursor()
+{
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO info;
+    GetConsoleCursorInfo(consoleHandle,&info);
+    info.bVisible = FALSE;
+    return SetConsoleCursorInfo(consoleHandle,&info);
+}
+
+int showcursor(){
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO info;
+    GetConsoleCursorInfo(consoleHandle,&info);
+    info.bVisible = TRUE;
+    return SetConsoleCursorInfo(consoleHandle,&info);
+}
+
+int backspace(){
+    return printf("\b \b");
+}
+
+int backtohead(){
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO SBInfo;
+    GetConsoleScreenBufferInfo(consoleHandle,&SBInfo);
+    return gotoxy(0,SBInfo.dwCursorPosition.Y);
+}
+
+int gotoxy(int x,int y)
+{
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD coord = {x,y};
+    return SetConsoleCursorPosition(consoleHandle,coord);
+}
+
+unsigned char   g_font_color = 0x07;
+
+#ifdef CONSOLE_NO_BUFFER
+
+int clearscreen()
+{
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    DWORD count;
+    DWORD cellCount;
+    COORD coord = {0,0};
+    GetConsoleScreenBufferInfo(consoleHandle,&csbi);
+    cellCount = csbi.dwSize.X *csbi.dwSize.Y;
+    FillConsoleOutputCharacter(consoleHandle,' ',cellCount,coord,&count);
+    FillConsoleOutputAttribute(consoleHandle,csbi.wAttributes,cellCount,coord,&count);
+    SetConsoleCursorPosition(consoleHandle,coord);
+}
+
+int printxyf(int x,int y,char * s,...){
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    va_list va;
+    va_start(va,s);
+    gotoxy(x,y);
+    SetConsoleTextAttribute(consoleHandle,g_font_color);
+    return vprintf(s,va);
+}
+
+#else
+
+unsigned char   g_front_screen_index = 0,g_back_screen_index = 1;
+                /* XXXX XXXX XXXX XXXX */
+unsigned short  g_screen_buffer[2][25*80] = {0};
+
+int clearscreen()
+{
+    memset(g_screen_buffer[g_back_screen_index],0,sizeof(g_screen_buffer[g_back_screen_index]));
+}
+
+int printxyf(int x,int y,char * s,...){
+    char buf[255];
+    va_list va;
+    va_start(va,s);
+    vsprintf(buf,s,va);
+    va_end(va);
+
+    for(int i=0;i < strlen(buf);i++){
+        g_screen_buffer[g_back_screen_index][y*80+x+i] = buf[i] + (g_font_color << 8);
+    }
+}
+
+int swapbuffer(){
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    for(int i=0;i<25*80;i++){
+        if(g_screen_buffer[g_front_screen_index][i] != g_screen_buffer[g_back_screen_index][i]){
+            COORD coord = {i%80,i/80};
+            SetConsoleCursorPosition(consoleHandle,coord);
+            SetConsoleTextAttribute(consoleHandle,(g_screen_buffer[g_back_screen_index][i] >> 8));
+            printf("%c",g_screen_buffer[g_back_screen_index][i]);
+            g_screen_buffer[g_front_screen_index][i] = g_screen_buffer[g_back_screen_index][i];
+        }
+    }
+    g_front_screen_index    ^= g_back_screen_index;
+    g_back_screen_index     ^= g_front_screen_index;
+    g_front_screen_index    ^= g_back_screen_index;
+}
+
+#endif
+
+int setcolor(int c){
+    g_font_color = c;
+}
+
+int gettime(){
+    return GetTickCount();
+}
+
+int keypress(){
+    for(int i=0;i < 0xFF;i++){
+        if(i == 35)continue;
+        if(GetAsyncKeyState(i)&0x8000){
+            return i;
+        }
+    }
+    return 0;
+}</CODE></PRE>
+<P>這份文檔我取名為「console.h」。這樣，我們寫遊戲的準備就基本完成了。所以，讓我們重寫一下那個移動小球(?)的程式吧。</P>
+<PRE><CODE>#include "music.h"
+#include "console.h"
+
+int x = 0,
+y = 0;
+
+int moveup(){
+    y -= 1;
+}
+int movedown(){
+    y += 1;
+}
+int moveleft(){
+    x -= 2;
+}
+int moveright(){
+    x += 2;
+}
+int gameover(){
+    exit(0);
+}
+
+struct{
+    int key;
+    int(*func)(void);
+}key[] = {
+    VK_UP,      moveup,
+    VK_DOWN,    movedown,
+    VK_LEFT,    moveleft,
+    VK_RIGHT,   moveright,
+    VK_ESCAPE,  gameover,
+};
+
+char loding[] = {'-','\\','|','/'};
+
+int music[] = {
+    261,293,329,349,391,440,493,523,
+};
+
+int main(){
+
+    music_init();
+    hidecursor();
+
+    int index=0;
+    int frame = 0;
+    int dir = VK_RIGHT;
+    int update = 5;
+    while(1){
+        int t = gettime();
+        update--;
+
+        int k = keypress();
+        if(k != dir){
+            for(int i=0;i < arraylen(key);i++){
+                if(k == key[i].key){
+                    dir = key[i].key;
+                    key[i].func();
+                    update = 5;
+                    break;
+                }
+            }
+        }
+
+        if(update == 0){
+            for(int i=0;i < arraylen(key);i++){
+                if(dir == key[i].key){
+                    key[i].func();
+                    break;
+                }
+            }
+            update = 5;
+        }
+
+        //clearscreen();
+        setcolor(index%14+1);
+        printxyf(x,y,"+");
+
+        if(frame%5 == 0){
+            beep(music[index++%8],100);
+        }
+        while(gettime()-t < 16);
+
+        swapbuffer();
+        frame++;
+    }
+}</CODE></PRE>
+<P>我做了一點小修改，現在這是一個畫圖的程序。每5次迴圈更新一次球的位置，每5次迴圈更新一次音樂播放。如果在迴圈中響應了鍵盤，那麼重置更新球位置的次數。</P>
+<P>這節課所寫的「console.h」和「music.h」這兩個頭標檔，在以後的代碼中會經常出現。如果可以，請把這兩個頭標檔加入自訂庫中。</P>
+<!--<H2>第五課</H2>
+<P>我們已經完成了非常多的東西，鍵盤，音樂，屏幕都做好了封裝。現在，真的是時候開始寫遊戲了。但是，如果是Windows平台的遊戲，有一個非常常用的硬體，我們還沒有做好支援，那就是滑鼠。</P>
+<H3>加入對滑鼠的支援</H3>
+<P><CODE>GetCursorPos</CODE>函式能夠返回滑鼠當前的位置，下面是一個實時顯示滑鼠位置的程式。</P>
+<PRE><CODE>#include "music.h"
+#include "console.h"
+
+int main(){
+    while(1){
+
+        POINT p;
+        GetCursorPos(&p);
+        clearscreen();
+        printxyf(0,0,"(%d,%d)",p.x,p.y);
+
+        swapbuffer();
+    }
+}</CODE></PRE>
+<P>我們要做的就是把它轉成控制台的座標。</P>
+<PRE><CODE>#include "music.h"
+#include "console.h"
+
+int main(){
+    while(1){
+
+        POINT p;
+        GetCursorPos(&p);
+        ScreenToClient(GetConsoleWindow(),&p);
+        CONSOLE_FONT_INFOEX  info = {sizeof( info )};
+        GetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE),FALSE,&info);
+        p.x/=info.dwFontSize.X*2;
+        p.y/=info.dwFontSize.Y;
+
+        clearscreen();
+
+        for(int i=0;i<80*24;i+=2){
+            printxyf(i%80,i/80,"[]");
+        }
+        for(int i=0;i<40;i++){
+            printxyf(i*2,0,"%2d",i);
+        }
+        for(int i=0;i<24;i++){
+            printxyf(0,i,"%2d",i);
+        }
+        printxyf(70,23,"(%d,%d)",p.x,p.y);
+
+        swapbuffer();
+    }
+}</CODE></PRE>
+<P>在完善一下「console.h」。</P>
+<PRE>&nbsp;</PRE>
+<H3>終於開始寫遊戲了</H3>
+<P>一般的2D遊戲其實就只是一個算法問題罷了。我真的感覺沒有甚麼好講的。其實主要是因為我算法很爛。emm，所以，我們直接看代碼好了。</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+-->
+</BODY>
+</HTML>

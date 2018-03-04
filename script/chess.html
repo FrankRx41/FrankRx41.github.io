@@ -1,0 +1,370 @@
+﻿<!DOCTYPE HTML>
+<HTML>
+<HEAD>
+<META CHARSET="UTF-8"/>
+<META NAME="VIEWPORT" CONTENT="WIDTH=DEVICE-WIDTH, INITIAL-SCALE=1, MINIMUM-SCALE=1, MAXIMUM-SCALE=1"/>
+<LINK TYPE="TEXT/CSS" HREF="../css/normalize.css" REL="stylesheet"/>
+<LINK TYPE="TEXT/CSS" HREF="../css/style.css" REL="stylesheet"/>
+<SCRIPT LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT" SRC="../js/window.js"></SCRIPT>
+<SCRIPT LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT" SRC="../js/main.js"></SCRIPT>
+<SCRIPT LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT" SRC="../js/code.js"></SCRIPT>
+<LINK REL="shortcut icon" TYPE="image/x-icon" HREF="../favicon.ico"/>
+<TITLE>frankrx's blog</TITLE>
+</HEAD>
+
+<BODY>
+
+<HEADER>
+<H1>EiSnow</H1>
+<H2>心の言葉</H2>
+<UL>
+<LI><A HREF="https://frankrx41.github.io">home</A></LI>
+<LI><A HREF="https://frankrx41.github.io/experience">experience</A></LI>
+<LI><A HREF="https://frankrx41.github.io/blog">blog</A></LI>
+<LI><A HREF="https://frankrx41.github.io/review">review</A></LI>
+<LI><A HREF="https://frankrx41.github.io/script">script</A></LI>
+</UL>
+</HEADER>
+
+<CONTENT>
+
+<DIV>
+<H1>Chess</H1>
+
+<STYLE>
+.tile {
+  cursor: default;
+  color: #490;
+  border:inset #660 1px;
+  display: inline-block;
+  float: left;
+  text-align: center;
+  border-radius: 0;
+  border: solid #4d4f55 1px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select:none;
+  user-select:none;
+  -o-user-select:none;
+  cursor: default;
+}
+
+.tile:hover {
+  cursor: default;
+}
+
+.selected {
+  color: #666 !important;
+  background-color: #c8b792 !important;
+  /*border:dashed #A00 1px*/
+}
+
+.while {
+  background-color: #d8dcd8; 
+}
+
+.black {
+  background-color: #4d4f55;
+}
+
+.wchess {
+  color: #C1BD09;
+}
+
+.bchess {
+  color: #000000;
+  transform:rotate(-180deg); 
+}
+
+</STYLE>
+
+<!--<TABLE WIDTH="100%" BORDER="0"  CELLSPACING="0" CELLPADDING="0">
+  <TR>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+  </TR>
+  <TR>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+  </TR>
+  <TR>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+  </TR>
+  <TR>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+  </TR>
+  <TR>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+  </TR>
+  <TR>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+  </TR>
+  <TR>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+  </TR>
+  <TR>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+    <TD CLASS="tile black">&nbsp;</TD>
+    <TD CLASS="tile white">&nbsp;</TD>
+  </TR>
+</TABLE>-->
+
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+<DIV CLASS="tile">&nbsp;</DIV>
+
+<P>&nbsp;</P>
+
+<DIV CLASS="tile extile">&nbsp;</DIV>
+<DIV CLASS="tile extile">&nbsp;</DIV>
+<DIV CLASS="tile extile">&nbsp;</DIV>
+<DIV CLASS="tile extile">&nbsp;</DIV>
+<DIV CLASS="tile extile">&nbsp;</DIV>
+<DIV CLASS="tile extile">&nbsp;</DIV>
+<DIV CLASS="tile extile">&nbsp;</DIV>
+<DIV CLASS="tile extile">&nbsp;</DIV>
+
+<SCRIPT>
+	var wchar = ['♖','♘','♗','♕','♔','♙'];
+	var bchar = ['♜','♞','♝','♛','♚','♟'];
+
+	var selected=0;
+	var selectTile=0;
+	function GoChess(tile){
+		if(selected){
+			selectTile.classList.remove('selected');
+			if(selectTile != tile){
+				
+				if(!tile.classList.contains('extile'))
+					tile.textContent=selectTile.textContent;
+				if(!selectTile.classList.contains('extile'))
+					selectTile.textContent=" ";
+					
+				if(selectTile.classList.contains('wchess')){
+					selectTile.classList.remove('wchess');
+					tile.classList.remove('bchess');
+					tile.classList.add('wchess');
+				}
+				if(selectTile.classList.contains('bchess')){
+					selectTile.classList.remove('bchess');
+					tile.classList.remove('wchess');
+					tile.classList.add('bchess');
+				}
+			}
+		}else{
+			selectTile=tile;
+			selectTile.classList.add('selected');
+		}
+		selected = !selected;
+	}
+	var static_i = 0;
+	function ChangeColor(){
+		var extiles=document.getElementsByClassName("extile");
+		static_i ++;
+		for(var i=0; i<extiles.length; i++){
+			extiles.item(i).classList.remove('bchess');
+			extiles.item(i).classList.remove('wchess');
+			extiles.item(i).classList.add(static_i%2 ? 'wchess' : 'bchess');
+			//extiles.item(i).classList.add('bchess');
+		}
+	}
+	
+	function GameInit(){
+		var tiles=document.getElementsByClassName("tile");
+		var width = document.body.getElementsByTagName("content").item(0).offsetWidth-8-8;
+		var initTiles = [
+		'♜','♞','♝','♛','♚','♝','♞','♜',
+		'♟','♟','♟','♟','♟','♟','♟','♟',
+		' ',' ',' ',' ',' ',' ',' ',' ',
+		' ',' ',' ',' ',' ',' ',' ',' ',
+		' ',' ',' ',' ',' ',' ',' ',' ',
+		' ',' ',' ',' ',' ',' ',' ',' ',
+		'♟','♟','♟','♟','♟','♟','♟','♟',
+		'♜','♞','♝','♛','♚','♝','♞','♜',
+		'♜','♞','♝','♛','♚','♟',' ',' ',
+		];
+		for(var i=0; i<tiles.length; i++){
+			tiles[i].setAttribute("onClick","GoChess(this)");
+			
+			tiles.item(i).style.height = width/8 + "px";
+			tiles.item(i).style.width = width/8 + "px";
+			tiles.item(i).style.textHeight = width/8 + "px";
+			tiles.item(i).style.lineHeight = width/8 + "px";
+			tiles.item(i).style.fontSize = width/8*.75 + "px";
+			
+			//alert( ( (i)/8) % 2);
+			if(!tiles[i].classList.contains('extile')){
+				if( parseInt((i)/8) % 2 ){
+					tiles[i].classList.add(i%2 ? 'white' : 'black');
+					//tiles[i].classList.add(i%2 ? 'black' : 'white');
+				}else{
+					//tiles[i].classList.add(i%2 ? 'white' : 'black');
+					tiles[i].classList.add(i%2 ? 'black' : 'white');
+				}
+			}
+
+			if(i>=0 && i<=15){
+				tiles[i].classList.remove('wchess');
+				tiles[i].classList.add('bchess');
+			}else
+			if(i>=48 && i<=63){
+				tiles[i].classList.remove('bchess');
+				tiles[i].classList.add('wchess');
+			}else{
+				tiles[i].classList.remove('bchess');
+				tiles[i].classList.remove('wchess');
+			}
+			tiles[i].textContent = initTiles[i];
+		}
+	}
+
+	var w=document.getElementsByClassName("white");
+	var b=document.getElementsByClassName("black");
+	
+	GameInit();
+</SCRIPT>
+
+
+<BUTTON onClick="GameInit()">GameInit</BUTTON>
+<BUTTON onClick="ChangeColor()">ChessColor</BUTTON>
+
+<H3>更新日誌</H3>
+
+<P>棋盤修改為使用DIV繪製</P>
+
+<P>修復已知錯誤</P>
+
+<H3>規則說明</H3>
+
+<P>我的原則是，不做任何的干預，允許玩家隨便玩</P>
+</DIV>
+</CONTENT>
+
+<FOOTER>
+<P>EiSnow</P>
+<P>心の言葉</P>
+<P>Copyright © 2017-2018 <A>EiSnow</A> All Rights Reserved.</P>
+</FOOTER>
+
+</BODY>
+</HTML>

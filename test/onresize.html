@@ -1,0 +1,70 @@
+<META CHARSET="UTF-8">
+
+<script>
+var $count = 0;
+function sample1resized() {
+    document.getElementById( "sample1output" ).innerHTML = ++$count + "回";
+		console.log("_1123");
+}
+console.log("0");
+window.onresize = function(){
+	console.log("window onresize");
+	console.log(document.getElementById("js-example").getBoundingClientRect().width);
+}
+</script>
+
+<style>
+.example{
+  padding: 20px 0;
+  width: 75%;
+  margin: 0 auto;
+  font-family: monospace;
+}
+
+p, h1{
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+p{
+  line-height: 22px;
+}
+</style>
+
+<p>サイズを変更した回数：<span id="sample1output"></span></p>
+
+<div style="width:100%" resize=sample1resized>haha</div>
+
+
+<div class="example" id="js-example">
+  <h1>Any Html Element Resize Event</h1>
+  <p>Try to resize your browser. This block should change it's color on every resize event. Now look at the JS tab.
+  See? Now &lt;div&gt; and others have 'onresize' event even without timer! ;D You can resize this block in dev tools to test more advanced scenarios.  </p>
+</div>
+
+
+
+
+<script type="text/javascript">
+example = document.getElementById('js-example');
+example.addEventListener('onresize', function(){
+  document.body.style.backgroundColor = "#1F0";
+	console.log("_123");
+	//'rgb('+random(0,255)+','+random(0,255)+','+random(0,255)+')'
+});
+var random = function(min, max){
+  var rand = min + Math.random()*(max+1-min);
+  return rand;
+}
+console.log("1");
+
+
+document.getElementById( "js-example" ).onresize = function(){
+	console.log("js-example onresize");
+}
+
+
+document.getElementById( "js-example" ).resize = function() {
+  document.body.prepend( "<div>" +document.getElementById( "js-example" ).width() + "</div>" );
+};
+</script>

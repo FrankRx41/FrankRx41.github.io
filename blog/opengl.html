@@ -1,0 +1,103 @@
+http://blog.csdn.net/u010281174/article/details/45848003
+
+安装GLEW库
+
+         按下表将各文件移动：
+
+
+文件名
+ 
+原地址
+ 
+目标地址
+ 
+
+glew32.dll
+ 
+源码路径\bin\Release\Win32
+ 
+C:\Windows\System32
+
+C:\Windows\SysWOW64
+ 
+
+glew.h
+
+glxew.h
+
+wglew.h
+ 
+源码路径\include\GL
+ 
+C:\Program Files (x86)\Windows Kits\8.0\Include\um\gl
+ 
+
+glew32.lib
+
+glew32s.lib
+ 
+源码路径\lib\Release\Win32
+ 
+C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\lib
+ 
+注意，如果C:\Windows\System32和C:\Windows\SysWOW64下的dll版本不一致，会出现无法定位程序输入点_glewInit@0于动态链接库XXXXXXX的问题，这时候把他们ctrl+C, ctrl+V一下就可以了。详情参阅[5]
+
+         如果同时编译了ReleaseMX下的项目，目标路径同上。
+
+
+
+创建工程注意事项
+
+1，要先包含#include<GL/glew.h>再包含#include <GL/glut.h>，否则会报错：
+
+fatal error C1189: #error :  gl.h included before glew.h
+
+2，记得初始化glew：
+
+glewInit();
+
+而且！glew的初始化要放在glut的初始化和窗口创建后面！否则初始化失败哦！[6]
+
+3，可能报错：
+
+error LNK2019: 无法解析的外部符号__imp__glewInit@0，该符号在函数 _main 中被引用
+
+fatal error LNK1120: 2 个无法解析的外部命令
+
+解决办法：
+
+在程序第一行加上：
+
+#pragma comment(lib,"glew32.lib")
+
+
+
+1>LINK : warning LNK4098: 默认库“LIBCMT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library
+ 1>libcpmtd.lib(xdebug.obj) : error LNK2019: 无法解析的外部符号 __malloc_dbg，该符号在函数 "void * __cdecl operator new(unsigned int,struct std::_DebugHeapTag_t const &,char *,int)" (??2@YAPAXIABU_DebugHeapTag_t@std@@PADH@Z) 中被引用
+1>libcpmtd.lib(xdebug.obj) : error LNK2019: 无法解析的外部符号 __free_dbg，该符号在函数 "void __cdecl operator delete(void *,struct std::_DebugHeapTag_t const &,char *,int)" (??3@YAXPAXABU_DebugHeapTag_t@std@@PADH@Z) 中被引用
+1>.\Debug/06CreateExample.exe : fatal error LNK1120: 2 个无法解析的外部命令
+
+ 
+
+解决方法：
+
+1，这个错误发生在debug编译时，如果采用release方式编译，则不会有错误；
+
+2，将项目 》 配置属性 》C/C++ 》 代码生成》运行时库 》
+ 发现 Debug时使用的是：单线程（/ML) Release时使用的也是：单线程（/ML)
+将Debug的改为：单线程调式（/MLd)，编译也通过
+
+
+
+
+（1）按照：http://glew.sourceforge.net/install.html 所述方法正确安装glew库，如果已经正确安装请看下一种方法，以此类推
+
+（2）在VS2008的“项目”菜单，点属性，打开属性对话框，在其中找到配置属性/链接器/输入，然后在右边找到附加依赖项，在其中输入glew32.lib。或者在程序前面加入
+#pragma comment(lib,"glew32.lib")
+
+ 
+
+（3）确保主函数中有glewInit();这个函数
+
+
+気を失ってしまい真相はわからずじまいですが

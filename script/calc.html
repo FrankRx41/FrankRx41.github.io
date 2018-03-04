@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<HTML>
+<HEAD>
+<META CHARSET="UTF-8"/>
+<META NAME="VIEWPORT" CONTENT="WIDTH=DEVICE-WIDTH, INITIAL-SCALE=1, MINIMUM-SCALE=1, MAXIMUM-SCALE=2"/>
+<LINK TYPE="TEXT/CSS" HREF="../css/normalize.css" REL="stylesheet"/>
+<LINK TYPE="TEXT/CSS" HREF="../css/style.css" REL="stylesheet"/>
+<SCRIPT LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT" SRC="../js/window.js"></SCRIPT>
+<SCRIPT LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT" SRC="../js/main.js"></SCRIPT>
+<SCRIPT LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT" SRC="../js/code.js"></SCRIPT>
+<LINK REL="shortcut icon" TYPE="image/x-icon" HREF="favicon.ico"/>
+<TITLE>frankrx's blog</TITLE>
+</HEAD>
+<SCRIPT>
+function JScalc(){
+	var input = document.getElementById("input").value;
+	console.log(input);
+	
+	var script = document.createElement("script");
+	script.appendChild(document.createTextNode("with(Math){var x="+input+"};"));
+	
+	var div = document.getElementById("runjshere");
+	div.replaceChild(script,div.firstChild);
+	//alert(x);
+	
+	document.getElementById("output").value = x;
+}
+window.onerror=function (sMsg,sUrl,sLine){
+	document.getElementById("output").value = "expression error!";
+	return false;
+}
+</SCRIPT>
+</HEAD>
+
+<BODY>
+
+<HEADER>
+<H1>EiSnow</H1>
+<H2>心の言葉</H2>
+<UL>
+<LI><A HREF="https://frankrx41.github.io">home</A></LI>
+<LI><A HREF="https://frankrx41.github.io/experience">experience</A></LI>
+<LI><A HREF="https://frankrx41.github.io/blog">blog</A></LI>
+<LI><A HREF="https://frankrx41.github.io/review">review</A></LI>
+<LI><A HREF="https://frankrx41.github.io/script">script</A></LI>
+</UL>
+</HEADER>
+
+<CONTENT>
+<ARTICLE>
+<H1>JS calculator</H1>
+<H2>version 0.1</H2>
+
+<NOSCRIPT>This page request JavaScript!</NOSCRIPT>
+<TEXTAREA COLS="80" ROWS="10" ID="input" STYLE="padding:10px; max-width:100%; overflow-x:auto; box-sizing:border-box; display:block"></TEXTAREA>
+<BUTTON onClick="JScalc();">calc</BUTTON>
+<INPUT ID="output" STYLE="padding:0 10px; max-width:100%; overflow-x:auto; box-sizing:border-box; display:block" READONLY SIZE="80">
+
+<DIV ID="runjshere"><SCRIPT></SCRIPT></DIV>
+
+</ARTICLE>
+</CONTENT>
+
+<FOOTER>
+<P>EiSnow</P>
+<P>心の言葉</P>
+<P>Copyright © 2017-2018 <A>EiSnow</A> All Rights Reserved.</P>
+</FOOTER>
+
+</BODY>
+</HTML>

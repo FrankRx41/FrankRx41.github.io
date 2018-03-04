@@ -1,0 +1,386 @@
+http://blog.sina.com.cn/s/blog_671f2cb60100vrg6.html
+
+Putty是一个优秀的，开源的SSH远程登录软件。 它不仅仅可以实现登录，还有很多高级功能。
+
+PuTTY is a free SSH, Telnet and Rlogin client for 32-bit Windows systems.
+
+PUTTY下载地址：
+http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
+下载putty包，解压后如下：
+
+clip_image001
+SSH登录说明：
+
+打开后默认协议是ssh协议，端口为22。
+然后输入准备登入的机器的IP地址，若是第一次登入，会出现一个警告。Host key。
+HOST KEY唯一标识一台主机 host key (ssh only) prevent spoofing attack
+EVENT LOG记录控制信息（ 在窗口上右键，选择Event Log ）
+操作：
+复制是直接用鼠标左键拖拉选中就可以了，不用按Ctrl+C，双击选中一个单词，三击选中一行;
+粘贴也很简单，不用Ctrl+V，单击鼠标右键即可。
+按住ALT键选中的区域是矩形
+用 Shift+PageUp/PageDown 来上下翻页，而 Ctrl+PageUp/PageDown 则是一行一行的。
+推荐初始：
+Session->logging->Session logging:->选中 Printable output logfile name:中输入 putty_&H_&M_&D_&T.log
+Terminal->keyboard->The Backspace Key->选择正确的退格键 stty -a可以查退格键 不正确的退格键可加SHIFT键退格
+Terminal->Bell->选中Beep using the PC speaker或default system alert sound 可用Ctrl+G测试
+window->修改成适当的行列，增加 Lines of scrollback （缓冲值可设置成9999，历史保存的记录多一点）
+window->Appearance->Font settings->选择适当的字体（字体可调大）
+window->Behaviour->window title 设置为空（可是我不好设置为空，可修改成相对应的IP，主机多时便于辨别）
+
+window->translate->选择适当的character 可查LANG 。有时候会出现乱码的解决方法？
+
+（1）用env | grep LANG 查看该系统所用的语言
+
+clip_image002
+
+（2）然后在character中修改成UTF-8即可。
+
+clip_image003
+
+Window->Colours-> 取消 Allow terminal to specify ANSI colurs 可消除server端控制颜色
+Window->Colours-> select a colour to adjust ->Default Foregroud（前端颜色）->Modify->选择适当的前景颜色（白色或绿色）
+Connection->Seconds between keepalive ->改成一个大于0的数（它就会在99秒未有人操作的时候向server发包，保证连接不容易断）
+Connection->SSH->X11->选择 Enable X11 forwarding（激活，将图形界面映射到本地。putty有个遗憾，它没有图形界面，我们可以通过此方法来实现）使用xlogo或xclock测试，需要安装 X 服务端程序（比如：免费好用的 Xming），具体的方法参考作者原来的博客文章。
+clip_image004
+设置完成后在session中选 Default Settings，然后点击Save
+输入Host Name 里的主机地址，在Saved Sessions中输入一个新的名字，然后save
+双击打开
+putty的命令行
+putty.exe [-ssh | -telnet | -rlogin | -raw] [user@]host
+D:\工具\putty-0.60>.\putty.exe -ssh 192.168.142.2
+.\putty.exe -load vm1
+想删除 PuTTY 的配置，就在控制台里输入如下的命令：putty.exe -cleanup
+
+clip_image005
+pscp
+pscp c:\documents\*.doc fred@example.com:docfiles
+pscp fred@example.com:source/*.c c:\source
+pscp -ls fred@example.com:dir1
+pscp拷贝命令，如下例：
+
+将windows中的文件拷贝到LINUX下：
+
+clip_image006
+
+析：以root用户登录192.168.1.119主机，将/root/install.log这个文件拷贝到d盘根目录下。执行成功。
+
+clip_image007
+
+同样，我们也可以将LINUX下的文件拷贝到WINDOWS下：
+
+clip_image008
+
+如上中文也是支持的哦。
+
+clip_image009
+
+其实在Linux中就有类似的命令：如scp等。 是ssh协议、22端口
+
+psftp
+psftp fred@hostname -b batchfile
+类似Linux中的sftp。
+
+psftp就好似ftp，但ftp同telnet它们都是明文的，不安全。感觉就好像通过一个终端登录到了这个主机上。
+
+clip_image010
+
+Plink
+Plink (PuTTY Link) is a command-line connection tool similar to UNIX ssh
+D:\工具\putty-0.60\plink.exe 192.168.142.2
+D:\工具\putty-0.60\plink.exe 192.168.142.2 -l oracle echo hello, world
+
+用plink加9个用户：
+
+C:\>plink root@192.168.1.119 "for i in $(seq 1 9); do useradd -d /home/guest$i guest$i; echo guest$i | passwd --stdin guest$i; done"
+如果需要一次在多台机器上加用户只需要将上面一行复制修改相应的主机IP即可。
+plink root@192.168.142.2 /etc/backups/do-backup.sh
+
+clip_image011
+
+clip_image012
+
+有什么好处呢？
+
+一个LINUX管理员，可能会管理很多台机器。如果老板让你在每台机子上都做这样的操作，如果我们登录到每一台机子上去修改会很麻烦的。用上述的方法只要修改IP就行了。
+
+用Puttygen生成KEY
+
+生成公钥和私钥，公钥和私钥是非对称加密，可上网搜索相关知识。
+
+公钥放server端，私钥放客户端，就可以需要不输入密码进行登录。
+
+打开PUTTYGEN.EXE这个程序，可在DOS下直接输入puttygen。 
+
+
+clip_image013
+
+选择SSH-2RSA，然后选择Generate，在生成key的过程中需要移动鼠标，PUTT会根据鼠标的随机移动生成一对密钥。
+
+clip_image014
+
+分别选Save public key，保存公钥，再选Save private key保存私钥。
+
+CLIENT端的设置
+
+运行pageant导入客户端的密钥
+
+打开PAGEANT.EXE，在本机添加私钥pri。
+
+clip_image015
+
+设置好后会在右下角出现如下图的一个图标。
+
+clip_image016
+
+SERVER端的设置
+
+将公钥加入到要登录的用户的家目录的相应文件中：~/.ssh/authorized_keys，要注意的是，一个public key只占一行，如果贴入后出现多行应该想办法修正到一行，ssh-rsa后面有一个空格，key最后的=和注释之间也有一个空格。
+
+重新启动ssh
+
+# svcadm restart ssh
+我们先打开sshd_config这个文件看下：
+
+clip_image017
+
+clip_image018
+前面加#号表注释掉，默认值就是这些，启用了公钥认证，认证文件在~/.ssh/authorized_keys中。
+然后执行下面的操作：
+
+clip_image019
+
+编辑如下：其中_60server只是为了区别有多个公钥存在时好辨识。
+
+clip_image020
+
+保存，退出。
+你也可以根据自己需要来对.ssh和authorized_keys这个文件的权限进行修改。
+现在我们就可以通过用户名直接登录了，而不用输入密码。
+
+clip_image021
+小说明：用ll命令查看属性的时候，目录是用蓝色表示的，可通过下图方法来修改，个人不建议修改，还是显示蓝色来的直观。
+
+clip_image022
+
+我们通过ssh可以不需要密码进行了登录。上面介绍的其它命令呢？
+
+使用密钥
+
+将Pageant处于最小化运行状态，在SSH和plink，SCP，SFTP中可以不用输入密码。
+以plink为例：
+
+clip_image023
+
+有乱码，但试验是成功，不需要密码便可直接执行命令。
+
+以scp为例：
+
+没有建用户等价之前需要输入密码
+
+C:\>D:\工具\putty-0.60\pscp D:\工具\putty-0.60\pubkey bbbbb@111.111.145.102:puttypubkey
+
+Using keyboard-interactive authentication.
+
+Password:
+
+pubkey | 0 kB | 0.3 kB/s | ETA: 00:00:00 | 100%
+
+建用户等价之后不需要输入密码
+
+C:\>D:\工具\putty-0.60\pscp D:\工具\putty-0.60\pubkey bbbbb@111.1111.145.102:puttypubkey
+
+pubkey | 0 kB | 0.3 kB/s | ETA: 00:00:00 | 100%
+
+Using port forwarding in SSH
+用SSH突破防火墙
+source 填 3000 destination 填 192.168.142.2:25
+在客户端 telnet 127.0.01 3000 就连接到server端的 25号端口
+clip_image024
+forward localhost:3000 as a sendmail server port 25
+iptables -A INPUT -p tcp --dport 25 -s 192.168.142.1 -j REJECT
+netstat -natp|grep :25
+telnet localhost 3000
+example 2:forward localhost:3110 as a POP-3 server instead of popserver.example.com:110.
+下 面要说的就是选中单选按钮 Remote 后建立的反向 SSH 隧道，这样的隧道做什么用呢？一般防火墙都是允许从内往外链接，而不允许从外到内的链接，除非在防火墙上做好nat或端口转发。现在，你在防火墙的内部，但是又想让外面的人链接到你的机器上。防火墙厚厚的城门紧闭，外面的人进不来，只有你能从里面打开这扇防护严密的大门，就像一个特洛伊木马一样，你主动连接出去建立一个反向的 SSH 隧道，然后外面的人就可以通过这个反向的 SSH 隧 道轻松突破防火墙链接到的你的本地机器。
+Source port 这里填写 8080，也就是隧道的入口是端口 8080，Destination 这里填写 localhost:7001，也就是隧道的出口是本地的 7001 端口，下面的单选按钮要选 中 Remote，表示建立的隧道是个反向隧道，填写完毕别忘记点 Add 按钮，在上面就可以看到显示的 是 R8080 localhost:7001。成功登录远程主机 guantouping 后，反向隧道就建立好了。在远程主 机 guantouping 上输入命令 telnet localhost 8080 就可以连接到你的本地端口7001。
+
+
+
+http://www.linuxidc.com/Linux/2017-01/139530.htm
+
+这里介绍一下如何用虚拟机构建一台服务器，我是用的VMware，用VirtualBox基本也差不多，除了端口映射那里不太一样。因为每次学新东西配置实验环境都是个麻烦事（其实也没那么麻烦），主要是当自己的电脑装了一堆环境，一堆IDE后，总会变得臃肿不堪，而且经常遇到莫名其妙的问题，解决麻烦，还容易造成系统的不稳定。而且每换一台电脑，所有的东西需要重新配置。
+
+所以我一直在想有一台专属的实验服务器就好了（可是对于学生来说还是贵啊），我可以在上面装我的专属实验环境，并且不用担心污染我的本地电脑，而且重装系统，或者在不同电脑上也能快速的恢复实验环境！
+
+所以我就想能不能用虚拟机做一台专属的实验服务器，后来发现是可行的，并且装了server版的虚拟机基本不怎么吃资源。
+
+安装VMware虚拟机
+
+首先安装一个虚拟机，这里网上大量教材就不提供了，可以看看Linux公社的的相关位置，这里我是用的Ubuntu-server，注意安装的时候，最后选择安装包的时候，把openssh带上。或者安装完后通过命令安装
+
+sudo apt-get install openssh-server
+安装完通过查看，如果有sshd说明安装成功
+
+your text
+
+配置网络
+
+这里我采用的NAT模式，该模式的好处是不用管外界ip地址的变化（比如说办公环境经常变换，ip地址也经常变换），内部ip部会改变，这样可以免去频繁修改host文件的烦恼。
+
+我这里使用的vmware，把22号端口暴露出去（可以在公网中访问）
+
+编辑-虚拟网络编辑器
+
+your text
+
+点击【NAT设置】- 【添加】，这里输入端口号22，然后虚拟机的ip地址（进入虚拟机通过ipconfig获得），我这里是192.168.91.133
+
+your text
+
+your text
+
+填完之后确定，我们虚拟机就配置完了
+
+VirtualBOX
+
+对于Virtualbox来说其实更简单，直接点击端口转发就行了
+
+your text
+
+your text
+
+配置host
+
+这里，为了访问虚拟机方便，或者避免虚拟机ip地址变化导致程序需要做大量修改配置文件。
+
+我们可以直接在host中做一个映射。一般在C:\Windows\System32\drivers\etc目录下，用记事本，gvim等可以打开。增加一行是虚拟机的ip地址。
+
+your text
+
+配置xshell
+
+xshell是windows端功能强大的ssh终端软件，可以免费使用。
+
+Xshell实现Windows上传文件到Linux主机  http://www.linuxidc.com/Linux/2015-05/117975.htm
+
+Xshell 登录 CentOS 6.3 中文乱码的解决 http://www.linuxidc.com/Linux/2013-06/86600.htm
+
+VirtualBox4.12文本安装CentOS 5.4以及Xshell连接教程 PDF http://www.linuxidc.com/Linux/2013-06/85575.htm
+
+Xshell连接CentOS6.5 iptables或ls 输出乱码 http://www.linuxidc.com/Linux/2014-06/103725.htm
+
+VMware Linux使用Xshell登陆 http://www.linuxidc.com/Linux/2012-06/62546.htm
+
+使用Xshell密钥认证机制远程登录Linux http://www.linuxidc.com/Linux/2015-03/114947.htm
+
+当然你也可以使用（Putty、SecureCRT）根据自己的需要
+
+输入主机的ip地址：
+
+your text
+
+然后可以修改一下外观，改变一下字体什么的，然后按确定，再在弹出的对话框点【连接】
+
+your text
+
+会让你输入用户名和密码， 你可以选择记住密码
+
+your text
+
+your text
+
+然后就可以连接上了
+
+your text
+
+我们测试一下通过输入本地主机的ip地址：
+
+your text
+
+your text
+
+发现也是能连接上的，说明端口被暴露出来了
+
+服务器后台运行
+
+是不是每次都要打开电脑，然后留一个VM程序在任务栏惹人厌呢？当然不是，我们可以让它后台运行。接下来，我们可以把我们的虚拟机（服务器）后台运行了
+
+your text
+
+编辑——首选项，选中关闭后保持虚拟机运行
+
+your text
+
+光这样还不够，还要在服务中把VMware Authorization Service打开，就可以把虚拟机后台运行了。
+
+把VMware Authorization Service打开，就可以把虚拟机后台运行了。
+
+your text
+
+在vmware把虚拟机打开时候，关闭就行了，然后它就跑后台运行了，我们就可以随时通过远程工具比如（xshell）访问了
+
+your text
+
+可以发现服务器开了在后台基本不怎么耗费资源，可能也是server版本的原因，这样就可以放心的在后台开启服务器了。
+
+your text
+
+有人问为什么不直接在虚拟机中运行指令，而非要弄一个xshell远程登录，这个嘛，主要是~装逼~，当然不是拉，一来，我xshell软件可以显示风格，二来和真实工作情况相似，三来xshell提供了很多功能，加上配合xftp传输文件，非常方便。
+
+配置环境
+
+我这里主要使用node，所以安装了一些node开发工具（node npm MongoDB Redis……）
+
+sublime sftp连接到服务器
+
+在sublime中，通过sftp插件可以快速的把工程同步到服务器上，简直不要太方便
+
+安装也很简单：
+
+ctrl + shift + p
+
+install
+
+sftp
+使用的时候，对需要同步的目录或文件，点击右键【SFTP】，配置一下，主要是下面几个地方要配置一下，把upload_on_save
+
+打开可以在每次保存的时候，自动同步（根据需要开关），然后配置一下host，用户名，密码，端口号，还有同步到的目录（事先创建）
+
+your text
+
+然后我们保存，点击右键——【SFTP】——Upload File
+
+your text
+
+然后我们通过xshell打开服务器，可以看到正常同步过来了
+
+your text
+
+然后，只要我们代码修改保存，这里就会自动同步更新
+
+我们写了一小程序，在服务器的8011端口跑
+
+var http = require('http')
+
+http.createServer(function  (req,res) {
+    // body... 
+    res.end('hello');
+}).listen(8011);
+
+console.log('listen 8011');
+我们在服务器端运行一下：
+
+your text
+
+然后我们在本地跑一下：输入http://myserver:8011（还记得我们之前配置了hosts文件吗），可以看到程序正常运行了。
+
+your text
+
+最后
+
+然后，你就可以在服务器上做任何你想做的事情了，而且配置好的环境，你可以压缩包保存一份，然后上传到百度云上（我装完环境的才2g，压缩完700m），以后不管在什么地方，只要装上虚拟机，所有环境就有了，不要重新配置，方便吧！
+
+你还可以多配几个不同的实验环境，而不用担心污染你的本地电脑。而且Linux的bash在实际工作中效率要比Windows好很多，把它作为真实的实验环境是比较合适的。
+
+本文永久更新链接地址：http://www.linuxidc.com/Linux/2017-01/139530.htm

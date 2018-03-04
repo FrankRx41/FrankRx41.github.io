@@ -1,0 +1,10 @@
+Find out what process changed a registry key or value #
+
+Process Monitor (and the deprecated RegMon) is swell for live monitoring of registry activity, but, if run for long periods, it will saturate the page file and stop capturing data.
+In order to track down which process kept (vexingly) changing a registry value once or twice a day, Windows' built-in registry auditing was used:
+
+C:\>auditpol /set /subcategory:"Registry" /success:enable
+In regedit, right click key to monitor then click "Permissions..."
+"Advanced" > "Auditing" > "Add..."
+Everyone > OK > check both boxes to right of "Set Value" > OK x3
+Any value changes will be recorded to Windows Logs\Security in the Event Viewer, including the guilty process name

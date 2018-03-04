@@ -1,0 +1,30 @@
+<HEAD> 
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=gb2312">
+<TITLE>Unicode、ASCII相互转换</TITLE>
+<SCRIPT TYPE="text/javascript">
+//AsciiToUnicode("中国");
+
+//ASCII 转换 Unicode
+function AsciiToUnicode(content) {
+  result = '';
+  for (var i=0; i<content.length; i++)
+  result+='&#' + content.charCodeAt(i) + ';';
+  alert("ASCII："+content+"\nUnicode："+result);
+}
+//Unicode 转换 ASCII
+function UnicodeToAscii(content) {
+  var code = content.match(/&#(\d+);/g);
+  result= '';
+  for (var i=0; i<code.length; i++)
+  result += String.fromCharCode(code[i].replace(/[&#;]/g, ''));
+  alert("Unicode："+content+"\nASCII："+result);
+}
+</SCRIPT>
+</HEAD>
+<BODY>
+<INPUT TYPE="TEXT">
+<INPUT TYPE="BUTTON" onClick="UnicodeToAscii("123")">
+<SCRIPT></SCRIPT>
+
+</BODY>
+</HTML>
