@@ -3,69 +3,249 @@
 <HEAD>
 <META CHARSET="UTF-8"/>
 <META NAME="VIEWPORT" CONTENT="WIDTH=DEVICE-WIDTH, INITIAL-SCALE=1, MINIMUM-SCALE=1, MAXIMUM-SCALE=2"/>
-<LINK TYPE="TEXT/CSS" HREF="../css/normalize.css" REL="stylesheet"/>
-<LINK TYPE="TEXT/CSS" HREF="../css/style.css" REL="stylesheet"/>
-<SCRIPT LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT" SRC="../js/window.js"></SCRIPT>
-<SCRIPT LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT" SRC="../js/main.js"></SCRIPT>
-<SCRIPT LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT" SRC="../js/code.js"></SCRIPT>
-<LINK REL="shortcut icon" TYPE="image/x-icon" HREF="favicon.ico"/>
-<TITLE>frankrx's blog</TITLE>
-</HEAD>
+<!--<script SRC="./math.js"></script>-->
+<style>
+body{
+  font-family:'方正粗雅宋_GBK';
+  margin: auto;
+  overflow-y:scroll;
+  max-width: 300px;
+}
+button{
+  font-size:12px;
+  width:50px;
+  height: 22px;
+  padding:0px;
+  margin:5px;
+  display: inline-block;
+  box-sizing:border-box;
+  word-break:keep-all;
+  text-wrap:none;
+  line-height:18px;
+}
+.hide{
+  visibility:hidden;
+}
+.inout{
+  width:300px;
+  height:30px;
+  padding:6px 4px;
+  font-size:14px;
+  background:#ccc;
+  border:none;
+  display: block;
+  margin-top:10px;
+  box-sizing:border-box;
+}
+</style>
 <SCRIPT>
-function JScalc(){
+var needclear = false;
+var Ans = 0;
+
+function Calc(e){
+	if(needclear)CalcClear();
+	needclear = false;
 	var input = document.getElementById("input").value;
-	console.log(input);
+	if("string" == typeof e){
+		input += e;
+	}else{
+		input += e.innerHTML;
+	}
+	document.getElementById("input").value = input;
+}
+function CalcBack(){
+	needclear = false;
+	var input = document.getElementById("input").value;
+	input = input.substr(0,input.length-1);
+	document.getElementById("input").value = input;
+}
+function CalcClear(){
+	document.getElementById("input").value = "";
+}
+function CalcExe(){
+	var input = document.getElementById("input").value;
 	
 	var script = document.createElement("script");
-	script.appendChild(document.createTextNode("with(Math){var x="+input+"};"));
+	script.appendChild(
+		document.createTextNode(
+		"try{with(Math){Ans="+input+"};}catch(err){x=err}"
+		));
 	
 	var div = document.getElementById("runjshere");
 	div.replaceChild(script,div.firstChild);
-	//alert(x);
 	
-	document.getElementById("output").value = x;
+	document.getElementById("output").value = Ans.toFixed(4);
+	needclear = true;
 }
-window.onerror=function (sMsg,sUrl,sLine){
+
+function Error(sMsg,sUrl,sLine){
+	var input = document.getElementById("input").value;
 	document.getElementById("output").value = "expression error!";
-	return false;
+	console.log(input);
+	needclear = false;
+	return true;
 }
+
+//window.onerror = Error;
+
+/* Variadic function -- Returns the greatest common divisor of a list of arguments */
+Math.gcd = function() {
+    if (arguments.length == 2) {
+        if (arguments[1] == 0)
+            return arguments[0];
+        else
+            return Math.gcd(arguments[1], arguments[0] % arguments[1]);
+    } else if (arguments.length > 2) {
+        var result = Math.gcd(arguments[0], arguments[1]);
+        for (var i = 2; i < arguments.length; i++)
+            result = Math.gcd(result, arguments[i]);
+        return result;
+    }
+};
+
+Math.shuffle = function shuffle() {
+    for (var i = arguments.length - 1; i >= 0; i--) {
+ 
+        var randomIndex = Math.floor(Math.random() * (i + 1));
+        var itemAtIndex = arguments[randomIndex];
+ 
+        arguments[randomIndex] = arguments[i];
+        arguments[i] = itemAtIndex;
+    }
+    return input;
+}
+
 </SCRIPT>
 </HEAD>
 
 <BODY>
 
-<HEADER>
-<H1>EiSnow</H1>
-<H2>心の言葉</H2>
-<UL>
-<LI><A HREF="https://frankrx41.github.io">home</A></LI>
-<LI><A HREF="https://frankrx41.github.io/experience">experience</A></LI>
-<LI><A HREF="https://frankrx41.github.io/blog">blog</A></LI>
-<LI><A HREF="https://frankrx41.github.io/review">review</A></LI>
-<LI><A HREF="https://frankrx41.github.io/script">script</A></LI>
-</UL>
-</HEADER>
-
-<CONTENT>
-<ARTICLE>
+<DIV>
 <H1>JS calculator</H1>
-<H2>version 0.1</H2>
 
 <NOSCRIPT>This page request JavaScript!</NOSCRIPT>
-<TEXTAREA COLS="80" ROWS="10" ID="input" STYLE="padding:10px; max-width:100%; overflow-x:auto; box-sizing:border-box; display:block"></TEXTAREA>
-<BUTTON onClick="JScalc();">calc</BUTTON>
-<INPUT ID="output" STYLE="padding:0 10px; max-width:100%; overflow-x:auto; box-sizing:border-box; display:block" READONLY SIZE="80">
 
-<DIV ID="runjshere"><SCRIPT></SCRIPT></DIV>
+<INPUT ID="input" STYLE="padding:0 10px; max-width:100%; overflow-x:auto; box-sizing:border-box; display:block" VALUE="" autofocus class="inout" spellcheck="false">
 
-</ARTICLE>
-</CONTENT>
+<INPUT class="inout" ID="output" STYLE="padding:0 10px; max-width:100%; overflow-x:auto; box-sizing:border-box; display:block; text-align:right" READONLY>
+<BR>
 
-<FOOTER>
-<P>EiSnow</P>
-<P>心の言葉</P>
-<P>Copyright © 2017-2018 <A>EiSnow</A> All Rights Reserved.</P>
-</FOOTER>
+<DIV STYLE="font-size:0">
+<BR>
+<BUTTON onClick="Calc(this);">abs(</BUTTON>
+<BUTTON onClick="Calc(this);">pow(</BUTTON>
+<BUTTON onClick="Calc(this);">exp(</BUTTON>
+
+<BUTTON onClick="Calc(this);">(</BUTTON>
+<BUTTON onClick="Calc(this);">)</BUTTON>
+<BR>
+<BUTTON onClick="Calc(this);">sin(</BUTTON>
+<BUTTON onClick="Calc(this);">cos(</BUTTON>
+<BUTTON onClick="Calc(this);">tan(</BUTTON>
+
+<BUTTON onClick="Calc(this);">sqrt(</BUTTON>
+<BUTTON onClick="Calc(this);">cbrt(</BUTTON>
+<BR>
+<BUTTON onClick="Calc(this);">asin(</BUTTON>
+<BUTTON onClick="Calc(this);">acos(</BUTTON>
+<BUTTON onClick="Calc(this);">atan(</BUTTON>
+
+<BUTTON onClick="Calc(this);">log10(</BUTTON>
+<BUTTON onClick="Calc(this);">log2(</BUTTON>
+<BR>
+<BUTTON onClick="Calc(this);">asinh(</BUTTON>
+<BUTTON onClick="Calc(this);">acosh(</BUTTON>
+<BUTTON onClick="Calc(this);">atanh(</BUTTON>
+<BUTTON onClick="Calc(this);">atan2(</BUTTON>
+
+<BUTTON onClick="Calc(this);">log(</BUTTON>
+<BR>
+<!--<BUTTON onClick="Calc('&');">&</BUTTON>
+<BUTTON onClick="Calc(this);">|</BUTTON>
+<BUTTON onClick="Calc(this);">^</BUTTON>
+<BUTTON class="hide" onClick="Calc(this);">factorial(</BUTTON>
+<BUTTON class="hide" onClick="Calc(this);"></BUTTON>-->
+
+<BR>
+<BUTTON onClick="Calc(this);">ceil(</BUTTON>
+<BUTTON onClick="Calc(this);">floor(</BUTTON>
+<BUTTON onClick="Calc(this);">fround(</BUTTON>
+
+<BUTTON onClick="Calc(this);">clz32(</BUTTON>
+<BUTTON onClick="Calc(this);">trunc(</BUTTON>
+<BR>
+<BUTTON onClick="Calc(this);">expm1(</BUTTON>
+<BUTTON onClick="Calc(this);">imul(</BUTTON>
+<BUTTON onClick="Calc(this);">log1p(</BUTTON>
+<BUTTON onClick="Calc(this);">max(</BUTTON>
+<BUTTON onClick="Calc(this);">min(</BUTTON>
+<BR>
+<BUTTON onClick="Calc(this);">random(</BUTTON>
+<BUTTON onClick="Calc(this);">round(</BUTTON>
+
+<BUTTON onClick="Calc(this);">hypot(</BUTTON>
+<BUTTON onClick="Calc(this);">sign(</BUTTON>
+<BUTTON onClick="Calc(this);">gcd(</BUTTON>
+<BR>
+<BUTTON onClick="Calc(this);">7</BUTTON>
+<BUTTON onClick="Calc(this);">8</BUTTON>
+<BUTTON onClick="Calc(this);">9</BUTTON>
+
+<BUTTON onClick="CalcBack();">DEL</BUTTON>
+<BUTTON onClick="CalcClear();">AC</BUTTON>
+<BR>
+<BUTTON onClick="Calc(this);">4</BUTTON>
+<BUTTON onClick="Calc(this);">5</BUTTON>
+<BUTTON onClick="Calc(this);">6</BUTTON>
+
+<BUTTON onClick="Calc(this);">*</BUTTON>
+<BUTTON onClick="Calc(this);">/</BUTTON>
+<BR>
+<BUTTON onClick="Calc(this);">1</BUTTON>
+<BUTTON onClick="Calc(this);">2</BUTTON>
+<BUTTON onClick="Calc(this);">3</BUTTON>
+
+<BUTTON onClick="Calc(this);">+</BUTTON>
+<BUTTON onClick="Calc(this);">-</BUTTON>
+<BR>
+<BUTTON onClick="Calc(this);">E</BUTTON>
+<BUTTON onClick="Calc(this);">0</BUTTON>
+<BUTTON onClick="Calc(this);">PI</BUTTON>
+<BUTTON onClick="Calc(this);">Ans</BUTTON>
+<BUTTON onClick="CalcExe();">EXE</BUTTON>
+<BR>
+</DIV>
+
+<DIV ID="runjshere"><SCRIPT onerror="Error()"></SCRIPT></DIV>
+<script>
+document.onkeydown = function(e){
+	if(e.keyCode === 13) return;
+	if(needclear)CalcClear();
+	needclear = false;
+	document.getElementById("input").focus();
+}
+document.getElementById("input").onkeydown = function(e){
+	console.log(e.keyCode);
+	if(e.keyCode == 18){
+		needclear = false;
+	}
+	if(e.keyCode == 8 || e.keyCode == 37 || e.keyCode == 39){
+		needclear = false;
+	}
+	if(e.keyCode == 27){
+		CalcClear();
+		needclear = false;
+	}
+	if(e.keyCode == 13){
+		CalcExe();
+	}
+};
+</script>
+
+<P STYLE="font-size:10px;text-align:right"><A HREF="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math">Help</A>
+<SPAN STYLE="">ver 0.2</SPAN></P>
+
+</DIV>
 
 </BODY>
 </HTML>
