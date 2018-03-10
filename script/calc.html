@@ -4,24 +4,28 @@
 <META CHARSET="UTF-8"/>
 <META NAME="VIEWPORT" CONTENT="WIDTH=DEVICE-WIDTH, INITIAL-SCALE=1, MINIMUM-SCALE=1, MAXIMUM-SCALE=2"/>
 <!--<script SRC="./math.js"></script>-->
-<style>
+<STYLE>
 body{
   font-family:'方正粗雅宋_GBK';
   margin: auto;
   overflow-y:scroll;
   max-width: 300px;
+  background-color:#222;
 }
 button{
   font-size:12px;
   width:50px;
+  height: 18px;
   height: 22px;
   padding:0px;
   margin:5px;
-  display: inline-block;
+  /*display: inline-block;*/
+  float:left;
   box-sizing:border-box;
   word-break:keep-all;
   text-wrap:none;
   line-height:18px;
+  border:1px solid #000;
 }
 .hide{
   visibility:hidden;
@@ -37,7 +41,32 @@ button{
   margin-top:10px;
   box-sizing:border-box;
 }
-</style>
+.ExFunc0{
+  background-color:#111;
+  color:#FFF;
+}
+.ExFunc1{
+  background-color:#333;
+  color:#FFF;
+  width:40px;
+}
+.ExFunc2{
+  background-color:#FFF;
+  width:40px;
+  display: none;
+  overflow:hidden;
+}
+.ExFunc3{
+  background-color:#090;
+  display: none;
+  width:40px;
+}
+.ExFunc4{
+  background-color:#C90;
+  display: none;
+  width:40px;
+}
+</STYLE>
 <SCRIPT>
 var needclear = false;
 var Ans = 0;
@@ -74,7 +103,7 @@ function CalcExe(){
 	var div = document.getElementById("runjshere");
 	div.replaceChild(script,div.firstChild);
 	
-	document.getElementById("output").value = Ans.toFixed(4);
+	document.getElementById("output").value = Ans//.toFixed(4);
 	needclear = true;
 }
 
@@ -86,7 +115,7 @@ function Error(sMsg,sUrl,sLine){
 	return true;
 }
 
-//window.onerror = Error;
+window.onerror = Error;
 
 /* Variadic function -- Returns the greatest common divisor of a list of arguments */
 Math.gcd = function() {
@@ -114,51 +143,83 @@ Math.shuffle = function shuffle() {
     }
     return input;
 }
-
+function ExFunc(e,s){
+	console.log(s);
+	var ExFunc = document.getElementsByClassName(s);
+	for(i = 0;i < ExFunc.length; i++){
+		if(!e.checked){
+			ExFunc[i].style.display = "none";
+		}else{
+			ExFunc[i].style.display = "inline-block";
+		}
+	}
+	
+	if(s == 'ExFunc3'){
+		var ExFunc = document.getElementsByClassName('ExFunc0');
+		for(i = 0;i < ExFunc.length; i++){
+			console.log(ExFunc.item(i).innerHTML);
+			if(ExFunc.item(i).innerHTML == '00' || ExFunc.item(i).innerHTML == '0x'){
+				if(e.checked){
+					ExFunc[i].style.backgroundColor = "#090";
+					ExFunc[i].style.color = "#000";
+					ExFunc[i].innerHTML = '0x';
+				}else{
+					ExFunc[i].style.backgroundColor = "";
+					ExFunc[i].style.color = "";
+					ExFunc[i].innerHTML = '00';
+				}
+			}
+		}
+	}
+}
 </SCRIPT>
 </HEAD>
 
 <BODY>
 
 <DIV>
-<H1>JS calculator</H1>
+<H1 STYLE="color:#FFF; font-size:12px;">JS calculator</H1>
 
 <NOSCRIPT>This page request JavaScript!</NOSCRIPT>
 
-<INPUT ID="input" STYLE="padding:0 10px; max-width:100%; overflow-x:auto; box-sizing:border-box; display:block" VALUE="" autofocus class="inout" spellcheck="false">
+<INPUT ID="input" STYLE="padding:0 10px; max-width:100%; overflow-x:auto; box-sizing:border-box; display:block" VALUE="" AUTOFOCUS CLASS="inout" SPELLCHECK="false">
 
-<INPUT class="inout" ID="output" STYLE="padding:0 10px; max-width:100%; overflow-x:auto; box-sizing:border-box; display:block; text-align:right" READONLY>
+<INPUT CLASS="inout" ID="output" STYLE="padding:0 10px; max-width:100%; overflow-x:auto; box-sizing:border-box; display:block; text-align:right" READONLY>
 <BR>
 
 <DIV STYLE="font-size:0">
+<P STYLE="font-size:10px; width:170px; height: 18px; padding:2; margin:5px; float:left; overflow:hidden; display:inline-block;">
+<INPUT TYPE="checkbox" NAME="View" onClick="ExFunc(this,'ExFunc1');" checked><FONT COLOR="#333333">Ex1</FONT>
+<INPUT TYPE="checkbox" NAME="View" onClick="ExFunc(this,'ExFunc2');"><FONT COLOR="#FFFFFF">Ex2</FONT>
+<INPUT TYPE="checkbox" NAME="View" onClick="ExFunc(this,'ExFunc3');"><FONT COLOR="#009900">Ex3</FONT>
+<!--<INPUT TYPE="checkbox" NAME="View" onClick="ExFunc(this,'ExFunc4');">Ex4-->
+</P>
+<BUTTON class="ExFunc0" onClick="Calc(this);">(</BUTTON>
+<BUTTON class="ExFunc0" onClick="Calc(this);">)</BUTTON>
 <BR>
-<BUTTON onClick="Calc(this);">abs(</BUTTON>
-<BUTTON onClick="Calc(this);">pow(</BUTTON>
-<BUTTON onClick="Calc(this);">exp(</BUTTON>
+<BUTTON class="ExFunc1" onClick="Calc(this);">sin(</BUTTON>
+<BUTTON class="ExFunc1" onClick="Calc(this);">cos(</BUTTON>
+<BUTTON class="ExFunc1" onClick="Calc(this);">tan(</BUTTON>
 
-<BUTTON onClick="Calc(this);">(</BUTTON>
-<BUTTON onClick="Calc(this);">)</BUTTON>
+<BUTTON class="ExFunc1" onClick="Calc(this);">abs(</BUTTON>
+<BUTTON class="ExFunc1" onClick="Calc(this);">sqrt(</BUTTON>
+<BUTTON class="ExFunc1" onClick="Calc(this);">cbrt(</BUTTON>
 <BR>
-<BUTTON onClick="Calc(this);">sin(</BUTTON>
-<BUTTON onClick="Calc(this);">cos(</BUTTON>
-<BUTTON onClick="Calc(this);">tan(</BUTTON>
+<BUTTON class="ExFunc1" onClick="Calc(this);">asin(</BUTTON>
+<BUTTON class="ExFunc1" onClick="Calc(this);">acos(</BUTTON>
+<BUTTON class="ExFunc1" onClick="Calc(this);">atan(</BUTTON>
 
-<BUTTON onClick="Calc(this);">sqrt(</BUTTON>
-<BUTTON onClick="Calc(this);">cbrt(</BUTTON>
+<BUTTON class="ExFunc1" onClick="Calc(this);">log(</BUTTON>
+<BUTTON class="ExFunc1" onClick="Calc(this);">log10(</BUTTON>
+<BUTTON class="ExFunc1" onClick="Calc(this);">log2(</BUTTON>
 <BR>
-<BUTTON onClick="Calc(this);">asin(</BUTTON>
-<BUTTON onClick="Calc(this);">acos(</BUTTON>
-<BUTTON onClick="Calc(this);">atan(</BUTTON>
+<BUTTON class="ExFunc1" onClick="Calc(this);">asinh(</BUTTON>
+<BUTTON class="ExFunc1" onClick="Calc(this);">acosh(</BUTTON>
+<BUTTON class="ExFunc1" onClick="Calc(this);">atanh(</BUTTON>
+<BUTTON class="ExFunc1" onClick="Calc(this);">atan2(</BUTTON>
 
-<BUTTON onClick="Calc(this);">log10(</BUTTON>
-<BUTTON onClick="Calc(this);">log2(</BUTTON>
-<BR>
-<BUTTON onClick="Calc(this);">asinh(</BUTTON>
-<BUTTON onClick="Calc(this);">acosh(</BUTTON>
-<BUTTON onClick="Calc(this);">atanh(</BUTTON>
-<BUTTON onClick="Calc(this);">atan2(</BUTTON>
-
-<BUTTON onClick="Calc(this);">log(</BUTTON>
+<BUTTON class="ExFunc1" onClick="Calc(this);">pow(</BUTTON>
+<BUTTON class="ExFunc1" onClick="Calc(this);">exp(</BUTTON>
 <BR>
 <!--<BUTTON onClick="Calc('&');">&</BUTTON>
 <BUTTON onClick="Calc(this);">|</BUTTON>
@@ -167,57 +228,68 @@ Math.shuffle = function shuffle() {
 <BUTTON class="hide" onClick="Calc(this);"></BUTTON>-->
 
 <BR>
-<BUTTON onClick="Calc(this);">ceil(</BUTTON>
-<BUTTON onClick="Calc(this);">floor(</BUTTON>
-<BUTTON onClick="Calc(this);">fround(</BUTTON>
+<BUTTON class="ExFunc2" onClick="Calc(this);">ceil(</BUTTON>
+<BUTTON class="ExFunc2" onClick="Calc(this);">floor(</BUTTON>
+<BUTTON class="ExFunc2" onClick="Calc(this);">fround(</BUTTON>
 
-<BUTTON onClick="Calc(this);">clz32(</BUTTON>
-<BUTTON onClick="Calc(this);">trunc(</BUTTON>
+<BUTTON class="ExFunc2" onClick="Calc(this);">clz32(</BUTTON>
+<BUTTON class="ExFunc2" onClick="Calc(this);">trunc(</BUTTON>
+<BUTTON class="ExFunc2" onClick="Calc(this);">expm1(</BUTTON>
 <BR>
-<BUTTON onClick="Calc(this);">expm1(</BUTTON>
-<BUTTON onClick="Calc(this);">imul(</BUTTON>
-<BUTTON onClick="Calc(this);">log1p(</BUTTON>
-<BUTTON onClick="Calc(this);">max(</BUTTON>
-<BUTTON onClick="Calc(this);">min(</BUTTON>
+<BUTTON class="ExFunc2" onClick="Calc(this);">imul(</BUTTON>
+<BUTTON class="ExFunc2" onClick="Calc(this);">log1p(</BUTTON>
+<BUTTON class="ExFunc2" onClick="Calc(this);">max(</BUTTON>
+<BUTTON class="ExFunc2" onClick="Calc(this);">min(</BUTTON>
+<BUTTON class="ExFunc2" onClick="Calc(this);">random(</BUTTON>
+<BUTTON class="ExFunc2" onClick="Calc(this);">round(</BUTTON>
 <BR>
-<BUTTON onClick="Calc(this);">random(</BUTTON>
-<BUTTON onClick="Calc(this);">round(</BUTTON>
+<BUTTON class="ExFunc2" onClick="Calc(this);">hypot(</BUTTON>
+<BUTTON class="ExFunc2" onClick="Calc(this);">sign(</BUTTON>
+<BUTTON class="ExFunc2" onClick="Calc(this);">gcd(</BUTTON>
 
-<BUTTON onClick="Calc(this);">hypot(</BUTTON>
-<BUTTON onClick="Calc(this);">sign(</BUTTON>
-<BUTTON onClick="Calc(this);">gcd(</BUTTON>
+<BUTTON class="ExFunc2 hide" onClick="Calc(this);"> </BUTTON>
+<BUTTON class="ExFunc2 hide" onClick="Calc(this);"> </BUTTON>
+<BUTTON class="ExFunc2 hide" onClick="Calc(this);"> </BUTTON>
 <BR>
-<BUTTON onClick="Calc(this);">7</BUTTON>
-<BUTTON onClick="Calc(this);">8</BUTTON>
-<BUTTON onClick="Calc(this);">9</BUTTON>
+<BUTTON class="ExFunc3" onClick="Calc(this);">A</BUTTON>
+<BUTTON class="ExFunc3" onClick="Calc(this);">B</BUTTON>
+<BUTTON class="ExFunc3" onClick="Calc(this);">C</BUTTON>
+<BUTTON class="ExFunc3" onClick="Calc(this);">D</BUTTON>
+<BUTTON class="ExFunc3" onClick="Calc(this);">E</BUTTON>
+<BUTTON class="ExFunc3" onClick="Calc(this);">F</BUTTON>
+<BR>
+<BUTTON class="ExFunc0" onClick="Calc(this);">7</BUTTON>
+<BUTTON class="ExFunc0" onClick="Calc(this);">8</BUTTON>
+<BUTTON class="ExFunc0" onClick="Calc(this);">9</BUTTON>
 
 <BUTTON onClick="CalcBack();">DEL</BUTTON>
 <BUTTON onClick="CalcClear();">AC</BUTTON>
 <BR>
-<BUTTON onClick="Calc(this);">4</BUTTON>
-<BUTTON onClick="Calc(this);">5</BUTTON>
-<BUTTON onClick="Calc(this);">6</BUTTON>
+<BUTTON class="ExFunc0" onClick="Calc(this);">4</BUTTON>
+<BUTTON class="ExFunc0" onClick="Calc(this);">5</BUTTON>
+<BUTTON class="ExFunc0" onClick="Calc(this);">6</BUTTON>
 
-<BUTTON onClick="Calc(this);">*</BUTTON>
-<BUTTON onClick="Calc(this);">/</BUTTON>
+<BUTTON class="ExFunc0" onClick="Calc(this);">*</BUTTON>
+<BUTTON class="ExFunc0" onClick="Calc(this);">/</BUTTON>
 <BR>
-<BUTTON onClick="Calc(this);">1</BUTTON>
-<BUTTON onClick="Calc(this);">2</BUTTON>
-<BUTTON onClick="Calc(this);">3</BUTTON>
+<BUTTON class="ExFunc0" onClick="Calc(this);">1</BUTTON>
+<BUTTON class="ExFunc0" onClick="Calc(this);">2</BUTTON>
+<BUTTON class="ExFunc0" onClick="Calc(this);">3</BUTTON>
 
-<BUTTON onClick="Calc(this);">+</BUTTON>
-<BUTTON onClick="Calc(this);">-</BUTTON>
+<BUTTON class="ExFunc0" onClick="Calc(this);">+</BUTTON>
+<BUTTON class="ExFunc0" onClick="Calc(this);">-</BUTTON>
 <BR>
-<BUTTON onClick="Calc(this);">E</BUTTON>
-<BUTTON onClick="Calc(this);">0</BUTTON>
-<BUTTON onClick="Calc(this);">PI</BUTTON>
-<BUTTON onClick="Calc(this);">Ans</BUTTON>
-<BUTTON onClick="CalcExe();">EXE</BUTTON>
+<BUTTON class="ExFunc0" onClick="Calc(this);">00</BUTTON>
+
+<BUTTON class="ExFunc0" onClick="Calc(this);">0</BUTTON>
+<BUTTON class="ExFunc0" onClick="Calc(this);">.</BUTTON>
+<BUTTON class="ExFunc0" onClick="Calc(this);">Ans</BUTTON>
+<BUTTON onClick="CalcExe();" STYLE="background-color:#03F">EXE</BUTTON>
 <BR>
 </DIV>
 
-<DIV ID="runjshere"><SCRIPT onerror="Error()"></SCRIPT></DIV>
-<script>
+<DIV ID="runjshere"><SCRIPT ONERROR="Error()"></SCRIPT></DIV>
+<SCRIPT>
 document.onkeydown = function(e){
 	if(e.keyCode === 13) return;
 	if(needclear)CalcClear();
@@ -240,10 +312,13 @@ document.getElementById("input").onkeydown = function(e){
 		CalcExe();
 	}
 };
-</script>
+document.getElementById("input").onclick = function(){
+	needclear = false;
+}
+</SCRIPT>
 
 <P STYLE="font-size:10px;text-align:right"><A HREF="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math">Help</A>
-<SPAN STYLE="">ver 0.2</SPAN></P>
+<SPAN STYLE="">ver 0.3</SPAN></P>
 
 </DIV>
 
