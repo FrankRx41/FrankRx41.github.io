@@ -1,0 +1,364 @@
+﻿<!DOCTYPE html>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8" />
+<STYLE>
+body{
+  font-family:'方正粗雅宋_GBK';
+  /*font-size: 16px;*/
+  margin: auto;
+  overflow-y:scroll;
+  max-width: 800px;
+}
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #939393;
+  font-size: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 6px 10px;
+  border-radius: 3px;
+  box-sizing:content-box;
+  margin-top: 0px;
+}
+code, tt {
+  font-family:'Fixedsys Excelsior 3.01'; 
+  line-height: 100%;
+  margin: 0px 1px;
+  padding: 0px 1px;
+  white-space: nowrap;
+  border: 1px solid #939393;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+.console{
+  background-color:#000;
+  color:#FFF; 
+  font-family:'consolas'; 
+  font-size:18px;
+}
+</STYLE>
+<SCRIPT TYPE="text/javascript" CHARSET="UTF-8" SRC="highlight.pack.js"></SCRIPT>
+<LINK REL="stylesheet" HREF="vs.css">
+<SCRIPT>
+hljs.initHighlightingOnLoad();
+</SCRIPT>
+</HEAD>
+
+<BODY>
+<H1>鍵盤</H1>
+<H2>代碼</H2>
+
+<PRE><CODE>#include &lt;stdio.h&gt;
+  #include &lt;windows.h&gt;
+  #pragma execution_character_set( &quot;utf-8&quot; )
+#define WIDTH   74
+  #define HEIGHT  6
+#define arraylen(x) (sizeof(x)/sizeof(x[0]))
+int hidecursor()
+  {
+  HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+  CONSOLE_CURSOR_INFO info;
+  GetConsoleCursorInfo(consoleHandle,&amp;info);
+  info.bVisible = FALSE;
+  return SetConsoleCursorInfo(consoleHandle,&amp;info);
+  }
+unsigned char   g_font_color = 0x07;
+unsigned char   g_front_screen_index = 0,g_back_screen_index = 1;
+  /* XXXX XXXX XXXX XXXX */
+  unsigned short  g_screen_buffer[2][25*80] = {0};
+int clearscreen()
+  {
+  memset(g_screen_buffer[g_back_screen_index],0,sizeof(g_screen_buffer[g_back_screen_index]));
+  }
+int printxyf(int x,int y,char * s,...){
+  char buf[255];
+  int ret;
+  va_list va;
+  va_start(va,s);
+  ret = vsprintf(buf,s,va);
+  va_end(va);
+ for(int i=0;i &lt; strlen(buf);i++){
+  g_screen_buffer[g_back_screen_index][y*80+x+i] = buf[i] + (g_font_color &lt;&lt; 8);
+  }
+  return ret;
+  }
+int swapbuffer(){
+  HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+ for(int i=0;i&lt;6*80;i++){
+  if(g_screen_buffer[g_front_screen_index][i] != g_screen_buffer[g_back_screen_index][i]){
+  COORD coord = {i%80,i/80};
+  SetConsoleCursorPosition(consoleHandle,coord);
+  SetConsoleTextAttribute(consoleHandle,(g_screen_buffer[g_back_screen_index][i] &gt;&gt; 8));
+  printf(&quot;%c&quot;,g_screen_buffer[g_back_screen_index][i]);
+  g_screen_buffer[g_front_screen_index][i] = g_screen_buffer[g_back_screen_index][i];
+  }
+  }
+  g_front_screen_index    ^= g_back_screen_index;
+  g_back_screen_index     ^= g_front_screen_index;
+  g_front_screen_index    ^= g_back_screen_index;
+  }
+int setcolor(int c){
+  g_font_color = c;
+  }
+int keydown(int k){
+  return GetAsyncKeyState(k)&amp;0x8000;
+  }
+int title(char *s){
+  return SetConsoleTitleA(s);
+  }
+/*
+  0  345  89
+  [Esc][F1][F2][F3][F4][F5][F6][F7][F8][F9][F0]
+  [`][1][2][3][4][5][6][7][8][9][0][-][=][Back]
+  [Tab][Q][W][E][R][T][Y][U][I][O][P][[][]][|\]
+  [Caps][A][S][D][F][G][H][J][K][L][;]['][&lt;Ent]
+  [Shift^][Z][X][C][V][B][N][M][,][.][/][Shift]
+  [Ctrl][Win][Alt][   Space   ][Alt][Win][Ctrl]
+[Esc][F1][F2][F3][F4][F5][F6][F7][F8][F9][F10][F11][F12][Pau]
+  [`][1][2][3][4][5][6][7][8][9][0][-][=][Back] [Hom][Pgu][Ins] [l][/][*][-]
+  [Tab][Q][W][E][R][T][Y][U][I][O][P][[][]][ \] [End][Pgd][Del] [7][8][9][+]
+  [Caps][A][S][D][F][G][H][J][K][L][;]['][&lt;Ret]                 [4][5][6][+]
+  [Shift^][Z][X][C][V][B][N][M][,][.][/][Shift]      [ ^ ]      [1][2][3][e]
+  [Ctrl][Win][Alt][   Space   ][Alt][Win][Ctrl] [ &lt; ][ v ][ &gt; ] [ 0  ][.][n]
+  */
+struct KEY{
+  char * name;
+  int key;
+  int y;
+  int x;
+  struct KEY * next;
+  };
+  struct KEY keyhead = {
+  0,0,0,0,
+  NULL
+  };
+&nbsp;
+print(){
+  clearscreen();
+ int id = 0;
+  int defcolor = 0x08;
+  int keycolor = 0x0F;
+  int higcolor = 0x0C;
+ struct KEY* p = NULL;
+  for(p = keyhead.next; p!=NULL; p=p-&gt;next){
+  setcolor(defcolor);
+  int x = p-&gt;x;
+  int y = p-&gt;y;
+  int k = p-&gt;key;
+  char * n = p-&gt;name;
+  x += printxyf(x,y,&quot;[&quot;);
+ if(keydown(k)){
+  setcolor(higcolor);
+  }else{
+  setcolor(keycolor);
+  }
+  x += printxyf(x,y,&quot;%s&quot;,n);
+  setcolor(defcolor);
+  x += printxyf(x,y,&quot;]&quot;);
+  }
+  }
+
+int RegKey(char *name,int id,int y,int x){
+  struct KEY* key = malloc(sizeof (struct KEY));
+  if(!key)return -1;
+  key-&gt;key = id;
+  key-&gt;name = name;
+  key-&gt;x  = x;
+  key-&gt;y  = y;
+  key-&gt;next   = NULL;
+ struct KEY* p = NULL;
+  int ret = 0;
+  for(p = &amp;keyhead; p-&gt;next!=NULL; p=p-&gt;next){
+  ret++;
+  }
+  p-&gt;next = key;
+  return ret+1;
+  }
+
+init(){
+  RegKey(&quot;Esc&quot;,   VK_ESCAPE,  0,0  );
+  RegKey(&quot;F1&quot;,    VK_F1,      0,5  );
+  RegKey(&quot;F2&quot;,    VK_F2,      0,9  );
+  RegKey(&quot;F3&quot;,    VK_F3,      0,13 );
+  RegKey(&quot;F4&quot;,    VK_F4,      0,17 );
+  RegKey(&quot;F5&quot;,    VK_F5,      0,21 );
+  RegKey(&quot;F6&quot;,    VK_F6,      0,25 );
+  RegKey(&quot;F7&quot;,    VK_F7,      0,29 );
+  RegKey(&quot;F8&quot;,    VK_F8,      0,33 );
+  RegKey(&quot;F9&quot;,    VK_F9,      0,37 );
+  RegKey(&quot;F10&quot;,   VK_F10,     0,41 );
+  
+  RegKey(&quot;F11&quot;,   VK_F11,     0,46 );
+  RegKey(&quot;F12&quot;,   VK_F12,     0,51 );
+  RegKey(&quot;Pau&quot;,   VK_PAUSE,   0,56 );
+  
+  RegKey(&quot;`&quot;,     VK_OEM_3,   1,0  );
+  RegKey(&quot;1&quot;,     '1',        1,3  );
+  RegKey(&quot;2&quot;,     '2',        1,6  );
+  RegKey(&quot;3&quot;,     '3',        1,9  );
+  RegKey(&quot;4&quot;,     '4',        1,12 );
+  RegKey(&quot;5&quot;,     '5',        1,15 );
+  RegKey(&quot;6&quot;,     '6',        1,18 );
+  RegKey(&quot;7&quot;,     '7',        1,21 );
+  RegKey(&quot;8&quot;,     '8',        1,24 );
+  RegKey(&quot;9&quot;,     '9',        1,27 );
+  RegKey(&quot;0&quot;,     '0',        1,30 );
+  RegKey(&quot;-&quot;,     VK_OEM_MINUS,1,33);
+  RegKey(&quot;=&quot;,     VK_OEM_PLUS,1,36 );
+  RegKey(&quot;Back&quot;,  VK_BACK,    1,39 );
+ RegKey(&quot;Tab&quot;,   VK_TAB,     2,0  );
+  RegKey(&quot;Q&quot;,     'Q',        2,5  );
+  RegKey(&quot;W&quot;,     'W',        2,8  );
+  RegKey(&quot;E&quot;,     'E',        2,11 );
+  RegKey(&quot;R&quot;,     'R',        2,14 );
+  RegKey(&quot;T&quot;,     'T',        2,17 );
+  RegKey(&quot;Y&quot;,     'Y',        2,20 );
+  RegKey(&quot;U&quot;,     'U',        2,23 );
+  RegKey(&quot;I&quot;,     'I',        2,26 );
+  RegKey(&quot;O&quot;,     'O',        2,29 );
+  RegKey(&quot;P&quot;,     'P',        2,32 );
+  RegKey(&quot;[&quot;,     VK_OEM_4,   2,35 );
+  RegKey(&quot;]&quot;,     VK_OEM_6,   2,38 );
+  RegKey(&quot; \\&quot;,   VK_OEM_5,   2,41 );
+ RegKey(&quot;Caps&quot;,  VK_CAPITAL, 3,0  );
+  RegKey(&quot;A&quot;,     'A',        3,6  );
+  RegKey(&quot;S&quot;,     'S',        3,9  );
+  RegKey(&quot;D&quot;,     'D',        3,12 );
+  RegKey(&quot;F&quot;,     'F',        3,15 );
+  RegKey(&quot;G&quot;,     'G',        3,18 );
+  RegKey(&quot;H&quot;,     'H',        3,21 );
+  RegKey(&quot;J&quot;,     'J',        3,24 );
+  RegKey(&quot;K&quot;,     'K',        3,27 );
+  RegKey(&quot;L&quot;,     'L',        3,30 );
+  RegKey(&quot;;&quot;,     VK_OEM_1,   3,33 );
+  RegKey(&quot;'&quot;,     VK_OEM_7,   3,36 );
+  RegKey(&quot;Ent &quot;,  VK_RETURN,  3,39 );
+  RegKey(&quot;&lt;Ret&quot;,  VK_RETURN,  3,39 );
+ RegKey(&quot;Shift^&quot;,VK_LSHIFT,  4,0  );
+  RegKey(&quot;Z&quot;,     'Z',        4,8  );
+  RegKey(&quot;X&quot;,     'X',        4,11 );
+  RegKey(&quot;C&quot;,     'C',        4,14 );
+  RegKey(&quot;V&quot;,     'V',        4,17 );
+  RegKey(&quot;B&quot;,     'B',        4,20 );
+  RegKey(&quot;N&quot;,     'N',        4,23 );
+  RegKey(&quot;M&quot;,     'M',        4,26 );
+  RegKey(&quot;,&quot;,     VK_OEM_COMMA,4,29);
+  RegKey(&quot;.&quot;,     VK_OEM_PERIOD,4,32);
+  RegKey(&quot;/&quot;,     VK_OEM_2,   4,35 );
+  RegKey(&quot;Shift&quot;, VK_RSHIFT,  4,38 );
+
+ RegKey(&quot;Ctrl&quot;,  VK_LCONTROL,5,0  );
+  RegKey(&quot;Win&quot;,   VK_LWIN,    5,6  );
+  RegKey(&quot;Alt&quot;,   VK_LMENU,   5,11 );
+  RegKey(&quot;   Space   &quot;,VK_SPACE,5,16);
+  RegKey(&quot;Alt&quot;,   VK_RMENU,   5,29 );
+  RegKey(&quot;Win&quot;,   VK_RWIN,    5,34 );
+  RegKey(&quot;Ctrl&quot;,  VK_RCONTROL,5,39 );
+ RegKey(&quot; &lt; &quot;,   VK_LEFT,    5,46 );
+  RegKey(&quot; v &quot;,   VK_DOWN,    5,51 );
+  RegKey(&quot; &gt; &quot;,   VK_RIGHT,   5,56 );
+  RegKey(&quot; ^ &quot;,   VK_UP,      4,51 );
+ RegKey(&quot;Pgu&quot;,   VK_PRIOR,   1,51 );
+  RegKey(&quot;Pgd&quot;,   VK_NEXT,    2,51 );
+  RegKey(&quot;Hom&quot;,   VK_HOME,    1,46 );
+  RegKey(&quot;End&quot;,   VK_END,     2,46 );
+  RegKey(&quot;Ins&quot;,   VK_INSERT,  1,56 );
+  RegKey(&quot;Del&quot;,   VK_DELETE,  2,56 );
+ RegKey(&quot; 0  &quot;,  VK_NUMPAD0, 5,62 );
+  RegKey(&quot;.&quot;,     VK_DECIMAL, 5,68 );
+  RegKey(&quot;1&quot;,     VK_NUMPAD1, 4,62 );
+  RegKey(&quot;2&quot;,     VK_NUMPAD2, 4,65 );
+  RegKey(&quot;3&quot;,     VK_NUMPAD3, 4,68 );
+  RegKey(&quot;4&quot;,     VK_NUMPAD4, 3,62 );
+  RegKey(&quot;5&quot;,     VK_NUMPAD5, 3,65 );
+  RegKey(&quot;6&quot;,     VK_NUMPAD6, 3,68 );
+  RegKey(&quot;7&quot;,     VK_NUMPAD7, 2,62 );
+  RegKey(&quot;8&quot;,     VK_NUMPAD8, 2,65 );
+  RegKey(&quot;9&quot;,     VK_NUMPAD9, 2,68 );
+ RegKey(&quot;l&quot;,     VK_NUMLOCK, 1,62 );
+  RegKey(&quot;/&quot;,     VK_DIVIDE,  1,65 );
+  RegKey(&quot;*&quot;,     VK_MULTIPLY,1,68 );
+  RegKey(&quot;-&quot;,     VK_SUBTRACT,1,71 );
+  RegKey(&quot;+&quot;,     VK_ADD,     2,71 );
+  RegKey(&quot;+&quot;,     VK_ADD,     3,71 );
+  RegKey(&quot;e&quot;,     VK_RETURN,  4,71 );
+  //RegKey(&quot;n&quot;,     VK_RETURN,  5,71 );
+}
+void SetWindowSize(int w,int h)
+  {
+  SMALL_RECT test; 
+  HANDLE hStdout;
+  COORD coord;
+ hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+ coord.X = w;
+  coord.Y = h;
+ test.Left = 0;
+  test.Top = 0;
+  test.Right = coord.X-1;
+  test.Bottom = coord.Y-1;
+ SetConsoleWindowInfo(hStdout, 1, &amp;test);
+  SetConsoleScreenBufferSize(hStdout, coord);
+  }
+CenterWindow(){
+  int sw = GetSystemMetrics(SM_CXSCREEN);
+  int sh = GetSystemMetrics(SM_CYSCREEN);
+  HWND hWnd = GetConsoleWindow();
+  RECT rt = {0};
+ GetWindowRect(hWnd,&amp;rt);
+  int w = rt.right-rt.left;
+  int h = rt.bottom-rt.top;
+ SetWindowPos(hWnd,HWND_TOPMOST,(sw-w)/2,(sh-h)/2,w,h,SWP_NOMOVE | SWP_NOSIZE);
+  MoveWindow(hWnd,(sw-w)/2,(sh-h),w,h,TRUE);
+  }
+info() {
+  CONSOLE_SCREEN_BUFFER_INFO csbi;
+  int columns, rows;
+ GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &amp;csbi);
+  columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+  rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+ printf(&quot;columns: %d\n&quot;, columns);
+  printf(&quot;rows: %d\n&quot;, rows);
+  getchar();
+  }
+Debug(){
+  getchar();
+  int i;
+  for(i=0;i&lt;255;i++){
+  if(GetAsyncKeyState(i)&amp;0x8000)
+  printf(&quot;0x%X\n&quot;,i);
+  }
+  getchar();
+  }
+main(){
+  //Debug();
+  SetWindowSize(74,6);
+  CenterWindow();
+  hidecursor();
+  //info();
+ title(&quot;keyboard ver 0.5&quot;);
+  init();
+ while(1){
+  print();
+  swapbuffer();
+  Sleep(40);
+  }
+  }
+<PRE></PRE>
+
+<H2>DEMO</H2>
+<PRE CLASS="console">[Esc][F1][F2][F3][F4][F5][F6][F7][F8][F9][F10][F11][F12][Pau]
+[`][1][2][3][4][5][6][7][8][9][0][-][=][Back] [Hom][Pgu][Ins] [l][/][*][-]
+[Tab][Q][W][E][R][T][Y][U][I][O][P][[][]][ \] [End][Pgd][Del] [7][8][9][+]
+[Caps][A][S][D][F][G][H][J][K][L][;]['][ Ret]                 [4][5][6][+]
+[Shift^][Z][X][C][V][B][N][M][,][.][/][Shift]      [ ^ ]      [1][2][3][e]
+[Ctrl][Win][Alt][   Space   ][Alt][Win][Ctrl] [ < ][ v ][ > ] [ 0  ][.]</PRE>
+
+</BODY>
+</HTML>
