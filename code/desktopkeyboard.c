@@ -1,66 +1,5 @@
-﻿<!DOCTYPE html>
-<HEAD>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8" />
-<STYLE>
-body{
-  font-family:'方正粗雅宋_GBK';
-  /*font-size: 16px;*/
-  margin: auto;
-  overflow-y:scroll;
-  max-width: 800px;
-}
-pre>code {
-  margin: 0;
-  padding: 0;
-  white-space: pre;
-  border: none;
-  background: transparent;
-}
-pre {
-  background-color: #f8f8f8;
-  border: 1px solid #939393;
-  font-size: 16px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 6px 10px;
-  border-radius: 3px;
-  box-sizing:content-box;
-  margin-top: 0px;
-}
-code, tt {
-  font-family:'Fixedsys Excelsior 3.01'; 
-  line-height: 100%;
-  margin: 0px 1px;
-  padding: 0px 1px;
-  white-space: nowrap;
-  border: 1px solid #939393;
-  background-color: #f8f8f8;
-  border-radius: 3px;
-}
-.console{
-  background-color:#000;
-  color:#FFF; 
-  font-family:'consolas'; 
-  font-size:18px;
-}
-.footer{
-  font-size:10px; 
-}
-</STYLE>
-<SCRIPT TYPE="text/javascript" CHARSET="UTF-8" SRC="highlight.js"></SCRIPT>
-<LINK REL="stylesheet" HREF="vs.css">
-<SCRIPT>
-hljs.initHighlightingOnLoad();
-</SCRIPT>
-</HEAD>
-
-<BODY>
-<H1>Desktop Keyboard</H1>
-
-<H2>Source</H2>
-<P><A HREF="desktopkeyboard.c" download="desktopkeyboard.c">Download</A></P>
-<PRE><CODE>#include < stdio.h >
-#include < windows.h >
+#include <stdio.h>
+#include <windows.h>
 #pragma execution_character_set( "utf-8" )
 
 #define WIDTH   74
@@ -130,6 +69,23 @@ int keydown(int k){
 int title(char *s){
     return SetConsoleTitleA(s);
 }
+
+/*
+0  345  89
+[Esc][F1][F2][F3][F4][F5][F6][F7][F8][F9][F0]
+[`][1][2][3][4][5][6][7][8][9][0][-][=][Back]
+[Tab][Q][W][E][R][T][Y][U][I][O][P][[][]][|\]
+[Caps][A][S][D][F][G][H][J][K][L][;]['][<Ent]
+[Shift^][Z][X][C][V][B][N][M][,][.][/][Shift]
+[Ctrl][Win][Alt][   Space   ][Alt][Win][Ctrl]
+
+[Esc][F1][F2][F3][F4][F5][F6][F7][F8][F9][F10][F11][F12][Pau]
+[`][1][2][3][4][5][6][7][8][9][0][-][=][Back] [Hom][Pgu][Ins] [l][/][*][-]
+[Tab][Q][W][E][R][T][Y][U][I][O][P][[][]][ \] [End][Pgd][Del] [7][8][9][+]
+[Caps][A][S][D][F][G][H][J][K][L][;]['][<Ret]                 [4][5][6][+]
+[Shift^][Z][X][C][V][B][N][M][,][.][/][Shift]      [ ^ ]      [1][2][3][e]
+[Ctrl][Win][Alt][   Space   ][Alt][Win][Ctrl] [ < ][ v ][ > ] [ 0  ][.][n]
+*/
 
 struct KEY{
     char * name;
@@ -253,7 +209,7 @@ init(){
     RegKey(";",     VK_OEM_1,   3,33 );
     RegKey("'",     VK_OEM_7,   3,36 );
     RegKey("Ent ",  VK_RETURN,  3,39 );
-    RegKey("&lt;Ret",  VK_RETURN,  3,39 );
+    RegKey("<Ret",  VK_RETURN,  3,39 );
 
     RegKey("Shift^",VK_LSHIFT,  4,0  );
     RegKey("Z",     'Z',        4,8  );
@@ -385,19 +341,3 @@ main(){
         Sleep(40);
     }
 }
-</CODE></PRE>
-
-<H2>Demo</H2>
-<PRE CLASS="console">[Esc][F1][F2][F3][F4][F5][F6][F7][F8][F9][F10][F11][F12][Pau]
-[`][1][2][3][4][5][6][7][8][9][0][-][=][Back] [Hom][Pgu][Ins] [l][/][*][-]
-[Tab][Q][W][E][R][T][Y][U][I][O][P][[][]][ \] [End][Pgd][Del] [7][8][9][+]
-[Caps][A][S][D][F][G][H][J][K][L][;]['][ Ret]                 [4][5][6][+]
-[Shift^][Z][X][C][V][B][N][M][,][.][/][Shift]      [ ^ ]      [1][2][3][e]
-[Ctrl][Win][Alt][   Space   ][Alt][Win][Ctrl] [ < ][ v ][ > ] [ 0  ][.]</PRE>
-
-<DIV class="footer">
-<P>Hightlight support by <A HREF="https://highlightjs.org/">highlightjs</A>
-</DIV>
-
-</BODY>
-</HTML>
