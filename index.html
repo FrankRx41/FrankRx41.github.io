@@ -5,71 +5,45 @@
 <LINK REL="shortcut icon" TYPE="image/x-icon" HREF="favicon.ico"/>
 <TITLE>frankrx's blog</TITLE>
 <STYLE>
-li{
-	list-style-type:square;
-	list-style-position:outside;
-}
-
 body{
   font-family:'方正粗雅宋_GBK';
   margin: auto;
   overflow-y:scroll;
   max-width: 800px;
-  background-color:#FC6;
 }
-
-H1{
-  
-}
-
-
-#header {
-  margin-bottom:60px;
-  background-color: #C90;
-  padding: 10px 0px 20px 20px;
-  color:#420;
-}
-#header li{
-  display:inline;
-  list-style-type:circle;
-  padding:0 10px;
-  width:50px;
-  border:1px solid #000;
-}
-#header h1{
-	margin:0;
-  border: none;
-  font-size: 28px;
-  margin:0 auto;
-  font-weight:normal;
-  color:inherit;
-}
-#header a:hover{
-  color:#900;
-  text-decoration:none;
-}
-#header a{
-  text-decoration:none;
+#header{
+  min-height: 160px;
 }
 #header p{
-  font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "Lucida Grande", "segoe UI", "メイリオ", Meiryo, "ＭＳ Ｐゴシック", Verdana, sans-serif;
-  font-size: 13px;
   border: none;
   margin:0 auto;
-  color:inherit;
+  color: gray;
 }
-
-#list li{
-  
+.content{
+  min-height: 200px;
+}
+.content p{
+  margin-top: 0;
+}
+.list li{
+  padding:5px;
+  list-style-type:square;
+	list-style-position:outside;
+}
+.time{
+  margin:0;
+	color: orange;
+}
+.list a{
+  text-decoration: none; 
+  color: blue;
+}
+.list a:hover{
+  color: red;
 }
 
 #footer { 
-  position: absolute; 
-  bottom: 0; 
-  height: 100px;
-} 
-#footer p{
-  font-size:-2;
+  font-size:10px; 
 }
 </STYLE>
 </HEAD>
@@ -77,8 +51,10 @@ H1{
 <BODY>
 
 <DIV ID="header">
-<H1>EiSnow</H1>
+<H1>Frankrx41's Personal Blog</H1>
+<P></P>
 <P>心の言葉</P>
+<P>Last updated: 2018-03-23</P>
 <UL>
 <!--<LI><A HREF="https://frankrx41.github.io">home</A></LI>
 <LI><A HREF="https://frankrx41.github.io/experience">experience</A></LI>
@@ -88,23 +64,30 @@ H1{
 </UL>
 </DIV>
 
-<DIV>
-<H3>Frankrx41's Personal Blog</H3>
-<P>Last updated: 11-Mar-2018</P>
+<DIV CLASS="content">
+<H3>What's New</H3>
 <!--<P>Last updated: 10-Mar-2018</P>
 <P>巴、お誕生日おめでとう！好きです！</P>-->
-<P>EiSnow 最新作 「雪玉九州」(暫命名) 蓄意研發中！
+<DD CLASS="time">2018-03-09</DD>
+<P>EiSnow 最新作 「雪玉九州」(暫命名) 蓄意研發中！</P>
+
+<DD CLASS="time">2017-05-10</DD>
+<P>ブログの基本的な構造を完成しました。</P>
+
+<DD CLASS="time">2017-03-20</DD>
+<P>私のブログを公開しました。</P>
 </DIV>
 
-<DIV CLASS="heigh 100"></DIV>
+<DIV CLASS="heigh 200"></DIV>
 
-<DIV>
-<H3>Recently updated</H3>
+<DIV CLASS="list content">
+<H3>List</H3>
 <OL>
-<LI><A HREF="script/calc.html">[腳本]計算器</A></LI>
-<LI><A HREF="script/chess.html">[腳本]國際個棋</A></LI>
-<LI><A HREF="blog/gamedev.html">[教程]基於Windows系統的DOS遊戲開發</A></LI>
-<LI><A HREF="code/desktopkeyboard.html">[代碼]鍵盤監聽並顯示，類似於桌面鍵盤的程序</A></LI>
+<LI>[腳本]<A HREF="script/calc.html"> JS計算器</A></LI>
+<!--<LI><A HREF="script/chess.html">[腳本]國際個棋</A></LI>-->
+<LI>[教程]<A HREF="blog/gamedev.html"> 基於Windows系統的DOS遊戲開發</A></LI>
+<LI>[代碼]<A HREF="code/desktopkeyboard.html"> Desktop Keyboard 鍵盤監聽並顯示</A></LI>
+<LI>[代碼]<A HREF="code/chinesechess.html"> Chinese Chess 中國象棋</A></LI>
 <!--<LI><A HREF="code/signal.html">[代碼]數據序列的電信號表示</A></LI>-->
 </OL>
 </DIV>

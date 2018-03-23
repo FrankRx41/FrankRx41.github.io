@@ -11,8 +11,10 @@ int hidecursor()
 {
     HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_CURSOR_INFO info;
+
     GetConsoleCursorInfo(consoleHandle,&info);
     info.bVisible = FALSE;
+
     return SetConsoleCursorInfo(consoleHandle,&info);
 }
 
@@ -25,12 +27,14 @@ unsigned short  g_screen_buffer[2][25*80] = {0};
 int clearscreen()
 {
     memset(g_screen_buffer[g_back_screen_index],0,sizeof(g_screen_buffer[g_back_screen_index]));
+    return 0;
 }
 
 int printxyf(int x,int y,char * s,...){
     char buf[255];
     int ret;
     va_list va;
+
     va_start(va,s);
     ret = vsprintf(buf,s,va);
     va_end(va);
@@ -56,10 +60,12 @@ int swapbuffer(){
     g_front_screen_index    ^= g_back_screen_index;
     g_back_screen_index     ^= g_front_screen_index;
     g_front_screen_index    ^= g_back_screen_index;
+
+    return 0;
 }
 
 int setcolor(int c){
-    g_font_color = c;
+    return g_font_color = c;
 }
 
 int keydown(int k){
@@ -99,17 +105,15 @@ struct KEY keyhead = {
     NULL
 };
 
-
-
-print(){
-    clearscreen();
-
+int print(){
     int id = 0;
     int defcolor = 0x08;
     int keycolor = 0x0F;
     int higcolor = 0x0C;
-
     struct KEY* p = NULL;
+
+    clearscreen();
+
     for(p = keyhead.next; p!=NULL; p=p->next){
         setcolor(defcolor);
         int x = p->x;
@@ -127,29 +131,33 @@ print(){
         setcolor(defcolor);
         x += printxyf(x,y,"]");
     }
+    return 0;
 }
 
 
 int RegKey(char *name,int id,int y,int x){
-    struct KEY* key = malloc(sizeof (struct KEY));
+    struct KEY* key = (struct KEY*)malloc(sizeof (struct KEY));
+    struct KEY* p = NULL;
+    int ret = 0;
+
     if(!key)return -1;
+    
     key->key = id;
     key->name = name;
     key->x  = x;
     key->y  = y;
     key->next   = NULL;
 
-    struct KEY* p = NULL;
-    int ret = 0;
     for(p = &keyhead; p->next!=NULL; p=p->next){
         ret++;
     }
     p->next = key;
+
     return ret+1;
 }
 
 
-init(){
+int init(){
     RegKey("Esc",   VK_ESCAPE,  0,0  );
     RegKey("F1",    VK_F1,      0,5  );
     RegKey("F2",    VK_F2,      0,9  );
@@ -264,8 +272,8 @@ init(){
     RegKey("+",     VK_ADD,     2,71 );
     RegKey("+",     VK_ADD,     3,71 );
     RegKey("e",     VK_RETURN,  4,71 );
-    //RegKey("n",     VK_RETURN,  5,71 );
 
+    return 0;
 }
 
 void SetWindowSize(int w,int h)
@@ -288,21 +296,23 @@ void SetWindowSize(int w,int h)
     SetConsoleScreenBufferSize(hStdout, coord);
 }
 
-CenterWindow(){
+void CenterWindow(){
     int sw = GetSystemMetrics(SM_CXSCREEN);
     int sh = GetSystemMetrics(SM_CYSCREEN);
     HWND hWnd = GetConsoleWindow();
     RECT rt = {0};
+    int w,h;
 
     GetWindowRect(hWnd,&rt);
-    int w = rt.right-rt.left;
-    int h = rt.bottom-rt.top;
-
+    w = rt.right-rt.left;
+    h = rt.bottom-rt.top;
     SetWindowPos(hWnd,HWND_TOPMOST,(sw-w)/2,(sh-h)/2,w,h,SWP_NOMOVE | SWP_NOSIZE);
     MoveWindow(hWnd,(sw-w)/2,(sh-h),w,h,TRUE);
 }
 
-info() {
+void Debug(){
+    int i;
+    
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     int columns, rows;
 
@@ -312,25 +322,16 @@ info() {
 
     printf("columns: %d\n", columns);
     printf("rows: %d\n", rows);
+
     getchar();
 }
 
-Debug(){
-    getchar();
-    int i;
-    for(i=0;i<255;i++){
-        if(GetAsyncKeyState(i)&0x8000)
-            printf("0x%X\n",i);
-    }
-    getchar();
-}
-
-main(){
+int main(){
     //Debug();
     SetWindowSize(74,6);
     CenterWindow();
     hidecursor();
-    //info();
+
 
     title("keyboard ver 0.5");
     init();
@@ -340,4 +341,5 @@ main(){
         swapbuffer();
         Sleep(40);
     }
+    return 0;
 }
