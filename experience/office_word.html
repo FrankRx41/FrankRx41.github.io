@@ -1,41 +1,11 @@
-﻿<!DOCTYPE HTML>
-<HTML>
+﻿<!DOCTYPE html>
 <HEAD>
-<META CHARSET="UTF-8">
-<META NAME="VIEWPORT" CONTENT="WIDTH=DEVICE-WIDTH, INITIAL-SCALE=1, MINIMUM-SCALE=1, MAXIMUM-SCALE=2"/>
-<LINK TYPE="TEXT/CSS" HREF="../css/normalize.css" REL="stylesheet"/>
-<LINK TYPE="TEXT/CSS" HREF="../css/style.css" REL="stylesheet"/>
-<SCRIPT LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT" SRC="../js/window.js"></SCRIPT>
-<SCRIPT LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT" SRC="../js/main.js"></SCRIPT>
-<SCRIPT LANGUAGE="JAVASCRIPT" TYPE="TEXT/JAVASCRIPT" SRC="../js/code.js"></SCRIPT>
-<TITLE>frankrx's blog</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8" />
+<LINK REL="STYLESHEET" TYPE="TEXT/CSS" HREF="style.css">
 </HEAD>
 
 <BODY>
 
-<HEADER>
-<H1>EiSnow</H1>
-<H2>心の言葉</H2>
-<UL>
-<LI><A HREF="http://frankrx41.github.io">home</A></LI>
-<LI><A HREF="http://frankrx41.github.io/experience">experience</A></LI>
-<LI><A HREF="http://frankrx41.github.io/blog">blog</A></LI>
-<LI><A HREF="http://frankrx41.github.io/review">review</A></LI>
-<LI><A HREF="http://frankrx41.github.io/script">script</A></LI>
-</UL>
-</HEADER>
-
-<CONTENT>
-<ASIDE>
-<DIV>
-<H1>Calendar</H1>
-</DIV>
-<DIV>
-<H1>QR code</H1>
-</DIV>
-</ASIDE>
-
-<ARTICLE>
 <H1>Office Word</H1>
 
 <H2>為Word中文字注音</H2>
@@ -48,20 +18,20 @@
 
 <H3>代碼思路</H3>
 
-<P>這個問題的關鍵就在於<B>FormatPhoneticGuide</B>這個原裝macro，系統自帶的宏定義。用<CODE>Application.Run MacroName:=&quot;FormatPhoneticGuide&quot;</CODE>這一條代碼就可以調用注音的macro，輕鬆實現注音功能。再加上<CODE>SendKeys &quot;{enter}&quot;, True</CODE>幫助我們按下確定鍵。這樣，就可以輕鬆的實現自動添加注音。</P>
+<P>這個問題的關鍵就在於<CODE>FormatPhoneticGuide</CODE>這個原裝macro，系統自帶的宏定義。用<CODE>Application.Run MacroName:=&quot;FormatPhoneticGuide&quot;</CODE>這一條代碼就可以調用注音的macro，輕鬆實現注音功能。再加上<CODE>SendKeys &quot;{enter}&quot;, True</CODE>幫助我們按下確定鍵。這樣，就可以輕鬆的實現自動添加注音。</P>
 
-<P>一切似乎都是那麼的完美。但是問題來了，SendKeys &quot;{enter}&quot;, True 遇到了權限問題，具體的原因我並不清楚，估計和WIN8.1作業系統有關。</P>
+<P>&nbsp;</P>
+<P>一切似乎都是那麼的完美。但是<CODE>SendKeys &quot;{enter}&quot;, True</CODE> 遇到了權限問題，具體的原因我並不清楚，估計和WIN8.1作業系統有關。</P>
 
+<P>&nbsp;</P>
 <P>我在網路上並沒有找到直接的解決方案，不過，找到了一個勉強算是可以的方法</P>
 
 <PRE>
-Dim myKey As Object
-Set myKey = CreateObject(&quot;WScript.Shell&quot;)
-</PRE>
+<CODE>Dim myKey As Object
+Set myKey = CreateObject(&quot;WScript.Shell&quot;)</CODE></PRE>
 <P>這樣，我們就可以用<CODE>myKey.SendKeys &quot;{enter}&quot;, True</CODE>來幫助我們按下確定鍵了。</P>
 
 <P>這行代碼具體是怎麼工作的，有興趣可以查一下VB的代碼。</P>
-
 <H3>取消選擇的字元的注音</H3>
 
 <PRE>
@@ -106,18 +76,14 @@ End Sub
 
 <H3>參考文章</H3>
 
-<A HREF="http://www.jb51.net/office/word/152352.html">word录制宏为整篇word文档加拼音标注的方法</A><BR>
-<A HREF="http://blog.csdn.net/liyilong1993/article/details/51043195">Word自定义宏实现全文拼音标注 </A><BR>
-<A HREF="http://microsoft.public.jp.word.narkive.com/FJ2m9feU">ルビをカタカナでつける方法</A><BR>
-<A HREF="https://zhidao.baidu.com/question/367111815710521764.html">VB中使用SendKeys &quot;{enter}&quot;运行显示 拒绝的权限为什么?</A><BR>
-</ARTICLE>
-</CONTENT>
-
-<FOOTER>
-<P>EiSnow</P>
-<P>心の言葉</P>
-<P>Copyright © 2017-2018 <A>EiSnow</A> All Rights Reserved.</P>
-</FOOTER>
+<UL>
+  <LI><A HREF="http://www.jb51.net/office/word/152352.html">word录制宏为整篇word文档加拼音标注的方法</A></LI>
+  <LI><A HREF="http://blog.csdn.net/liyilong1993/article/details/51043195">Word自定义宏实现全文拼音标注 </A></LI>
+  <LI><A HREF="http://microsoft.public.jp.word.narkive.com/FJ2m9feU">ルビをカタカナでつける方法</A></LI>
+  <LI><A HREF="https://zhidao.baidu.com/question/367111815710521764.html">VB中使用SendKeys &quot;{enter}&quot;运行显示 拒绝的权限为什么?</A><BR>
+    
+  </LI>
+</UL>
 </BODY>
 </HTML>
 

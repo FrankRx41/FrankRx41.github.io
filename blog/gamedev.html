@@ -1,154 +1,19 @@
 ﻿<!DOCTYPE html>
 <HEAD>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8" />
-<STYLE>
-body{
-  font-family:'方正粗雅宋_GBK';
-  font-size: 16px;
-  margin: auto;
-  overflow-y:scroll;
-  max-width: 800px;
-}
-pre>code {
-  margin: 0;
-  padding: 0;
-  white-space: pre;
-  border: none;
-  background: transparent;
-}
-
-pre {
-  background-color: #f8f8f8;
-  border: 1px solid #939393;
-  font-size: 16px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 6px 10px;
-  border-radius: 3px;
-  box-sizing:content-box;
-  margin-top: 0px;
-}
-code, tt {
-  font-family:'Fixedsys Excelsior 3.01'; 
-  line-height: 100%;
-  margin: 0px 1px;
-  padding: 0px 1px;
-  white-space: nowrap;
-  border: 1px solid #939393;
-  background-color: #f8f8f8;
-  border-radius: 3px;
-}
-kbd {
-  line-height: 100%;
-	display: inline-block;
-	margin: 0 2px 0 2px;
-	padding: 2px 5px 2px 5px;
-	font-family: Consolas, "Liberation Mono", Courier, monospace;
-	font-size: 90%;
-	color: #242729;
-	text-shadow: 0 1px 0 #fff;
-	background-color: #eee;
-	border: 1px solid #abb;
-	border-radius: 2px;
-	box-shadow: 0 1px 0 rgba(12,13,14,0.2), 0 0 0 2px #fff inset;
-  box-sizing:content-box;
-	white-space: nowrap;
-}
-.code-control-div{
-  margin-bottom: -1px;
-}
-.code-control-button{
-  background-color: #f8f8f8;
-  color: #1e75bb;
-  text-align: center;
-  text-decoration: none;
-  margin-left: 0px;
-  margin-right: 1px;
-  font-size: 13px;
-  padding: 2px 6px;
-  width:50px;
-  display: inline-block;
-  padding: 2px;
-  
-  /* msdn.microsoft.com */
-  border-left: solid 1px #939393;
-  border-top: 1px solid #939393;
-  
-  border-top-left-radius: 4px;
-  border-right: 1px solid #939393;
-  border: 1px solid #939393;
-  border-top-right-radius: 4px;
-  border-bottom: 0px;
-  /*float: left;*/
-}
-.code-control-button:hover{
-  color: #00bcf2;
-  text-decoration: underline;
-  cursor: default;
-}
-.code-control-button
-</STYLE>
-<SCRIPT>
-window.onload = function(){
-	var pre = document.getElementsByTagName("pre");
-	for(var i=0;i<pre.length;i++){
-	if(pre.item(i).firstChild.tagName != undefined && pre.item(i).firstChild.tagName.toLowerCase() == "code"){
-		var div = document.createElement("div");
-		pre.item(i).parentNode.insertBefore(div,pre.item(i));
-		div.classList.add('code-control-div');
-		
-		var btn = document.createElement("A");
-		btn.innerHTML = "Select";
-		btn.classList.add('code-control-button');
-		btn.onclick = function() {
-			var range = document.createRange();
-			var referenceNode = this.parentNode.nextSibling.firstChild;
-			range.selectNode(referenceNode);
-			window.getSelection().removeAllRanges();
-			window.getSelection().addRange(range);
-		};
-		div.appendChild(btn);
-		
-		var btn = document.createElement("A");
-		btn.innerHTML = "roll";
-		btn.classList.add('code-control-button');
-		btn.onclick = function() {
-			var pre = this.parentNode.nextSibling;
-			console.log(pre.style.maxHeight);
-			if(pre.style.maxHeight == ""){
-				pre.style.maxHeight = "300px";
-			}else{
-				pre.style.maxHeight = "";
-			}
-		};
-		if(pre.item(i).offsetHeight > 300){
-			div.appendChild(btn);
-		}
-		console.log(pre.item(i).offsetHeight);
-		pre.item(i).style.maxHeight = "300px";
-	}
-	}
-};
-</SCRIPT>
-
-<LINK HREF="http://cdn.bootcss.com/highlight.js/8.0/styles/vs.min.css" REL="stylesheet">
-<STYLE>
-.hljs{
-  background:inherit;
-}
-</STYLE>
-<SCRIPT SRC="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></SCRIPT>  
-<SCRIPT >hljs.initHighlightingOnLoad();</SCRIPT>  
-
+<LINK REL="STYLESHEET" TYPE="TEXT/CSS" HREF="style.css">
+<SCRIPT SRC="script.js"></SCRIPT>
 </HEAD>
 
 <BODY>
+
 <H1>基於Windows系統的DOS遊戲開發</H1>
+
 <H2>前言</H2>
 <P>我是一個立志從事遊戲開發行業的在校大學生，可以稱呼我為「符」。我曾經在大二時擔任過科協遊戲組組長，但是，那個時候的我還不夠成熟，很多的東西都只懂皮毛，所以那個時候給大一的學生上課中有很多的地方沒有講好，我感覺非常的遺憾。一年後之後，在重新學習了C語言，編程藝術，代碼重構，遊戲框架，WIN32API這些知識後，我感覺是時候彌補大二那會兒的遺憾了。所以，打算把我遊戲開發的經驗全部寫在這裡。</P>
 <P>這些經驗，我打算留給想從事遊戲開發的讀者。在接著讀下去之前，我期望讀者您已經具備C語言的編程的基礎。後面的文章，我會以Windows平台為基礎，用C語言跟各位讀者講授我的遊戲編程經驗。我不會去和讀者談論編程語言的語法，那些不是遊戲開發的重點，他們可以從很多的地方學到，談論他們會浪費很多的時間，很抱歉。</P>
 <P>這裡，我在推薦幾本書給各位讀者，「C語言的編程與藝術」，「C語言專家編程」，「Windows程序設計第5版」。現在的我遺憾還在學習中，難免會有錯誤和不足，還望各位讀者包含，指正。</P>
-<P>閱讀這篇教程，我推薦的文本字體是「方正粗雅宋_GBK」，代碼字體是「Fixedsys Excelsior 3.01」。分別可以從<A HREF="http://www.sozi.cn/downdetail.php?aid=2106">這裡</A>和<A HREF="http://www.fixedsysexcelsior.com/fonts/FSEX300.ttf">這裡</A>下載。<!--或許我應該把這兩個字體上傳到我的博客上？-->本網站啟用了語法突顯來自於highlightjs.org，需要接入互聯網才能啟用。</P>
+<P>閱讀這篇教程，我推薦的代碼字體是「Fixedsys Excelsior 3.01」，可以從<A HREF="http://www.fixedsysexcelsior.com/fonts/FSEX300.ttf">這裡</A>下載之。<!--或許我應該把這兩個字體上傳到我的博客上？--></P>
 <H2>特別鳴謝</H2>
 <P>這篇文章能夠順利地發表，離不開支持我的人給我的幫助。在此，我特別感謝何科技同學能夠在百忙之中騰出時間幫助審閱我的文檔。</P>
 <H2>第零課 熟悉我們的IDE</H2>
