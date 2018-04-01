@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8" />
+<LINK REL="STYLESHEET" TYPE="TEXT/CSS" HREF="../style.css">
+<SCRIPT SRC="../script.js"></SCRIPT>
+</HEAD>
+
+<BODY>
+<H1>實現標準庫中的<CODE>qsort</CODE></H1>
+<H3>前言</H3>
+<P>我發現我果然不適合用腦子去想問題，寫這東西實在是太燒腦了。為了能夠寫出這份代碼，我浪費了整整一個下午打遊戲的時光和半個晚上，想想真是可惜，我美好的周末啊。</P>
+<H2>ver 1.0</H2>
+<P>這份代碼實現了一個排序，就是標準庫中的牌序，那個支援各種數據的牌序。我這裡也實現了。至少測試通過了基本類型。</P>
+<P>入口引數和標準庫的qsort完全相同，分別是數組地址，數組長度，數組中每個元素佔據的字節數和比較函式。</P>
+<PRE><CODE>#include &lt;stdio.h&gt;
+
+/*
+Parameter:
+    arr : address of array
+    len : sizeof(array/array[0])
+    size: sizeof(array[0])
+    func: this func return 1 (first arg first) -1 (second arg first)
+*/
+
+void myqsort(void *arr,int len,int size,int (*func)(const void *,const void *)){
+    void *i, *j;
+    int k;
+    i = (void *)((int)arr + size);
+    j = (void *)((int)arr + (len-1)*size);
+
+    if(len == 1 || len == 0)return;
+
+    while(i &lt;= j){
+
+        /* 尋找要交換的元素 */
+        while( func(arr,i) &lt; 0 &amp;&amp; i &lt; j){
+            i = (void*)((int)i + size);
+        }
+        while( func(arr,j) &gt; 0 &amp;&amp; j &gt;= i){
+            j = (void*)((int)j - size);
+        }
+
+        /* 交換之 */
+        if( j &gt; i ){
+            for(k=0; k&lt;size/sizeof(char); k++){
+                char x = *((char *)(i)+k);
+                *((char *)i+k) = *((char *)j+k);
+                *((char *)j+k) = x;
+            }
+        }
+
+        i = (void*)((int)i + size);
+    }
+
+    /* 交換 arr[0] 和 j */
+    if( arr != j ){
+        for(k=0; k&lt;size/sizeof(char); k++){
+            char x = *((char *)(j)+k);
+            *((char *)j+k) = *((char *)arr+k);
+            *((char *)arr+k) = x;
+        }
+    }
+
+    /* 繼續快排 */
+    myqsort(arr,((int)j-(int)arr)/size,size,func);
+    myqsort((void*)((int)j+size),((int)arr + (len-1)*size-(int)j)/size,size,func);
+}
+
+#define T   double
+
+T a[] = {1.5,1.4,3.2,4.2,5.4,9.1,8.1,8.3,8.2};
+
+int cmp(const void *a,const void *b){
+    return *(T *)a &gt; *(T *)b ? 1 : -1;
+}
+
+int main(){
+    int i = 0;
+    for(i=0; i&lt;sizeof(a)/sizeof(a[0]); i++){
+        printf("%g  ",(double)a[i]);
+    }
+    printf("\n");
+
+    myqsort(a,sizeof(a)/sizeof(a[0]),sizeof(a[0]),cmp);
+
+    for(i=0; i&lt;sizeof(a)/sizeof(a[0]); i++){
+        printf("%g  ",(double)a[i]);
+    }
+    printf("\n");
+
+    return 0;
+}</CODE></PRE>
+<P>我寫得肯定還有能夠改進的部分，也許還有我不清楚的bug。還請諸君見笑。</P>
+<H2>ver 1.1</H2>
+<P>改寫了交換的寫法。<BR>
+參考了一些其他人寫法，將最後一個函式呼叫改為使用<CODE>goto</CODE>。</P>
+<PRE><CODE>#include &lt;stdio.h&gt;
+#include &lt;inttypes.h&gt;
+
+/*
+Swap a and b:
+    global  : _w(uint8_t)
+*/
+static uint8_t _w;
+#define swap_(a,b,_width)   for(_w=0; _w&lt;_width; _w++){                     \
+                                char __x = *((char*)(a)+_w);                \
+                                *((char *)a+_w) = *((char *)b+_w);          \
+                                *((char *)b+_w) = __x;                      \
+                            }
+#define swap(a,b)       swap_(&amp;(a),&amp;(b),sizeof(a)/sizeof(char))
+
+/*
+Parameter:
+    arr : address of array
+    len : sizeof(array/array[0])
+    size: sizeof(array[0])
+    func: this func return 1 (first arg first) -1 (second arg first)
+*/
+void myqsort(void *arr,int len,int size,int (*func)(const void *,const void *)){
+    void *i, *j;
+    int len2;
+loop:
+    i = (void *)((int)arr + size);
+    j = (void *)((int)arr + (len-1)*size);
+    
+    while(i &lt;= j){
+
+        /* 尋找要交換的元素 */
+        while( func(arr,i) &lt; 0 &amp;&amp; i &lt; j){
+            i = (void*)((int)i + size);
+        }
+        while( func(arr,j) &gt; 0 &amp;&amp; j &gt;= i){
+            j = (void*)((int)j - size);
+        }
+
+        /* 交換之 */
+        if( j &gt; i ){
+            swap_(i,j,size/sizeof(char));
+        }
+
+        i = (void*)((int)i + size);
+    }
+
+    /* 交換 arr[0] 和 j */
+    if( arr != j ){
+        swap_(arr,j,size/sizeof(char));
+    }
+
+    /* 繼續快排 */
+    len2 = ((int)j-(int)arr)/size;
+    if(len2 &gt; 1){
+        myqsort(arr,len2,size,func);
+    }
+
+    len2 = ((int)arr + (len-1)*size-(int)j)/size;
+    if(len2 &gt; 1){
+        /* myqsort((void*)((int)j+size),len2,size,func); */
+        /* 使用 goto 節省一次函式呼叫 */
+        len = len2;
+        arr = (void*)((int)j+size);
+        goto loop;
+    }
+}
+
+#define T   int
+
+T a[] = {1.5,1.4,3.2,4.2,0.0,5.4,9.1,8.1,8.3,8.2};
+
+int cmp(const void *a,const void *b){
+    return *(T *)a &lt; *(T *)b ? 1 : -1;
+}
+
+debug(){
+    double a = 10.4, b = 2.8;
+    struct{
+        int x,y;
+    }p1 = {1,2}, p2 = {3,4};
+
+    printf("%g %g\n",(double)a,(double)b);
+    swap(a,b);
+    printf("%g %g\n",(double)a,(double)b);
+
+    printf("(%g,%g) (%g,%g)\n",(double)p1.x,(double)p1.y,(double)p2.x,(double)p2.y);
+    swap(p1,p2);
+    printf("(%g,%g) (%g,%g)\n",(double)p1.x,(double)p1.y,(double)p2.x,(double)p2.y);
+}
+
+int main(){
+    int i = 0;
+
+    debug();
+
+    for(i=0; i&lt;sizeof(a)/sizeof(a[0]); i++){
+        printf("%g  ",(double)a[i]);
+    }
+    printf("\n");
+
+    myqsort(a,sizeof(a)/sizeof(a[0]),sizeof(a[0]),cmp);
+
+    for(i=0; i&lt;sizeof(a)/sizeof(a[0]); i++){
+        printf("%g  ",(double)a[i]);
+    }
+    printf("\n");
+
+    return 0;
+}</CODE></PRE>
+<P>加入的<CODE>debug</CODE>函式是用來測試<CODE>swap</CODE>的。關於<CODE>swap</CODE>函式可以參考我寫的另一篇文章。</P>
+<H3>參考代碼</H3>
+<UL>
+  <LI><A HREF="https://opensource.apple.com/source/xnu/xnu-344/bsd/kern/qsort.c">https://opensource.apple.com/source/xnu/xnu-344/bsd/kern/qsort.c</A></LI>
+  <LI><A HREF="http://www.jbox.dk/sanos/source/lib/qsort.c.html">http://www.jbox.dk/sanos/source/lib/qsort.c.html</A></LI>
+</UL>
+
+<DIV ID="footer">frankrx41.github.io 2018 04 01</DIV>
+
+</BODY>
+</HTML>

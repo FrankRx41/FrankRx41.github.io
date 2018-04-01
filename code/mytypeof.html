@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8" />
+<LINK REL="STYLESHEET" TYPE="TEXT/CSS" HREF="../style.css">
+<SCRIPT SRC="../script.js"></SCRIPT>
+</HEAD>
+
+<BODY>
+<H1>typeof marco on C</H1>
+<PRE><CODE>#define typeof(_Val)    (sizeof((_Val)+(float)0)==sizeof(float) ? (                                 \
+                        (_Val) != ((int)_Val) || (_Val-_Val+~(unsigned int)0+1) > ((int)0) ? 'f' :  \
+                        ((_Val) < 0 || (_Val)+(1<<31) < 0) ? 'i' : 'u' ):                           \
+                        sizeof ((_Val) + (double)0) == sizeof (double) ? 'd' : 'l')</CODE></PRE>
+<P>Similar to <CODE>getName()</CODE> on java or <CODE>typeof</CODE> on javascript, this macro get the type of variable defined on C.</P>
+<P>return a char：</P>
+<P> <CODE>f</CODE>loat <CODE>d</CODE>ouble <CODE>i</CODE>nt or <CODE>u</CODE>nsigned</P>
+<P> I was inspired in math.h#280, it look like:</P>
+<PRE><CODE>#define _CLASS_ARG(_Val) (sizeof ((_Val) + (float)0) == sizeof (float) ? 'f' :\
+                          sizeof ((_Val) + (double)0) == sizeof (double) ? 'd' : 'l')</CODE></PRE>
+<P>This macro can detect float double and long double by checking its size.</P>
+<P>On this basis, I added the detection of signed and unsigned.</P>
+<P> First, let me tell you how to detect signed or unsigned.</P>
+<P> Here is my fake code:</P>
+<PRE><CODE>x = signed or unsigned;
+  
+if x &lt; 0, x must be signed.
+else if x &gt; 0,
+    if x is signed then x highest must be 0,
+    if x is unsigned, it's highest can be 0 or 1(but I don't care).
+
+now, let's set the highest to be 1. um, actually, I can only sure signed int can be set to 1, unsigned still be 0 or 1(but i still don't care).
+
+if the finaly value &lt; 0, then it must be signed.
+else, it is unsigned.</CODE></PRE>
+<P>Let's change the fake code to marco:</P>
+<PRE><CODE>#define isunsigned(_Val)   (((_Val) &lt; 0 || (_Val)+(1&lt;&lt;(sizeof(int)*8-1)) &lt; 0) ? 'i' : 'u')</CODE></PRE>
+<P>there have another way:</P>
+<PRE><CODE>#define isunsigned(v)   (((v) &lt; 0 || (v) &gt; 0 &amp;&amp; ~(v) &lt; 0) ? 'i' : 'u')</CODE></PRE>
+<P>way I not use? opreator <CODE>~</CODE> can not use in double or float!</P>
+<P> And now, let's have a check, here is my check code:</P>
+<PRE><CODE>#include &lt;assert.h&gt;
+#define isunsigned(_Val)   (((_Val) &lt; 0 || (_Val)+(1&lt;&lt;(sizeof(int)*8-1)) &lt; 0) ? 'i' : 'u')
+int main(){
+    for(unsigned int k=0;k&lt;0xFFFFFFFFFFFFFFFF;k++){
+        int         i=(k-(unsigned)0x7FFFFFFFFFFFFFF);
+        unsigned    u=k;
+        assert(isunsigned(i)=='i');
+        assert(isunsigned(u)=='u');
+    }
+}</CODE></PRE>
+<P>be careful, if you run this code in release mode, it won't work!</P>
+<P>and this program may run about 3 hours.</P>
+<P>Leave it alone, let me tell you how to distinguish between float and integer.</P>
+<P> Here is my fake code:</P>
+<PRE><CODE>x is a variable;
+
+if sizeof x is sizeof float and 
+if x is not a integer, it must be float.
+and then, i have to do a bad thing:
+
+set x to 0 and add to the largest integer(maybe 0xFFFFFFFFFFFFFFFF).
+
+now, the result have save in a temp variable, call it y.
+you have to konw, x and y have the same type and float can hold a larger number than the largest integer.
+
+so, let y add to 1.
+
+if y is a integer, it will overflow to 0, but float can continue hold the value.</CODE></PRE>
+<P>Finally, the marco is same as beginning.</P>
+<P>Thank you for your reading!</P>
+
+
+
+<DIV ID="footer">frankrx41.github.io 2017 12 05</DIV>
+
+</BODY>
+</HTML>

@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8" />
+<LINK REL="STYLESHEET" TYPE="TEXT/CSS" HREF="../style.css">
+<SCRIPT SRC="../script.js"></SCRIPT>
+</HEAD>
+
+<body>
+<H1>實現萬能的<CODE>swap</CODE>函式</H1>
+<P>這裡有兩種實現的方法，我取名為<CODE>swap</CODE>和<CODE>swap2</CODE>，其區別在於<CODE>swap</CODE>額外使用了一個變數。這兩個巨集可以交換多種類型，包括結構體。</P>
+<PRE><CODE>#include &lt;stdio.h&gt;
+#include &lt;inttypes.h&gt;
+
+static uint8_t _w;
+#define swap_(a,b,_width)   do{                                             \
+                            for(_w=0; _w&lt;_width; _w++){                     \
+                                char __x = *((char*)(a)+_w);                \
+                                *((char *)a+_w) = *((char *)b+_w);          \
+                                *((char *)b+_w) = __x;                      \
+                            }                                               \
+                            }while(0)
+            
+#define swap(a,b)           swap_(&amp;(a),&amp;(b),sizeof(a)/sizeof(char))
+
+#define swap2_(a,b,_width)  do{                                             \
+                            for(_w=0; _w&lt;_width; _w++){                     \
+                                *((char *)a+_w) ^=                          \
+                                *((char *)b+_w) ^=                          \
+                                *((char *)a+_w) ^= *((char *)b+_w);         \
+                            }                                               \
+                            }while(0)
+#define swap2(a,b)          swap2_(&amp;(a),&amp;(b),sizeof(a)/sizeof(char))
+
+#define T           double
+#define toT(T,a)    (T)(a)
+#define to(a)       toT(T,a)
+#define toD(a)      toT(double,a)
+
+int main(){
+    T a = to(6.2),b = to(10.5);
+    int i;
+
+    struct{
+        T x,y;
+    }p1 = {to(0),to(2.3)},p2 = {to(3.1),to(-5.0)};
+
+    printf("%g %g\n",toD(a),toD(b));
+    swap(a,b);    
+    printf("%g %g\n",toD(a),toD(b));
+
+    printf("(%g,%g) (%g,%g)\n",toD(p1.x),toD(p1.y),toD(p2.x),toD(p2.y));
+    swap2(p1,p2);
+    printf("(%g,%g) (%g,%g)\n",toD(p1.x),toD(p1.y),toD(p2.x),toD(p2.y));
+
+    return 0;
+}</CODE></PRE>
+
+<DIV ID="footer">frankrx41.github.io 2018 04 02</DIV>
+
+</body>
+</html>

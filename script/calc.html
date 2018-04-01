@@ -5,41 +5,66 @@
 <META NAME="VIEWPORT" CONTENT="WIDTH=DEVICE-WIDTH, INITIAL-SCALE=1, MINIMUM-SCALE=1, MAXIMUM-SCALE=2"/>
 <!--<script SRC="./math.js"></script>-->
 <STYLE>
+html, body{
+  font-size:0;
+  padding:0;
+  margin:0;
+  height:100%;
+  overflow:auto;
+}
+p, div, hr{
+  padding:0;
+  margin:0;
+  border:none;
+}
+hr{
+  display:block;
+  width:100%;
+  height:0;
+}
 body{
   font-family:'方正粗雅宋_GBK';
-  margin: auto;
   overflow-y:scroll;
-  max-width: 300px;
   background-color:#222;
+}
+h1{
+  color:#FFF;
+  font-size:12px;
+  height:2%;
 }
 button{
   font-size:12px;
-  width:50px;
-  height: 18px;
-  height: 22px;
+  width:20%;
+  height:7%;
   padding:0px;
-  margin:5px;
-  /*display: inline-block;*/
-  float:left;
+  margin:0px;
   box-sizing:border-box;
   word-break:keep-all;
   text-wrap:none;
   line-height:18px;
   border:1px solid #000;
+  overflow:hidden;
+  float:left;
 }
 .hide{
   visibility:hidden;
 }
 .inout{
-  width:300px;
-  height:30px;
-  padding:6px 4px;
+  width:90%;
+  height:6%;
+  padding:1%;
   font-size:14px;
   background:#ccc;
   border:none;
   display: block;
-  margin-top:10px;
+  margin:0 auto;
+  margin-top:2%;
   box-sizing:border-box;
+}
+.ExFunc9{
+  background-color:#111;
+  color:#FFF;
+  float:right;
 }
 .ExFunc0{
   background-color:#111;
@@ -48,23 +73,26 @@ button{
 .ExFunc1{
   background-color:#333;
   color:#FFF;
-  width:40px;
+  width:16.6%;
+  margin:0 auto;
 }
 .ExFunc2{
   background-color:#FFF;
-  width:40px;
   display: none;
-  overflow:hidden;
+  width:16.6%;
+  margin:0 auto;
 }
 .ExFunc3{
   background-color:#090;
   display: none;
-  width:40px;
+  width:16.6%;
+  margin:0 auto;
 }
 .ExFunc4{
   background-color:#C90;
   display: none;
-  width:40px;
+  width:16.6%;
+  margin:0 auto;
 }
 </STYLE>
 <SCRIPT>
@@ -176,9 +204,7 @@ function ExFunc(e,s){
 </HEAD>
 
 <BODY>
-
-<DIV>
-<H1 STYLE="color:#FFF; font-size:12px;">JS calculator</H1>
+<H1>JS calculator</H1>
 
 <NOSCRIPT><FONT COLOR="red">This page request JavaScript!</FONT></NOSCRIPT>
 
@@ -187,15 +213,16 @@ function ExFunc(e,s){
 <INPUT CLASS="inout" ID="output" STYLE="padding:0 10px; max-width:100%; overflow-x:auto; box-sizing:border-box; display:block; text-align:right" READONLY>
 <BR>
 
-<DIV STYLE="font-size:0">
 <P STYLE="font-size:10px; width:190px; height: 18px; padding:2; margin:5px; float:left; overflow:hidden; display:inline-block;">
 <INPUT TYPE="checkbox" NAME="View" onClick="ExFunc(this,'ExFunc1');" CHECKED><FONT COLOR="#333333">Ex1</FONT>
 <INPUT TYPE="checkbox" NAME="View" onClick="ExFunc(this,'ExFunc2');"><FONT COLOR="#FFFFFF">Ex2</FONT>
 <INPUT TYPE="checkbox" NAME="View" onClick="ExFunc(this,'ExFunc3');"><FONT COLOR="#009900">Ex3</FONT>
 <!--<INPUT TYPE="checkbox" NAME="View" onClick="ExFunc(this,'ExFunc4');">Ex4-->
 </P>
-<BUTTON CLASS="ExFunc0" STYLE="width: 40px;" onClick="Calc(this);">(</BUTTON>
-<BUTTON CLASS="ExFunc0" STYLE="width: 40px;" onClick="Calc(this);">)</BUTTON>
+<BUTTON CLASS="ExFunc9" onClick="Calc(this);">(</BUTTON>
+<BUTTON CLASS="ExFunc9" onClick="Calc(this);">)</BUTTON>
+<HR>
+
 <BR>
 <BUTTON CLASS="ExFunc1" onClick="Calc(this);">sin(</BUTTON>
 <BUTTON CLASS="ExFunc1" onClick="Calc(this);">cos(</BUTTON>
@@ -227,6 +254,7 @@ function ExFunc(e,s){
 <BUTTON class="hide" onClick="Calc(this);">factorial(</BUTTON>
 <BUTTON class="hide" onClick="Calc(this);"></BUTTON>-->
 
+
 <BR>
 <BUTTON CLASS="ExFunc2" onClick="Calc(this);">ceil(</BUTTON>
 <BUTTON CLASS="ExFunc2" onClick="Calc(this);">floor(</BUTTON>
@@ -250,6 +278,7 @@ function ExFunc(e,s){
 
 <BUTTON CLASS="ExFunc2 hide" onClick="Calc(this);"> </BUTTON>
 <BUTTON CLASS="ExFunc2 hide" onClick="Calc(this);"> </BUTTON>
+
 <BR>
 <BUTTON CLASS="ExFunc3" onClick="Calc(this);">A</BUTTON>
 <BUTTON CLASS="ExFunc3" onClick="Calc(this);">B</BUTTON>
@@ -257,6 +286,8 @@ function ExFunc(e,s){
 <BUTTON CLASS="ExFunc3" onClick="Calc(this);">D</BUTTON>
 <BUTTON CLASS="ExFunc3" onClick="Calc(this);">E</BUTTON>
 <BUTTON CLASS="ExFunc3" onClick="Calc(this);">F</BUTTON>
+
+
 <BR>
 <BUTTON CLASS="ExFunc0" onClick="Calc(this);">7</BUTTON>
 <BUTTON CLASS="ExFunc0" onClick="Calc(this);">8</BUTTON>
@@ -286,7 +317,6 @@ function ExFunc(e,s){
 <BUTTON CLASS="ExFunc0" onClick="Calc(this);">Ans</BUTTON>
 <BUTTON onClick="CalcExe();" STYLE="background-color:#03F">EXE</BUTTON>
 <BR>
-</DIV>
 
 <DIV ID="runjshere"><SCRIPT ONERROR="Error()"></SCRIPT></DIV>
 <SCRIPT>
@@ -317,10 +347,8 @@ document.getElementById("input").onclick = function(){
 }
 </SCRIPT>
 
-<P STYLE="font-size:10px;text-align:right"><A HREF="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math">Help</A>
-<SPAN STYLE="">ver 0.3</SPAN></P>
-
-</DIV>
+<P STYLE="font-size:10px;text-align:right;height:1%;"><A HREF="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math">Help</A>
+<SPAN STYLE="">ver 0.4</SPAN></P>
 
 </BODY>
 </HTML>

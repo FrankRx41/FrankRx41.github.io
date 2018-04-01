@@ -1,3 +1,4 @@
+/* 給所有的代碼加入 select 和 roll */
 window.onload = function(){
 	var pre = document.getElementsByTagName("pre");
 	for(var i=0;i<pre.length;i++){

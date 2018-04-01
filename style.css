@@ -13,11 +13,7 @@ body{
 }
 p{
   padding:0;
-  margin:0;
-  margin-top:16px;
-  margin-bottom: 8px;
-  margin-left:6px;
-  text-indent:2em;
+  margin:4px 6px;
   font-size:16px;
 }
 h1{
@@ -30,15 +26,12 @@ h2{
   background-color:#28F;
   font-size:120%;
   margin-top:6%;
+  padding-left:2px;
 }
 h3{
   color:#28F;
-  font-size:110%;
-  margin-top:2%;
-}
-strong{
-  font-weight:normal;
-  color:red; 
+  font-size:100%;
+  margin-top:3%;
 }
 
 #footer {
@@ -46,19 +39,6 @@ strong{
   font-size:8px; 
 }
 /* 代碼相關 */
-code,tt {
-  font-family:'Fixedsys Excelsior 3.01',Monaco,Courier,'Courier New',monospace;; 
-  font-size:inherit;
-  line-height:100%;
-  margin:0px 1px;
-  padding:0px 1px;
-  white-space:pre-wrap;
-  color:#000;
-  background-color:#DFE;
-  border:1px solid #111;
-  border-radius:2px;
-  box-sizing:content-box;
-}
 pre{
   background-color:#DFE;
   border:1px solid #111;
@@ -74,6 +54,19 @@ pre>code {
   border:none;
   background:transparent;
 }
+code,tt {
+  font-family:'Fixedsys Excelsior 3.01',Monaco,Courier,'Courier New',monospace;; 
+  font-size:inherit;
+  line-height:100%;
+  margin:0px 1px;
+  padding:0px 1px;
+  white-space:nowrap;
+  color:#000;
+  background-color:#DFE;
+  border:1px solid #111;
+  border-radius:2px;
+  box-sizing:content-box;
+}
 .console{
   background-color:#000;
   color:#FFF; 
@@ -81,7 +74,7 @@ pre>code {
   font-size:18px;
 }
 #footer{
-  font-size:10px; 
+  font-size:10px;
 }
 kbd {
   line-height:100%;

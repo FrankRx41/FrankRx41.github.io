@@ -1,8 +1,8 @@
 ﻿<!DOCTYPE html>
 <HEAD>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8" />
-<LINK REL="STYLESHEET" TYPE="TEXT/CSS" HREF="style.css">
-<SCRIPT SRC="script.js"></SCRIPT>
+<LINK REL="STYLESHEET" TYPE="TEXT/CSS" HREF="../style.css">
+<SCRIPT SRC="../script.js"></SCRIPT>
 </HEAD>
 
 <BODY>
@@ -12,47 +12,47 @@
 <H2>巨集的副作用</H2>
 <P>我們先來看一個簡單的代碼</P>
 <PRE><CODE>#define min(a,b)    (a &lt; b ? a : b)</CODE></PRE>
-<P>這個巨集返回兩個數之間的最小值，對吧<P>寫一個簡單的主函式測試一下</P>
+<P>這個巨集返回兩個數之間的最小值，對吧<BR>
+寫一個簡單的主函式測試一下
 <PRE><CODE>int main(){
     int num = min(1,2);
     printf(&quot;%d\n&quot;,num);
 }</CODE></PRE>
-<P>列印出的是1，似乎是正確的。</P>
-<P>&nbsp;</P>
-<P>可是，這個巨集真的是這樣嗎？</P>
-<P>我們來看另一個主函式</P>
+<P>列印出的是1，似乎是正確的。<BR>
+可是，這個巨集真的是這樣嗎？<BR>
+我們來看另一個主函式</P>
 <PRE><CODE>int main(){
     int a = 10,b = 20;
     int num = min(++a,++b);
     printf(&quot;%d\n&quot;,num);
 }</CODE></PRE>
-<P>答案是多少？在vs2013中，是12！</P>
-<P>出現這個問題的原因，是因為<CODE>min</CODE>巨集展開後，<CODE>++a</CODE>被調用了2次，10變成了12！</P>
-<P>但是，如果你使用其他的編譯器，答案可能不是12。因為這樣的行為undefined的！</P>
-<P>&nbsp;</P>
-<P>可以嘗試下面一個程式</P>
-<PRE><CODE>main(){<BR>    int i = 10;<BR>    i = i-- - --i * (i = -3) * i++ + ++i;<BR>    printf(&quot;%d\n&quot;,i);<BR>}</CODE></PRE>
-<P>該程式摘自C和指針中文版P84。</P>
-<P>在vs2013中的結果是4。而在gcc編輯器下結果是36。</P>
+<P>答案是多少？在vs2013中，是12！<BR>
+出現這個問題的原因，是因為<CODE>min</CODE>巨集展開後，<CODE>++a</CODE>被調用了2次，10變成了12！</P>
+<P>但是，如果你使用其他的編譯器，答案可能不是12。因為這樣的行為undefined的！<BR>
+可以嘗試下面一個程式</P>
+<PRE><CODE>main(){
+    int i = 10;
+    i = i-- - --i * (i = -3) * i++ + ++i;
+    printf(&quot;%d\n&quot;,i);
+}</CODE></PRE>
+<P>該程式摘自C和指針中文版P84。<BR>
+在vs2013中的結果是4。而在gcc編輯器下結果是36。</P>
 
 <H2>巨集正確的宣告方式</H2>
 <P>再看另一個巨集</P>
 <PRE><CODE>#define dosomething()   printf(&quot;1&quot;);printf(&quot;2&quot;);</CODE></PRE>
 <P>這個巨集做了兩件事，但是這個巨集真的安全嗎？</P>
-<P>&nbsp;</P>
 <P>我們測試一個主函式</P>
 <PRE><CODE>int main(){
     if(0)
         dosomething();
 }</CODE></PRE>
 <P>程式列印出了2，而我們的意圖應該是什麼都不輸出。</P>
-<P>&nbsp;</P>
 <P>為了防治這樣的情況，我們可以在巨集兩旁加入大括號</P>
 <PRE><CODE>#define dosomething()   { printf(&quot;1&quot;);printf(&quot;2&quot;); }</CODE></PRE>
 <P>這樣，前一個主函式是達成了我們的意圖。</P>
-<P>&nbsp;</P>
-<P>但是，這樣子就沒有問題了嗎？</P>
-<P>我們測試另一個主函式</P>
+<P>但是，這樣子就沒有問題了嗎？<BR>
+我們測試另一個主函式</P>
 <PRE><CODE>int main(){
     if(0)
         dosomething();
@@ -60,7 +60,6 @@
         dosomething();
 }</CODE></PRE>
 <P>是的，IDE報錯了，在沒有括號的if語句中，else沒有匹配的if。</P>
-<P>&nbsp;</P>
 <P>終極解決方法，是把巨集加入<CODE>do{}while(0)</CODE>語句中</P>
 <PRE><CODE>#define dosomething()   do{ printf(&quot;1&quot;);printf(&quot;2&quot;); }while(0)</CODE></PRE>
 <P>在現代IDE中，編譯器會自動幫助優化<CODE>while(0)</CODE>的語句，我們不需要擔心。</P>
@@ -72,14 +71,12 @@ int main(){
     printf(&quot;%s\n&quot;,join(&quot;hello&quot;,&quot;world&quot;));
 }</CODE></PRE>
 <P>這個程式將<CODE>hello</CODE>和<CODE>world</CODE>兩個字元組結合，然後列印。</P>
-<P>&nbsp;</P>
 <P>C語言也可以把一個宣告轉換成字元組</P>
 <PRE><CODE>#define tostring(x)     (#x)
 int main(){
     printf(&quot;%s\n&quot;,tostring(hello world));
 }</CODE></PRE>
 <P>這個語句很奇妙的列印出了<CODE>hello world</CODE>，而該<CODE>hello world</CODE>不是字元組
-<P>
 <P>我們結合<CODE>join</CODE>巨集，還可以這樣子寫
 <PRE><CODE>#define tostring(x)     (#x)
 #define join(a,b)   tostring(a##b)
@@ -99,9 +96,8 @@ int main(){
     string str1 = &quot;123&quot;,str2 = &quot;456&quot;;
     printf(&quot;%s\n%s\n&quot;,str1,str2);
 }</CODE></PRE>
-<P>這個程式在vs2013中可以順利的編譯通過，但是，運行時會出錯
-<P>出錯的原因很簡單，<CODE>str2</CODE>被宣告成了<CODE>char</CODE>，而不是<CODE>char*</CODE>。
-<P>
+<P>這個程式在vs2013中可以順利的編譯通過，但是，運行時會出錯<BR>
+  出錯的原因很簡單，<CODE>str2</CODE>被宣告成了<CODE>char</CODE>，而不是<CODE>char*</CODE>。
 <P>這個時候，需要使用<CODE>typedef</CODE>來對類型進行重宣告
 <PRE><CODE>typedef char * string;
 int main(){
@@ -111,13 +107,26 @@ int main(){
 <P>這樣，程式可以正常的運行。
 <H2><CODE>typedef</CODE>的其他用法</H2>
 <P>直接看代碼</P>
-<PRE><CODE>typedef char str_10[10];<BR>int main(){<BR>    str_10 str1 = &quot;123&quot;;<BR>    printf(&quot;%s\n&quot;,str1);<BR>}</CODE></PRE>
-<P>這樣子宣告的<CODE>str_10</CODE>是一個長度為10的字元組。
-<P>如果不是用typedef的重宣告，而想宣告一個長度為10的字元組，可以使用數組的宣告方式
-<PRE><CODE>int main(){<BR>    char str1[10] = &quot;123&quot;;<BR>    printf(&quot;%s\n&quot;,str1);<BR>}</CODE></PRE>
-<P>
+<PRE><CODE>typedef char str_10[10];
+int main(){
+    str_10 str1 = &quot;123&quot;;
+    printf(&quot;%s\n&quot;,str1);
+}</CODE></PRE>
+<P>這樣子宣告的<CODE>str_10</CODE>是一個長度為10的字元組。<BR>
+  如果不是用typedef的重宣告，而想宣告一個長度為10的字元組，可以使用數組的宣告方式
+<PRE><CODE>int main(){
+    char str1[10] = &quot;123&quot;;
+    printf(&quot;%s\n&quot;,str1);
+}</CODE>
+</PRE>
 <P>2d數組同理
-<PRE><CODE>typedef unsigned char matrix[10][10];<BR>int main(){<BR>    matrix m = {<BR>        {   1,2,3,4 },<BR>        {   5,6,7,8 },<BR>    };<BR>}</CODE></PRE>
+<PRE><CODE>typedef unsigned char matrix[10][10];
+int main(){
+    matrix m = {
+        {   1,2,3,4 },
+        {   5,6,7,8 },
+    };
+}</CODE></PRE>
 <P>這樣子宣告的<CODE>matrix</CODE>是一個10*10的2D數組。
 <H2>本地debug函式</H2>
 <P>在vs2013中，debug編譯模式會設置<CODE>_DEBUG</CODE>巨集，而我們可以對之進行利用</P>
@@ -133,81 +142,158 @@ int main(){
 <P>該程式在debug模式下輸出x的值，在release模式下不列印任何消息。</P>
 <H2>漂亮的預處理寫法</H2>
 <P>在IDE中會忽略掉<CODE>#</CODE>之後的空格，所以我們可以讓預處理有很好的風格</P>
-<PRE><CODE>#if 1<BR>#   define something<BR>#endif</CODE></PRE>
+<PRE><CODE>#if 1
+#   define something
+#endif</CODE></PRE>
 <P>當然，vs2013支援下面這種寫法</P>
-<PRE><CODE>#if 1<BR>    #define something<BR>#endif</CODE></PRE>
+<PRE><CODE>#if 1
+    #define something
+#endif</CODE></PRE>
 <P>但並不是每一個編譯器都支援的。
-<P>
 <P>IDE也會忽略空白的#，下面的寫法編譯是可以通過的
-<PRE><CODE>#if 1<BR>#<BR>#   define something<BR>#<BR>#endif</CODE></PRE>
+<PRE><CODE>#if 1
+#
+#   define something
+#
+#endif</CODE></PRE>
 <H2>關於<CODE>#error</CODE></H2>
 <P><CODE>#error</CODE>會強制編譯失敗，並顯示<CODE>#error</CODE>之後的信息。</P>
-<PRE><CODE>#ifdef _DEBUG<BR>#error this project request release mode<BR>#endif</CODE></PRE>
+<PRE><CODE>#ifdef _DEBUG
+#error this project request release mode
+#endif</CODE></PRE>
 <P>該代碼在debug模式下編譯會失敗。</P>
 <H2>快速的<CODE>for</CODE>寫法？</H2>
 <P>提前說明，這只是我個人的愛好。</P>
 <P>有的時候，我會宣告一個巨集用來替代繁瑣的for語句的寫法</P>
 <PRE><CODE>#define forp(x,m)   for(int x=0; x&lt;m; x++)</CODE></PRE>
 <P>使用方法如下
-<PRE><CODE>int main(){<BR>    forp(i,10){<BR>        printf(&quot;%d\n&quot;,i);<BR>    }<BR>}</CODE></PRE>
-<P>
+<PRE><CODE>int main(){
+    forp(i,10){
+        printf(&quot;%d\n&quot;,i);
+    }
+}</CODE>
+</PRE>
 <P>還有應一個寫法，用來做簡單的重複的事情
 <PRE><CODE>#define loop(m)     for(int loop_cnt##__LINE__ = 0;loop_cnt##__LINE__ &lt; m;loop_cnt##__LINE__++)</CODE></PRE>
 <P>我使用了<CODE>loop_cnt##__LINE__</CODE>確保能夠得到不一樣的變數名，以欠套的loop之間不會相互影響。
-<PRE><CODE>int main(){<BR>    loop(3){<BR>        printf(&quot;#&quot;);<BR>        loop(2)<BR>            printf(&quot;*&quot;);<BR>        printf(&quot;\n&quot;);<BR>    }<BR>}</CODE></PRE>
+<PRE><CODE>int main(){
+    loop(3){
+        printf(&quot;#&quot;);
+        loop(2)
+            printf(&quot;*&quot;);
+        printf(&quot;\n&quot;);
+    }
+}</CODE></PRE>
 <P>但是，這些寫法並不被所有的IDE所接受，在不支援C99的編譯中可能就會出錯<H2>字元組結構體</H2>
 <P>這是一個好想法。我們可以定義一個結構體如下
-<PRE><CODE>typedef struct tagstr_16{<BR>    char s[16];<BR>}str_16;</CODE></PRE>
+<PRE><CODE>typedef struct tagstr_16{
+    char s[16];
+}str_16;</CODE></PRE>
 <P>然後這樣子使用他
-<PRE><CODE>int main(){<BR>    str_16 str1 = {&quot;hello world\n&quot;};<BR>    printf(&quot;%s&quot;,str1.s);<BR>}</CODE></PRE>
+<PRE><CODE>int main(){
+    str_16 str1 = {&quot;hello world\n&quot;};
+    printf(&quot;%s&quot;,str1.s);
+}</CODE></PRE>
 <P>有兩點比較麻煩，一是初始化的時候必須要給字元組兩邊加入大括號。二是輸出字元組時要使用<CODE>str_16.s</CODE>或者<CODE>&amp;str_16</CODE>的方式。
-<P>
 <P>有沒有想起之前說<CODE>typedef</CODE>的時候寫的
 <PRE><CODE>typedef char str_10[10]; </CODE></PRE>
 <P>他們之間有什麼不同呢？
 <P>後者只能當作一個能夠少寫一點字母的寫法，而前者則有一個特性：
-<PRE><CODE>int main(){<BR>    str_16 str1 = {&quot;ABC&quot;};<BR>    str_16 str2 = {&quot;123&quot;};<BR>    str1 = str2;<BR>    printf(&quot;%s\n&quot;,&amp;str1);<BR>}</CODE></PRE>
+<PRE><CODE>int main(){
+    str_16 str1 = {&quot;ABC&quot;};
+    str_16 str2 = {&quot;123&quot;};
+    str1 = str2;
+    printf(&quot;%s\n&quot;,&amp;str1);
+}</CODE></PRE>
 <P>是的，編譯可以通過，還可以正常的運行，並且輸出正確的結果。
 <H2>關於行連接的方法</H2>
-<P>很簡單，就是在行的末尾加上一個字元<CODE>\</CODE>。</P>
-<P>我們知道，<CODE>\</CODE>又名轉譯字元，是使其後的一個字元失去原有的意思，比如<CODE>\n</CODE>代表迴車，<CODE>\b</CODE>代表退格。</P>
-<P>而行連結也是使用到了這個特性，即<CODE>\</CODE>+<CODE>\n</CODE>代表空</P>
-<P>&nbsp;</P>
+<P>很簡單，就是在行的末尾加上一個字元<CODE>\</CODE>。<BR>
+  我們知道，<CODE>\</CODE>又名轉譯字元，是使其後的一個字元失去原有的意思，比如<CODE>\n</CODE>代表迴車，<CODE>\b</CODE>代表退格。<BR>
+而行連結也是使用到了這個特性，即<CODE>\</CODE>+<CODE>\n</CODE>代表空</P>
 <P>這個一般只會在巨集中被使用，比如</P>
-<PRE><CODE>#define cube()  a = \<BR>                a * a * a<BR>int main(){<BR>    int a = 10;<BR>    cube();<BR>    printf(&quot;%d&quot;,a);<BR>}</CODE><BR></PRE>
-<P>
+<PRE><CODE>#define cube()  a = \
+                a * a * a
+int main(){
+    int a = 10;
+    cube();
+    printf(&quot;%d&quot;,a);
+}</CODE></PRE>
 <P>在函式調用時，C語言不會以換行做為結束標記，所以，可以這樣子調用函式
-<PRE><CODE>int sum(int a,int b,int c){<BR>    return a+b+c;<BR>}<BR>int main(){<BR>    int a = 10;<BR>    a = sum(<BR>        a,<BR>        a,<BR>        a);<BR>    printf(&quot;%d&quot;,a);<BR>}</CODE></PRE>
-<P>
+<PRE><CODE>int sum(int a,int b,int c){
+    return a+b+c;
+}
+int main(){
+    int a = 10;
+    a = sum(
+        a,
+        a,
+        a);
+    printf(&quot;%d&quot;,a);
+}</CODE>
+</PRE>
 <P>當然，下面這樣子寫也沒有問題
-<PRE><CODE>int sum(int a,int b,int c){<BR>    return a+b+c;<BR>}<BR>int main(){<BR>    int a = 10;<BR>    a = sum(    \<BR>        a,      \<BR>        a,      \<BR>        a);<BR>    printf(&quot;%d&quot;,a);<BR>}</CODE></PRE>
+<PRE><CODE>int sum(int a,int b,int c){
+    return a+b+c;
+}
+int main(){
+    int a = 10;
+    a = sum(    \
+        a,      \
+        a,      \
+        a);
+    printf(&quot;%d&quot;,a);
+}</CODE></PRE>
 <P>只是沒有必要
-<P>
 <P>字元組的拼接更簡單，在現代C語言中，編譯器會把中間只有空白字元的字元組自動進行拼接，所以下面的<CODE>str</CODE>的值為<CODE>&quot;helloworld&quot;</CODE>。
-<PRE><CODE>int main(){<BR>    char *str = &quot;hello&quot; &quot;world&quot;;<BR>    printf(&quot;%s&quot;,str);<BR>}</CODE></PRE>
+<PRE><CODE>int main(){
+    char *str = &quot;hello&quot; &quot;world&quot;;
+    printf(&quot;%s&quot;,str);
+}</CODE></PRE>
 <P>所以要小心了，比如下面的代碼</P>
-<PRE><CODE>int main(){<BR>    char *str[2] = {<BR>        &quot;hello&quot;<BR>        &quot;world&quot;<BR>    };<BR>    printf(&quot;%s\n&quot;,str[1]);<BR>}</CODE></PRE>
+<PRE><CODE>int main(){
+    char *str[2] = {
+        &quot;hello&quot;
+        &quot;world&quot;
+    };
+    printf(&quot;%s\n&quot;,str[1]);
+}</CODE></PRE>
 <P>如果少在str的初始化中少打了那個逗號，輸出的結果就會完全不同</P>
 <H2>指針的運算</H2>
-<P>精通C語言的人必然精通指針，而精通C語言人，也直到，所謂指針，不過是一個<CODE>int</CODE>。</P>
-<P>不信可以嘗試</P>
-<PRE><CODE>assert(sizeof(void*) == sizeof(int));</CODE></PRE>
-<P>&nbsp;</P>
+<P>精通C語言的人必然精通指針，而精通C語言人，也直到，所謂指針，不過是一個<CODE>int</CODE>。<BR>
+不信可以嘗試</P>
+<PRE><CODE>assert(sizeof(void*) == sizeof(int));</CODE>
+</PRE>
 <P>既然指針是一個<CODE>int</CODE>，那麼自然也支援<CODE>int</CODE>支援的運算。所以，我們可以使用<CODE>++</CODE>這樣的運算符更改指針的值。</P>
 <P>比如這樣一個訪問數組的程式</P>
-<PRE><CODE>int main(){<BR>    int arr[4] = {1,2,3,4};<BR>    int * p = arr;<BR>    while(p - arr != sizeof(arr)/sizeof(arr[0])){<BR>        printf(&quot;%d\n&quot;,*p++);<BR>    }<BR>}</CODE></PRE>
-<P>&nbsp;</P>
-<P>我們可以發現，<CODE>p++</CODE>使<CODE>p</CODE>增加的不是1，而是<CODE>sizoef(int)</CODE>，其原因是<CODE>p</CODE>被宣告為<CODE>int*</CODE>。</P>
-<P>我們可以使用強制轉換更改每次<CODE>p</CODE>增加的長度</P>
-<PRE><CODE>int main(){<BR>    int arr[4] = {1,2,3,4};<BR>    int * p = arr;<BR>    while(p - arr != sizeof(arr)/sizeof(arr[0])){<BR>        printf(&quot;%d\n&quot;,*((double *)p)++);<BR>    }<BR>}</CODE></PRE>
+<PRE><CODE>int main(){
+    int arr[4] = {1,2,3,4};
+    int * p = arr;
+    while(p - arr != sizeof(arr)/sizeof(arr[0])){
+        printf(&quot;%d\n&quot;,*p++);
+    }
+}</CODE>
+</PRE>
+<P>我們可以發現，<CODE>p++</CODE>使<CODE>p</CODE>增加的不是1，而是<CODE>sizoef(int)</CODE>，其原因是<CODE>p</CODE>被宣告為<CODE>int*</CODE>。<BR>
+我們可以使用強制轉換更改每次<CODE>p</CODE>增加的長度</P>
+<PRE><CODE>int main(){
+    int arr[4] = {1,2,3,4};
+    int * p = arr;
+    while(p - arr != sizeof(arr)/sizeof(arr[0])){
+        printf(&quot;%d\n&quot;,*((double *)p)++);
+    }
+}</CODE></PRE>
 <P>這個程式只會輸出1和3，而不是所有的值。</P>
-<P>&nbsp;</P>
 <P>我們也可以通過把<CODE>p</CODE>宣告為一個長度為2的<CODE>int</CODE>指針來做到這一點</P>
-<PRE><CODE>int main(){<BR>    int arr[4] = {1,2,3,4};<BR>    int (*p)[2] = arr;<BR>    while(*p - arr != sizeof(arr)/sizeof(arr[0])){<BR>        printf(&quot;%d\n&quot;,**p++);<BR>    }<BR>}</CODE></PRE>
+<PRE><CODE>int main(){
+    int arr[4] = {1,2,3,4};
+    int (*p)[2] = arr;
+    while(*p - arr != sizeof(arr)/sizeof(arr[0])){
+        printf(&quot;%d\n&quot;,**p++);
+    }
+}</CODE></PRE>
 <P>需要注意的是，<CODE>p</CODE>可以被理解成一個二級指針，<CODE>while</CODE>中判斷<CODE>p</CODE>的位置時必須使用<CODE>*p</CODE>進行，列印p中的值要使用<CODE>**</CODE>操作符。</P>
-<P>&nbsp;</P>
-<P>再來點難度</P>
-<P>把arr宣告為2*4的2d數組，然後把p宣告為一個長度為4的<CODE>int</CODE>指針，現在我們讓<CODE>p++</CODE></P>
+<P>再來點難度<BR>
+把arr宣告為2*4的2d數組，然後把p宣告為一個長度為4的<CODE>int</CODE>指針，現在我們讓<CODE>p++</CODE></P>
 <PRE><CODE>int main(){
    int arr[2][4] = {11,12,13,14, 21,22,23,24};
    int (*p)[4] = arr;
@@ -217,59 +303,153 @@ int main(){
 </PRE>
 <P>如您所見，p指向了第21的地址。</P>
 <H2>不定參數個數的函式</H2>
-<P>標準庫中也存在這類函式，比如<CODE>scanf</CODE>和<CODE>printf</CODE>，他們接受一至任意個參數。
-<P>為甚麼能夠這樣子寫，原因是C語言調用函式，並不會去看有多少個參數。
-<P>
+<P>標準庫中也存在這類函式，比如<CODE>scanf</CODE>和<CODE>printf</CODE>，他們接受一至任意個參數。<BR>
+  為甚麼能夠這樣子寫，原因是C語言調用函式，並不會去看有多少個參數。
 <P>比如，有個函式
-<PRE><CODE>int func(int x){<BR>    return x;<BR>}</CODE></PRE>
-<P>我們可以<CODE>func(1)</CODE>這樣調用，也可以<CODE>func(1,2,3)</CODE>這樣調用。
-<P>C語言編譯器不會有任何抱怨，C++會告訴我們參數數量不等。
-<P>
-<P>那麼，怎麼直到傳遞了多少個參數呢？答案是，只能通過調用函式處得知。
-<P>比如在<CODE>printf</CODE>中，第一個字元組中有多少個轉譯，就代表了後面有多少個參數。
-<P>
+<PRE><CODE>int func(int x){
+    return x;
+}</CODE></PRE>
+<P>我們可以<CODE>func(1)</CODE>這樣調用，也可以<CODE>func(1,2,3)</CODE>這樣調用。<BR>
+  C語言編譯器不會有任何抱怨，C++會告訴我們參數數量不等。
+<P>那麼，怎麼直到傳遞了多少個參數呢？答案是，只能通過調用函式處得知。<BR>
+  比如在<CODE>printf</CODE>中，第一個字元組中有多少個轉譯，就代表了後面有多少個參數。
 <P>我們可以寫一個累加任意數的函式<CODE>sum</CODE>，
 該函式宣告如下
 <PRE><CODE>int sum(int n,...);</CODE></PRE>
 <P>這是為了兼容C++而寫的，如果確定我們的代碼只會被C語言寫的代碼調用，我們還可以簡單的宣告為<CODE>int sum(int n);</CODE>，當然，這樣的宣告會被人罵 。
-<P>
 <P>這函式返回後面n個參數的累加和。
-<P>那麼，現在問題來了，怎麼訪問後面每個參數呢？
-<P>C語言調用函式的時候，會把參數的值壓入棧中，根據<CODE>stdcall</CODE>，<CODE>cdecl</CODE>等不同的函式調用方式而壓入參數。
-<P>我們按照<CODE>cdecl</CODE>先壓入最後一個參數的方式，然後，用指針進行訪問。
-<P>
+<P>那麼，現在問題來了，怎麼訪問後面每個參數呢？<BR>
+  C語言調用函式的時候，會把參數的值壓入棧中，根據<CODE>stdcall</CODE>，<CODE>cdecl</CODE>等不同的函式調用方式而壓入參數。<BR>
+  我們按照<CODE>cdecl</CODE>先壓入最後一個參數的方式，然後，用指針進行訪問。
 <P>首先我們用一個指針<CODE>p</CODE>指向第一個參數的地址，然後讓該指針+<CODE>sizeof</CODE>第一個參數的大小，這樣就可以得到第二個參數的地址，使用*運算符，即可提取到該參數的值。
 <P>實現代碼如下
-<PRE><CODE>int sum(int n,...){<BR>    int sum = 0;<BR>    int *p = &amp;n;<BR>    while(n--){<BR>        p = (int)p + sizeof(int);<BR>        sum += *p;<BR>    }<BR>    return sum;<BR>}</CODE></PRE>
-<P>&nbsp;</P>
+<PRE><CODE>int sum(int n,...){
+    int sum = 0;
+    int *p = &amp;n;
+    while(n--){
+        p = (int)p + sizeof(int);
+        sum += *p;
+    }
+    return sum;
+}</CODE>
+</PRE>
 <P>我必須要還提一個頭標檔<CODE>&lt;stdarg.h&gt;</CODE>，裡面存在一些操作參數的巨集<CODE>va_start</CODE>，<CODE>va_arg</CODE>，<CODE>va_end</CODE>。但是，就我個人而言，我覺得並沒有必要去使用他。但是，為了跨平台之類的存在，我們還是必須要去了解它。</P>
 <P>sum函式修改後如下</P>
-<PRE><CODE>int sum(int n,...){<BR>    int sum = 0;<BR>    va_list ap;<BR>    va_start(ap,n);<BR>    while(n--){<BR>        sum += *ap;<BR>        va_arg(ap,int);<BR>    }<BR>    va_end(ap);<BR>    return sum;<BR>}</CODE><BR></PRE>
+<PRE><CODE>int sum(int n,...){
+    int sum = 0;
+    va_list ap;
+    va_start(ap,n);
+    while(n--){
+        sum += *ap;
+        va_arg(ap,int);
+    }
+    va_end(ap);
+    return sum;
+}</CODE>
+</PRE>
 <P>我大概談談其原理吧。<CODE>va_list</CODE>是一個<CODE>char</CODE>型指針，使用<CODE>va_start</CODE>後，會把<CODE>ap</CODE>指向<CODE>n</CODE>之後的那個參數的地址，<CODE>va_arg</CODE>會按照其第二個參數，也就是類型的長度移動<CODE>ap</CODE>指針。最後的<CODE>va_end</CODE>會把<CODE>ap</CODE>指向0。我感覺最後一步是冗餘的。</P>
 <H2>調用main函式</H2>
 <P>順帶一提，大多數程序員都會把這個函式念作「賣」，而他其實念作「mєin」。</P>
 <P>C語言編譯器允許我們自己調用main函式，比如說這樣</P>
 <PRE><CODE>static n = 10;
 
-int main(int argc,char **argv){<BR>    int i;<BR>    for(i=0; i&lt;argc; i++){<BR>        printf(&quot;%s\t&quot;,*(argv+i));<BR>    }<BR>    printf(&quot;%p %d\n&quot;,main,i);<BR>    if(n--){<BR>        main(argc,argv);<BR>    }<BR>}</CODE></PRE>
+int main(int argc,char **argv){
+    int i;
+    for(i=0; i&lt;argc; i++){
+        printf(&quot;%s\t&quot;,*(argv+i));
+    }
+    printf(&quot;%p %d\n&quot;,main,i);
+    if(n--){
+        main(argc,argv);
+    }
+}</CODE></PRE>
 <P>但是，這並沒有甚麼太大的幫助</P>
 <H2>C語言實現C++</H2>
 <P>C++中最偉大的，也就是<CODE>class</CODE>，或者應該說是<CODE>struct</CODE>的別名。早期的C++編輯器是將代碼轉換成C語言後再由C語言編譯器進行編譯的。換句話說，C++的特性都可以用C語言實現。<P>結構體的繼承可以把被繼承的結構體宣告在繼承的結構體的開頭。C++的物件方法可以通過指向函式的指針進行實現，也可以通過將結構體的地址傳遞給函式來實現。
 <P>C語言不會進行類型檢查，比如下面的代碼
-<PRE><CODE>struct S0{<BR>    int x;<BR>};<BR>struct S1{<BR>    struct S0;<BR>    int y;<BR>};<BR>int showx(struct S0 * s){<BR>    printf(&quot;%d\n&quot;,s-&gt;x);<BR>}<BR>int main(){<BR>    struct S0 s0 = {1};<BR>    struct S1 s1 = {2,3};<BR>    showx(&amp;s0);<BR>    showx(&amp;s1);<BR>}</CODE></PRE>
+<PRE><CODE>struct S0{
+    int x;
+};
+struct S1{
+    struct S0;
+    int y;
+};
+int showx(struct S0 * s){
+    printf(&quot;%d\n&quot;,s-&gt;x);
+}
+int main(){
+    struct S0 s0 = {1};
+    struct S1 s1 = {2,3};
+    showx(&amp;s0);
+    showx(&amp;s1);
+}</CODE></PRE>
 <P>結構體<CODE>S0</CODE>有一個方法<CODE>showx</CODE>列印<CODE>x</CODE>的值，<CODE>S1</CODE>繼承於<CODE>S0</CODE>，而<CODE>showx</CODE>同樣也可以列印出讓<CODE>S1</CODE>中的<CODE>x</CODE>的值。
-<P>
-<P>我們也可以把函式直接寫進結構體中，不過我感覺這樣增加結構體的體積<PRE><CODE>typedef int(*func)(void *);<BR>struct S0{<BR>    int x;<BR>    func show;<BR>};<BR>int showx(struct S0 * s){<BR>    printf(&quot;%d\n&quot;,s-&gt;x);<BR>}<BR>int main(){<BR>    struct S0 s0 = {1,showx};<BR>    s0.show(&amp;s0);<BR>}</CODE></PRE>
-<P><CODE>func</CODE>是一個返回值為<CODE>int</CODE>，參數為<CODE>void *</CODE>的函式指針，也可以把參數改為正確的<CODE>struct S0 *</CODE>，C語言編譯器不會有任何抱怨。 在<CODE>s0</CODE>宣告的時候，需要手動指出<CODE>show</CODE>函式的地址空間。<P>
+<P>我們也可以把函式直接寫進結構體中，不過我感覺這樣增加結構體的體積<PRE><CODE>typedef int(*func)(void *);
+struct S0{
+    int x;
+    func show;
+};
+int showx(struct S0 * s){
+    printf(&quot;%d\n&quot;,s-&gt;x);
+}
+int main(){
+    struct S0 s0 = {1,showx};
+    s0.show(&amp;s0);
+}</CODE></PRE>
+<P><CODE>func</CODE>是一個返回值為<CODE>int</CODE>，參數為<CODE>void *</CODE>的函式指針，也可以把參數改為正確的<CODE>struct S0 *</CODE>，C語言編譯器不會有任何抱怨。 在<CODE>s0</CODE>宣告的時候，需要手動指出<CODE>show</CODE>函式的地址空間。
 <P>再讓我們把繼承和多态也引入
-<PRE><CODE>typedef int(*func)(void *);<BR>struct S0{<BR>    int x;<BR>    func show;<BR>};<BR>struct S1{<BR>    struct S0;<BR>    int y;<BR>};<BR>int showx(struct S0 * s){<BR>    printf(&quot;%d\n&quot;,s-&gt;x);<BR>}<BR>int showxx(struct S1 * s){<BR>    printf(&quot;%d\n&quot;,s-&gt;y);<BR>}<BR>int main(){<BR>    struct S0 s0 = {1,showx};<BR>    struct S1 s1 = {1,showxx,3};<BR>    s0.show(&amp;s0);<BR>    s1.show(&amp;s1);<BR>}</CODE></PRE>
+<PRE><CODE>typedef int(*func)(void *);
+struct S0{
+    int x;
+    func show;
+};
+struct S1{
+    struct S0;
+    int y;
+};
+int showx(struct S0 * s){
+    printf(&quot;%d\n&quot;,s-&gt;x);
+}
+int showxx(struct S1 * s){
+    printf(&quot;%d\n&quot;,s-&gt;y);
+}
+int main(){
+    struct S0 s0 = {1,showx};
+    struct S1 s1 = {1,showxx,3};
+    s0.show(&amp;s0);
+    s1.show(&amp;s1);
+}</CODE></PRE>
 <P>雖然<CODE>s0</CODE>和<CODE>s1</CODE>兩個結構體調用的都是<CODE>show</CODE>函式，但是，他們所列印的是不同的值。這也就是多态了。
-<P>
-<P>C++編譯時的多态也可以使用巨集來實現，比如<CODE>min</CODE>巨集就支援<CODE>int</CODE>，<CODE>float</CODE>等多種不同的類型。
-<P>運行時的多态我感覺也是函式指針的不同罷了
-<PRE><CODE>typedef int(*func)(void *);<BR>struct S0{<BR>    int x;<BR>    func show;<BR>};<BR>struct S1{<BR>    struct S0;<BR>    int y;<BR>};<BR>int showx(struct S0 * s){<BR>    printf(&quot;%d\n&quot;,s-&gt;x);<BR>}<BR>int showxx(struct S1 * s){<BR>    printf(&quot;%d\n&quot;,s-&gt;y);<BR>}<BR>int main(){<BR>    struct S0 s0 = {1,showx};<BR>    struct S1 s1 = {2,showxx,3};<BR>    struct S1 s2 = {4,showx,5};<BR>    struct S0 *p;<BR>    p = &amp;s0;<BR>    p-&gt;show(p);<BR>    p = &amp;s1;<BR>    p-&gt;show(p);<BR>    p = &amp;s2;<BR>    p-&gt;show(p);<BR>}</CODE></PRE>
+<P>C++編譯時的多态也可以使用巨集來實現，比如<CODE>min</CODE>巨集就支援<CODE>int</CODE>，<CODE>float</CODE>等多種不同的類型。<BR>
+  運行時的多态我感覺也是函式指針的不同罷了
+<PRE><CODE>typedef int(*func)(void *);
+struct S0{
+    int x;
+    func show;
+};
+struct S1{
+    struct S0;
+    int y;
+};
+int showx(struct S0 * s){
+    printf(&quot;%d\n&quot;,s-&gt;x);
+}
+int showxx(struct S1 * s){
+    printf(&quot;%d\n&quot;,s-&gt;y);
+}
+int main(){
+    struct S0 s0 = {1,showx};
+    struct S1 s1 = {2,showxx,3};
+    struct S1 s2 = {4,showx,5};
+    struct S0 *p;
+    p = &amp;s0;
+    p-&gt;show(p);
+    p = &amp;s1;
+    p-&gt;show(p);
+    p = &amp;s2;
+    p-&gt;show(p);
+}</CODE></PRE>
 <P>順帶一提，這份代碼在C++中編譯過不了。畢竟，如果你已經在用C++了，就別再去用C語言的這種寫法吧。
-<P>
 <P>而封裝在C語言中可以使用<CODE>static</CODE>將函式宣告為只限本文件使用來實現
 <P>
 <P>

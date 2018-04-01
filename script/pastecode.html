@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8" />
+<STYLE TYPE="text/css">
+html, body{
+  padding:0;
+  margin:0;
+  height:100%;
+  overflow:hidden;
+}
+#input, #output {
+  width:50%;
+  height:100%;
+  padding:0;
+  margin:0;
+  overflow:scroll;
+  font-size:14px;
+  background:#FFF;
+  border:1px solid #000;
+  display:inline-block;
+  box-sizing:border-box;
+}
+</STYLE>
+</HEAD>
+
+<BODY CLASS="body">
+<TEXTAREA ID="input" WRAP="OFF" onClick="func();"></TEXTAREA><TEXTAREA READONLY WRAP="OFF" ID="output" onClick="func();">說明
+這個程式用以把代碼中存在的 & < > 進行轉換，方便拷貝
+以後可能會加入語法突顯之類的功能
+
+ver 0.1
+2018 04 01</TEXTAREA>
+
+<SCRIPT TYPE="text/javascript" >
+    var input		= document.getElementById("input");
+    var output 	= document.getElementById("output");
+		var intext;
+		
+    output.designMode="On";
+		
+    function func(){
+        intext = input.value;
+				if( intext == "" ){
+					intext = window.clipboardData.getData('Text');
+				}
+				/* 替換 < > &*/
+				intext = intext.replace(new RegExp("&",'g'),"&amp;");
+				intext = intext.replace(new RegExp("<",'g'),"&lt;");
+				intext = intext.replace(new RegExp(">",'g'),"&gt;");
+				
+				output.value= intext;
+    }	
+</SCRIPT>
+</BODY>
+</HTML>
