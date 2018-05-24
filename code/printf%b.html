@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8" />
+<LINK REL="STYLESHEET" TYPE="TEXT/CSS" HREF="../style.css">
+<SCRIPT SRC="../script.js"></SCRIPT>
+</HEAD>
+
+<BODY>
+<H1>實現列印出二進數格式</H1>
+
+<P><CODE>printf</CODE>函式作為標準庫中強大的IO工具而受青睞，可以說是所有初心者學習C語言必須接觸的函式。但是，<CODE>printf</CODE>中的轉譯字元組中很遺憾的沒有包含輸出二進數的轉譯方法。雖然說大部分時候，我們都可以用輸出16進數以替代，而且列印出二進數也實在沒有甚麼意義。</P>
+<P><STRONG>可有的時候，就是有這個必要。</STRONG></P>
+<P>提前說明，我沒有實現<CODE>%b</CODE>的效果，我只是用了另一個方法列印出變數的二進數值。</P>
+
+<P>我這裡提供了兩種方法列印之。</P>
+<H3>其一，使用結構體 </H3>
+<P>首先我們制訂一個結構體，該結構體一共有8各成員，使用<CODE>:</CODE>運算子使每個成員佔1個位元。所以一共是8bit，也就是剛好一個char。</P>
+<PRE><CODE>struct bit{
+    unsigned char _0:1;
+    unsigned char _1:1;
+    unsigned char _2:1;
+    unsigned char _3:1;
+    unsigned char _4:1;
+    unsigned char _5:1;
+    unsigned char _6:1;
+    unsigned char _7:1;
+};</CODE></PRE>
+<P>  然後我們宣告一個該等位體的變數<CODE>b</CODE>，用之指向某個數據<CODE>a</CODE>的地址，然後，用<CODE>b-&gt;_0</CODE>的方式得到每一個位元。我們還可以用<CODE>sizeof(a)/sizeof(char)</CODE>的方式得知一共要進行幾次輸出。</P>
+<P>具體來說就是</P>
+<PRE><CODE>int main(){
+    int a = 50;
+    int i;
+
+    for(i=sizeof(a)/sizeof(char)-1; i>=0; i--){
+        struct bit *b = (int)&a+i;
+        printf("%d%d%d%d%d%d%d%d",b->_7,b->_6,b->_5,b->_4,b->_3,b->_2,b->_1,b->_0);
+    }
+    printf("\n");
+}</CODE></PRE>
+<P>順帶一提，如果結構體中的變數類型只是宣告為<CODE>unsigned</CODE>，下面的代碼是不會通過的。</P>
+<PRE><CODE>assert(sizeof(struct bit) == sizeof(char));</CODE></PRE>
+<H3>其二，使用位運算子</H3>
+<P>和方法一基本相同，使用<CODE>sizeof(a)/sizeof(char)</CODE>獲取要進行輸出的次數，然後將要輸出的數a強制轉換為<CODE>unsigned char</CODE>，然後輸出其中的每一位。<PRE><CODE>for(i=sizeof(a)/sizeof(char)-1; i&gt;=0; i--){
+    int k;
+    for(k=7; k&gt;=0; k--){
+        printf("%d",((*(unsigned char*)((int)&amp;a+i)) &amp; (0x01&lt;&lt;k))&gt;&gt;k);
+    }
+}</CODE></PRE>
+<P>我們可以封裝為一個巨集</P>
+
+<PRE><CODE>#define printb_(b,size) {                                                   \
+                        int i;                                              \
+                        for(i=size-1; i&gt;=0; i--){                           \
+                            int k;                                          \
+                            for(k=7; k&gt;=0; k--){                            \
+                                printf("%d",((*(unsigned char*)((int)&amp;b+i)) &amp; (0x01&lt;&lt;k))&gt;&gt;k);   \
+                            }                                               \
+                        }}
+
+#define printb(b)       printb_(b,sizeof(b)/sizeof(char))</CODE></PRE>
+<P>就可以很輕鬆的使用之了。</P>
+<PRE><CODE>int main(){
+    int a = 50;
+    printb(a);
+}</CODE></PRE>
+
+<DIV ID="footer">frankrx41.github.io 2018 04 02</DIV>
+
+</BODY>
+</HTML>

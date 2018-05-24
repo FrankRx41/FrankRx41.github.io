@@ -33,7 +33,10 @@ h3{
   font-size:100%;
   margin-top:3%;
 }
-
+strong{
+  font-weight:normal;
+  color:red; 
+}
 #footer {
   color:gray;
   font-size:8px; 
@@ -55,12 +58,12 @@ pre>code {
   background:transparent;
 }
 code,tt {
-  font-family:'Fixedsys Excelsior 3.01',Monaco,Courier,'Courier New',monospace;; 
+  font-family:'Fixedsys Excelsior 3.01',Monaco,Courier,'Courier New',monospace;
   font-size:inherit;
   line-height:100%;
   margin:0px 1px;
   padding:0px 1px;
-  white-space:nowrap;
+  white-space:normal;
   color:#000;
   background-color:#DFE;
   border:1px solid #111;
@@ -68,10 +71,10 @@ code,tt {
   box-sizing:content-box;
 }
 .console{
+  font-family:'consolas','Fixedsys Excelsior 3.01',Monaco,Courier,'Courier New',monospace;
+  font-size:18px;
   background-color:#000;
   color:#FFF; 
-  font-family:'consolas'; 
-  font-size:18px;
 }
 #footer{
   font-size:10px;

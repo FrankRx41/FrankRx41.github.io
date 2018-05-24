@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8" />
+<LINK REL="STYLESHEET" TYPE="TEXT/CSS" HREF="../style.css">
+<SCRIPT SRC="../script.js"></SCRIPT>
+</HEAD>
+
+<BODY>
+<H1>實現一個萬能的<CODE>debug</CODE>巨集</H1>
+<P>剛剛突然來了靈感，既然可以用<CODE>(double)</CODE>對想列印的數進行強制轉換，又可以用<CODE>%g</CODE>列印出所有的各式，為甚麼不實現一個萬能的巨集呢？</P>
+<P>於是出現了下面的代碼</P>
+
+<PRE><CODE>#define debug(a)        printf(#a": %g\n",(double)a)</CODE>
+</PRE>
+
+<P>這份代碼使用了<CODE>#</CODE>將變數<CODE>a</CODE>的名字作為字元組進行連結，可以列印出變數的名字。主要支援<CODE>int</CODE>，<CODE>float</CODE>，<CODE>double</CODE>這些可以轉換為<CODE>double</CODE>的基礎類型。結構體不能列印。</P>
+<P>再補充一下，在vs2013中，可以用下面的方式阻止在release模式下列印消息。</P>
+
+<PRE><CODE>#ifdef _DEBUG
+#define debug(a)        printf(#a": %g\n",(double)a)
+#else
+#define debug(a)
+#endif</CODE></PRE>
+
+<DIV ID="footer">frankrx41.github.io 2018 04 02</DIV>
+
+</BODY>
+</HTML>

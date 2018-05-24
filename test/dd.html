@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8" />
+<STYLE>
+.menubar{
+  position:absolute;
+  top:10px;
+  width:100px;
+  height:20px;
+  cursor:default;
+  border-width:1px;
+  border-style:outset;
+  color:#99FFFF;
+  background:#669900; 
+}
+.menu{
+  position:absolute;
+  top:32px;
+  width:140px;
+  display:none;
+  border-width:2px;
+  border-style:outset;
+  border-color:white sliver sliver white;
+  background:#333399;
+}
+.menu A{
+  text-decoration:none;
+  color:#99FFFF;
+}
+.menu A:hover{
+  color:#FFFFFF;
+}
+</STYLE>
+</HEAD>
+<BODY>
+<TABLE WIDTH="400px">
+<TR>
+<TD WIDTH="20%"><DIV id="Tdiv_1" class="menubar" onMouseOver="divControl(1)" onMouseOut="divControl(0)">one</DIV></TD>
+<TD WIDTH="20%"><DIV id="Tdiv_2" class="menubar" onMouseOver="divControl(1)" onMouseOut="divControl(0)">two</DIV></TD>
+<TD WIDTH="20%"><DIV id="Tdiv_3" class="menubar" onMouseOver="divControl(1)" onMouseOut="divControl(0)">three</DIV></TD>
+</TR>
+</TABLE>
+<DIV id="Div1" CLASS="menu" onMouseOver="keepstyle(this)" onMouseOut="hidediv(this)">
+<A HREF="#">option 1</A><BR>
+<A HREF="#">option 2</A><BR>
+<A HREF="#">option 3</A><BR>
+</DIV>
+<SCRIPT>
+var nbottom=0,speed=2;
+function divControl(show){
+	window.event.cancelBubble=true;
+	var objID=event.srcElement.id;
+	var index=objID.indexOf("_");
+	var mainID=objID.substring(0,index);
+	var numID=objID.substring(index+1);
+	if(mainID=="Tdiv"){
+		if(show==1 && nbottom==0){
+			eval("showdiv("+"Div"+numID+")");
+		}else{
+			eval("hidediv("+"Div"+numID+")");
+		}
+	}
+}
+
+function displayMenu(obj){
+	obj.style.clip="rect(0 100 100 0)";
+	nbottom+=speed;
+	console.log(nbottom);
+	if(nbottom <= 100){
+		timerID=setTimeout("displayMenu("+obj.id+"),1");
+	}else{
+		clearTimeout(timerID);
+	}
+}
+
+function showdiv(obj){
+	console.log("showdiv");
+	obj.style.display="block";
+	obj.style.clip="rect(0 0 0 0)";
+	nbottom=5;
+	displayMenu(obj);
+}
+
+function hidediv(obj){
+	nbottom=0;
+	obj.style.display="none";
+}
+
+function keepstyle(obj){
+	obj.style.display="block";
+}
+</SCRIPT>
+<DIV>
+123
+</DIV>
+</BODY>
+</HTML>

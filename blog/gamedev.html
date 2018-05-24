@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <HEAD>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8" />
 <LINK REL="STYLESHEET" TYPE="TEXT/CSS" HREF="../style.css">
@@ -1511,25 +1511,20 @@ int main(){
 <P><CODE>GetCursorPos</CODE>函式能夠返回滑鼠當前的位置，下面是一個實時顯示滑鼠位置的程式。</P>
 <PRE><CODE>#include "music.h"
 #include "console.h"
-
 int main(){
     while(1){
-
         POINT p;
         GetCursorPos(&p);
         clearscreen();
         printxyf(0,0,"(%d,%d)",p.x,p.y);
-
         swapbuffer();
     }
 }</CODE></PRE>
 <P>我們要做的就是把它轉成控制台的座標。</P>
 <PRE><CODE>#include "music.h"
 #include "console.h"
-
 int main(){
     while(1){
-
         POINT p;
         GetCursorPos(&p);
         ScreenToClient(GetConsoleWindow(),&p);
@@ -1537,9 +1532,7 @@ int main(){
         GetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE),FALSE,&info);
         p.x/=info.dwFontSize.X*2;
         p.y/=info.dwFontSize.Y;
-
         clearscreen();
-
         for(int i=0;i<80*24;i+=2){
             printxyf(i%80,i/80,"[]");
         }
@@ -1550,7 +1543,6 @@ int main(){
             printxyf(0,i,"%2d",i);
         }
         printxyf(70,23,"(%d,%d)",p.x,p.y);
-
         swapbuffer();
     }
 }</CODE></PRE>
