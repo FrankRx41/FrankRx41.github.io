@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, minimum-scale=1, user-scalable=yes" />
+<link type="text/css" href="../css/style.css" rel="stylesheet"/>
+<title>Adblock Plus</title>
+</head>
+
+<body>
+
+<div class="article">
+<h1>Adblock Plus</h1>
+<p>Adblock Plus是我用過的一款很良心的瀏覽器網頁元素過濾插件，不單單可以過濾廣告，還可以過濾任何你不想看到的東西。好的東西不需要任何過多的語言說明。</p>
+
+<h2>寫法</h2>
+<p>具體可以參閱Adblock Plus的官方文檔</p>
+<ul>
+<li><a href="https://adblockplus.org/zh_TW/filters">撰寫 Adblock Plus 過濾條件</a></li>
+<li><a href="https://adblockplus.org/en/filters">Writing Adblock Plus filters</a></li>
+</ul>
+<p>要想讀懂這些過濾規則的寫法，你需要的是極其強大的內心，無比的堅強的毅力和一點點html，css語法知識的了解。</p>
+<p>如果你從來沒有接觸過這些東西，又想寫出自己的規則，不要指望一口氣做完，慢慢學，每天學1小時，比一天學12小時的效率要好。</p>
+
+<h2>分享</h2>
+<p>其實寫這些過濾規則真的不難。我當年甚至還不會html和css就寫出來了。很多東西照葫蘆畫瓢就行。</p>
+<h3>百度廣告過濾</h3>
+<pre>
+<code>
+wenku.baidu.com##div.ad-taishan-bar
+wenku.baidu.com##div.fix-searchbar-wra
+wenku.baidu.com##div#guess-like-doc
+wenku.baidu.com##div#doc-upload
+wenku.baidu.com##div.top-ads-banner
+zhidao.baidu.com##aside[id=&quot;qb-side&quot;]
+baidu.com##div[class=&quot;wrp-exp-share&quot;]
+baidu.com##aside[id=&quot;aside&quot;]
+baidu.com##td[align=&quot;left&quot;]
+baidu.com##div[class=&quot;result-op xpath-log&quot;]
+wenku.baidu.com##div.wk-other-new-cntent
+wenku.baidu.com##div.reader-tools-bar
+baidu.com##img[id=selectsearch-icon]
+baidu.com##div[class=&quot;jump-top-box&quot;]
+baidu.com##span[class=&quot;grid-r ask-time&quot;]
+baidu.com##div[class=&quot;footer-wp&quot;]
+baidu.com##div[class=&quot;wgt-push mod-shadow last &quot;]
+baidu.com##div#side-share
+baidu.com##div[class=&quot;magzine-list&quot;]
+jingyan.baidu.com##div[id=&quot;wgt-like&quot;][class=&quot;wgt-like&quot;]
+baidu.com##div[class=&quot;banner-active discount-banner&quot;]
+||img.baidu.com/img/iknow/qb/*
+@@||v3.bootcss.com^$document
+</code></pre>
+<p>把這些規則導入到Adblocl Plus中，可以還原一個簡潔的網頁。</p>
+<p>這些規則過濾掉的是我覺得影響自己視覺的元素，可能不適合所有的人。你可以根據自己的需要自行修改。</p>
+
+<h2>結語</h2>
+<p>我目前是在firefox和chrome上使用這個插件。IE上不清楚。以前我曾經嘗試過在IE上使用Adblock Plus，不過效果並不理想。</p>
+<p>在很久以前，我還用過一個國產廣告過濾軟體Adsafe，那個時候，我還是很喜歡用他的。畢竟是國產軟體，自然最了解國人的需求。不過，現在我完全不推薦Adsafe，上一次我下載的時候，他已經完全的走上了360一般的流氓軟體之路。</p>
+
+</div>
+
+</body>
+</html>

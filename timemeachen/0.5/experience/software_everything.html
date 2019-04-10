@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, minimum-scale=1, user-scalable=yes" />
+<link type="text/css" href="../css/style.css" rel="stylesheet"/>
+<title>Everything some error</title>
+</head>
+
+<body>
+
+<div class="article">
+<h1>Everything</h1>
+<p>Everything 應該是我最常用的軟體了。 其出色的文件檢索速度，是我這一種大硬盤用戶
+查找文件的利器。不過呢，使用過程中，也還是難免會有一點問題。</p>
+<h2>每次啟動everything，都要等待一段時間的文件檢索時間</h2>
+<h3>問題說明</h3>
+<p>這個問題，我曾經使用過一個老版本來解決，那是一個不自動更新數據庫的版本。不過那個版本很老，很多我常用的新功能都不完善，所以最後我又換回了新版本。
+<h3>解決方法</h3>
+<p>新版本中我通過<em>Tools - Options - Indexes - NTFS</em>取消了所有<strong>Auto include new fiexed volumes</strong>和<strong>Auto include new removable volumes</strong>前面的勾，並且，對所有的硬盤取消選擇了<strong>Include USN Journal in recent changes</strong>和<strong>Monitor changes</strong>前面的勾。
+<p>這樣子，雖然不能自動監視文件的更新。但我覺得比每次啟動，都花費1分鐘左右的時間｢因為我的文件比較多｣來重新建立索引數據庫要好。</p>
+<p>當需要檢索最近更新的文件時，可以在<em>Tools - Options - Indexes</em>中，選擇<strong>Force Rebuild</strong>。</p>
+<p>我目前不確定選擇<strong>Compress database</strong>會不會對讀取數據庫的時間有影響，只是我的文件太多，而感覺他數據庫是有大小上限的，所以我選擇了這個選項。</p>
+<h2>不能控制Everything的窗體</h2>
+<h3>問題描述</h3>
+<p>我有一個管理我桌面窗體的程式，他在大部分情況下都能正常的工作，但是，對於Everything的窗體，他沒有任何效果，不管是移動窗體還是改變窗體的大小。</p>
+<h3>問題原因</h3>
+<p>為了解決這個問題，我不只一次的查過google，但是，並沒有查到我想要的結果。後來，隨著自己寫的程式越來越多，對Windows系統有了更深的了解，終於在某一天，發現了問題的原因。</p>
+<p>因為Everything為了檢索NTFS分區，獲取了管理員權限，而一般的Window應用程序並沒有這個權限。所以我們發送的窗口控制消息「比如MoveWindow消息」並不會被Everything窗體響應。</p>
+<h3>解決方法</h3>
+<p>讓發送的窗口控制消息的程序以管理員運行，即擁有管理員權限。</p>
+</div>
+
+</body>
+</html>

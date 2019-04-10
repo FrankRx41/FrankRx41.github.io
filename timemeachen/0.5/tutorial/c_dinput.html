@@ -1,0 +1,44 @@
+#dinput的使用(C實現)
+
+本教程為講授如何使用dinput
+
+diput是windows系統DirectX中的一個子模塊，用於讀取鍵盤，滑鼠，搖桿等所有輸入設備的信息。其為這些設備的讀入提供了相似的函式，程序員可以忽略硬體上的差異而編寫能夠被多種硬體所支援的代碼。
+但dinput不涉足如DirectX繪圖部分的大量繁瑣的設置，以及dinput非常的穩定，在DirectX版本號已經更新到了12的現在，dinput依然停留在版本號8。
+所以，並不需要和複雜的DirectX的其他部分打交道，就可以掌握dinput的使用方法。
+
+那麼，趕緊看看dinput的真身吧。
+
+##在控制台窗口中使用dinput讀取鍵盤
+
+0.準備
+使用dinput必須要包含頭標檔dinput.h
+	#include <dinput.h>
+同時需要兩個庫
+	#pragma comment(lib,"dinput8.lib")
+	#pragma comment(lib,"dxguid.lib")
+第一個存儲了dinput.h中函式的實現，第二個保存了IID_IDirectInput8的值。
+
+1.所需變數
+
+1.1變數宣告
+	LPDIRECTINPUT8 dinput;
+	LPDIRECTINPUTDEVICE8 dinputdev;
+這兩個變數
+
+1.2創建
+	DirectInput8Create(GetModuleHandle(NULL),DIRECTINPUT_VERSION,&IID_IDirectInput8,(void**)&dinput,NULL);
+	IDirectInput8_CreateDevice(dinput,&GUID_SysKeyboard,&dinputdev,NULL);
+	
+1.3設置
+    IDirectInputDevice8_SetDataFormat(dinputdev,&c_dfDIKeyboard);
+    IDirectInputDevice8_SetCooperativeLevel(dinputdev,NULL, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+    
+2.獲取信息
+	BYTE key[256];
+    ZeroMemory(key,sizeof(key));
+    HRESULT ret = IDirectInputDevice8_GetDeviceState(dinputdev,sizeof(key),key);
+    if(FAILED(ret)) {
+        // 失敗なら再開させてもう一度取得
+        dinputdev->lpVtbl->Acquire(dinputdev);
+        dinputdev->lpVtbl->GetDeviceState(dinputdev,sizeof(key),key);
+    }

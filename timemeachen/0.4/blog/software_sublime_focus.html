@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, minimum-scale=1, user-scalable=yes" />
+<link type="text/css" href="../css/style.css" rel="stylesheet"/>
+<title>Sublime no focus</title>
+</head>
+
+<body>
+
+<div class="article">
+<h1>sublime接受文件時，不能獲得焦點</h1>
+Sublime作為最強大的編輯器，自然是受我青睞的，但是……
+<p>sublime在接受文件後，不能被正確的激活，這是一個BUG。詳細問題可以看這篇文章的描述。</p>
+<p><a href="https://forum.sublimetext.com/t/bug-no-focus-when-dropped-file-on-sublime-but-caret-blinks/14745">[BUG] No focus when dropped file on sublime but caret blinks
+</a></p>
+<p>其實，這個BUG也不算什麼大事，甚至都不影響體驗。但對我來說，就不一樣了。</p>
+<p>我經常從資源管理器中拖拽文件到sublime中，有時候發現自己拖錯了，左手就習慣性的按下Ctrl+W，結果，我的explorer中的標籤就被我關閉了。</p>
+<p>說真的，很煩，特別煩。一次兩次還好，每天都這樣，還不讓人瘋了？</p>
+
+<h2>尋求解決之旅</h2>
+<p>今天一個晚上，我又無所事事的尋求解決方案了。</p>
+<ul>
+  <li><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms646256(v=vs.85).aspx">DragDetect function</a></li>
+</ul>
+<p>也許是這些問題，但是，我看不懂，也不想看。</p>
+<p>我決定從AHK中尋求幫助。中途查了不少文檔。</p>
+<ul>
+  <li><a href="http://stackoverflow.com/questions/15472404/autohotkey-on-right-mouse-click-get-a-keyboard-button-pressed-as-well">AutoHotKey on right mouse click get a keyboard button pressed as well</a></li>
+  <li><a href="https://autohotkey.com/board/topic/89280-detecting-mouse-drag-event">Detecting mouse drag event</a>
+  </li>
+</ul>
+<p>記下來，以後慢慢看。</p>
+<h2>解決方案之 AHK 代碼</h2>
+<pre>
+loop{
+
+  if( GetKeyState("LButton") ) {
+    Sleep ,1
+    if ( GetKeyState("LButton") == 0 ){
+      break
+    }
+    loop{
+      if ( GetKeyState("LButton") == 0 ) {
+        MouseGetPos ,,, MouseWin
+        WinActivate , ahk_id %MouseWin%
+        break
+      }
+    }
+  
+  }
+  Sleep, 1
+}
+return 
+</pre>
+<p>目前先這樣吧。至少可以不和滑鼠單機事件衝突。也許有很多可以改進的地方，打遊戲的時候，也請記得關閉這個腳本，不然可能會造成不必要的CPU浪費。</p>
+<pre>
+#IfWinExist, ahk_exe sublime_text.exe
+
+~LButton Up::
+	MouseGetPos ,,, MouseWin
+	WinGet, WinName, ProcessName, ahk_id %MouseWin%
+
+  if( WinName == "sublime_text.exe")
+  {
+  ;ToolTip, get
+  WinActivate, ahk_id %MouseWin%
+  }
+  return
+
+#IfWinExist
+</pre>
+<p>修復了很多問題 ，現在可以完全沒有顧慮的把腳本放在後台運行了。</p>
+</div>
+
+</body>
+</html>

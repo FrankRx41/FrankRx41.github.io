@@ -1,0 +1,150 @@
+body,pre,p,h1,h2,h3,h4,h5,h6{
+  padding:  0;
+  margin:   0;
+  /*font-weight:normal;*/
+}
+body{
+  font-family:MSyahei,simsun,Arial,Helvetica,'Luxi-sans','Nimbus Sans L',sans-serif;
+  margin:auto;
+  overflow-y:scroll;
+  max-width:800px;
+  background-color:#9F9;
+  /*margin:2%;*/
+}
+p,LI{
+  padding:0;
+  margin:10px 6px;
+  font-size:16px;
+}
+h1{
+  color:#000;
+  font-size:150%;
+  margin-top: 4%;
+  padding-left:1px;
+}
+h2{
+  color:#FEF;
+  background-color:#28F;
+  font-size:120%;
+  margin-top:4%;
+  margin-bottom:2%;
+  padding-left:2px;
+}
+h3{
+  color:#777;
+  font-size:100%;
+  margin-top:3%;
+  margin-bottom:1%;
+}
+
+LI{
+  font-size:16px;
+  margin:0;  
+}
+strong{
+  font-weight:normal;
+  color:red; 
+}
+#footer {
+  color:gray;
+  font-size:8px; 
+}
+a:hover{
+  color:green;
+}
+
+/* 代碼相關 */
+pre{
+  box-sizing:content-box;
+  background-color:#DFE;
+  border:1px solid #111;
+  font-size:inherit;
+  overflow-y:auto;
+  overflow-x:auto;
+  padding:6px 10px;
+  margin-bottom:3px;
+  margin-top:0px;
+
+  font-size: 12px;
+  /*line-height: 1.514285714;*/
+  overflow: auto;
+  display:block;
+  white-space: pre;
+  word-wrap: break-word;
+}
+pre>code {
+  white-space:pre;
+  font-size:12px;
+  border:none;
+  background:transparent;
+  display:block;
+  line-height:120%;
+}
+
+code {
+  font-family:Consolas,Monaco,Lucida Console,MSyahei,'Fixedsys Excelsior 3.01',Monaco,Courier,'Courier New',monospace;
+  font-size:inherit;
+  /*font-size:12px;*/
+  /*line-height:100%;*/
+  margin:0px 1px;
+  padding:0px 1px;
+  white-space:normal;
+  color:#000;
+  background-color:#DEF;
+  border:1px solid #111;
+  border-radius:2px;
+  box-sizing:content-box;
+}
+.console{
+  font-family:'consolas','Fixedsys Excelsior 3.01',Monaco,Courier,'Courier New',monospace;
+  font-size:14px;
+  background-color:#000;
+  color:#FFF;
+  padding:6px 4px;
+}
+#footer{
+  font-size:10px;
+}
+kbd {
+  line-height:100%;
+  /*display:inline-block;*/
+  margin:0 2px 0 2px;
+  padding:0px 5px 0px 5px;
+  font-family:Consolas, "Liberation Mono", Courier, monospace;
+  font-size:100%;
+  color:#242729;
+  text-shadow: 0 1px 0 #FFF;
+  background-color:#EEE;
+  border:1px solid #abb;
+  border-radius:2px;
+  box-shadow:0 1px 0 rgba(12,13,14,0.2), 0 0 0 2px #fff inset;
+  box-sizing:content-box;
+  white-space:nowrap;
+}
+/* 代碼控制塊 */
+.code-control-div{}
+.code-control-button{
+  background-color:#EEE;
+  color: #17B;
+  
+  text-align:center;
+  text-decoration:none;
+  font-size:13px;
+    
+  margin:0;
+  margin-right:1px;
+
+  padding:2px 6px;
+  width:50px;
+  display:inline-block;
+  
+  border: 1px solid #111;
+  border-top-right-radius:4px;
+  border-bottom:0;
+}
+.code-control-button:hover{
+  color:#0bf;
+  text-decoration:underline;
+  cursor:default;
+}
+.code-control-button{}

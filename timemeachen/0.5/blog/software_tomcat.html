@@ -1,0 +1,93 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="VIEWPORT" content="WIDTH=DEVICE-WIDTH, INITIAL-SCALE=1.0, USER-SCALABLE=YES">
+<link type="TEXT/CSS" href="../CSS/STYLE.CSS" rel="STYLESHEET"/>
+<title>Tomcat</title>
+</head>
+
+<body>
+
+<h1>Tomcat</h1>
+
+<blockquote><p>近日忙完了繁重的課業，終於有時間重新開始了博客的搭建。這一次參考了很多的博客，突然感覺HEXO似乎也常的好用。但是，我怎麼可以對不起以前自己說的，絕不使用HEXO布局的話呢？所以，我還是決定好好的做我不依賴任何三方工具的博客。為了模擬出HEXO中本地預覽的效果，我選擇了Tomcat這個網站建設工具。順帶一提，我還找到了Markdown這樣一種優美的語言。</p><TIME>Sat, 2017-11-25</TIME></blockquote>
+
+
+<h2>Tomcat的使用</h2>
+
+<p>在所安裝軟體目錄，打開<i>\conf\tomcat-users.xml</i>，找到
+<pre><code>&lt;tomcat-users xmlns="http://tomcat.apache.org/xml"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"
+              version="1.0"&gt;
+
+&lt;/tomcat-users&gt;
+</code></pre>
+修改為
+<pre><code>&lt;tomcat-users xmlns="http://tomcat.apache.org/xml"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"
+              version="1.0"&gt;
+
+    &lt;role rolename="tomcat"/&gt;
+    &lt;role rolename="role1"/&gt;
+    &lt;role rolename="manager"/&gt; 
+    &lt;role rolename="manager-gui"/&gt;
+    &lt;role rolename="admin"/&gt;  
+    &lt;role rolename="admin-gui"/&gt;  
+    &lt;role rolename="manager-script"/&gt;  
+    &lt;role rolename="manager-jmx"/&gt;  
+    &lt;role rolename="manager-status"/&gt; 
+
+    &lt;user username="tomcat" password="tomcat"   roles="tomcat"/&gt;
+    &lt;user username="both"   password="tomcat"   roles="tomcat,role1"/&gt;
+    &lt;user username="role1"  password="tomcat"   roles="role1"/&gt;
+    &lt;user username="admin"  password="admin"    roles="tomcat,role1"/&gt;
+    &lt;user username="tomcat" password=""         roles="manager-gui"/&gt;
+    &lt;user username="Tomcat" password="Tomcat"   roles="admin-gui,admin,manager-gui,manager,manager-script,manager-jmx,manager-status"/&gt;
+
+&lt;/tomcat-users&gt;
+</code></pre></P>
+
+<p>運行<i>\bin\Tomcat8w.exe</i>。</p>
+
+<p>打開瀏覽器，訪問<i>http://localhost:8080</i>。</p>
+
+<h3>參考文獻</h3>
+
+<p><A HREF="https://jingyan.baidu.com/article/0964eca23effcc8284f5367e.html">打开Tomcat服务器网页部署界面的配置</A></p>
+
+
+<h2>Tomcat更改網站目錄</h2>
+
+<p>在所安裝軟體目錄，打開<i>\conf\server.xml</i>，找到:
+<pre><code>&lt;Host name="localhost"  appBase="webapps"
+      unpackWARs="true" autoDeploy="true"&gt;
+
+    &lt;Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+         prefix="localhost_access_log" suffix=".txt"
+         pattern="%h %l %u %t &amp;quot;%r&amp;quot; %s %b" /&gt;
+&lt;/Host&gt;
+</code></pre>
+修改為
+<pre><code>&lt;Host name="localhost"  appBase="webapps"
+      unpackWARs="true" autoDeploy="true"&gt;
+
+    &lt;Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+         prefix="localhost_access_log" suffix=".txt"
+         pattern="%h %l %u %t &amp;quot;%r&amp;quot; %s %b" /&gt;
+    &lt;Context path="" docBase="D:/WorkPlace/Web/mywebsite/webmain" debug="0"/&gt;
+&lt;/Host&gt;
+</code></pre></P>
+
+<p>其中，<i>D:/WorkPlace/Web/mywebsite/webmain</i>為你所設定的目錄</p>
+
+<p>重启tomcat</p>
+
+<h3>參考文獻</h3>
+
+<p><A HREF="http://www.jb51.net/article/49814.htm">Tomcat中更改网站根目录和默认页的配置方法</A></p>
+
+</body>
+</html>

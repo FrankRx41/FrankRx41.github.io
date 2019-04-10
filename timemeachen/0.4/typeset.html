@@ -1,0 +1,150 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="VIEWPORT" content="WIDTH=DEVICE-WIDTH, INITIAL-SCALE=1.0, USER-SCALABLE=YES">
+<link type="TEXT/CSS" href="CSS/STYLE.CSS" rel="STYLESHEET"/>
+<title>本站排版說明</title>
+</head>
+
+<body>
+
+<h1>本站排版說明</h1>
+
+<blockquote><p>我知道，這些東西不寫也沒事，寫下來也沒有人會看。但是，給以後的自己留下一個記憶，這才是這篇文章的目的。</p><TIME>Sat, 2017-11-25</TIME></blockquote>
+
+<p>本站的CSS是非常簡單的風格，來源於<A HREF="https://github.com/nicolahery/markdownpad-github">github</A>，在前輩的基礎上，我做了些許的更改。</p>
+
+<p>因為本篇文章是對本站的樣式風格進行介紹，所以，本文章不受我所規定的樣式排版的限制。也因為這個原因，這篇文章可能會顯得有點亂。</p>
+
+<p>那麼，就讓我開始介紹我博客的風格吧！</p>
+
+
+<h2>關於標記</h2>
+
+<blockquote><p>沒有華麗的特效，沒有多餘的代碼，沒有複雜的標籤。所有的一切，都是那麼的簡單。就像是簡書，寫著樸實的文章。其實，這是因為我懶得去排版，懶得去給每篇文章貼上那些一樣的JS代碼，也懶得去管理那些沒有用的標籤。因為，這裡面所有的文章，都是我用雙手，一篇一篇的敲出來的啊。早晚會寫一個自動完成的程序幫我做的。</p></blockquote>
+
+<p>本站所有的標籤使用大寫<S>。我知道不符合HTML5的標準，但是我喜歡這樣</S>。主要使用標籤為<code>H1~H4</code>，<code>P</code>，<code>BLOCKQUOTE</code>，<code>TIME</code>，<code>CODE</code>，<code>PRE</code>，<code>TABLE</code>，<code>I</code>，<code>B</code>，<code>A</code>，<code>S</code>。</p>
+
+<h3>段落標記</h3>
+<p>在自然段和自然段之間，保留一個空行。每個段落結束，都要求有一個結束標記<code>&lt;/P&gt;</code>。</p>
+
+<h3>引言標記</h3>
+<p>在標題<code>H1</code>，<code>H2</code>的後方，一般跟隨一個<code>BLOCKQUOTE</code>，而<code>BLOCKQUOTE</code>中需要至少跟隨一個<code>P</code>。主要寫一些不重要的信息<S>，其實是我的BB</S>。</p>
+
+<h3>代碼標記</h3>
+<p>在涉及到與代碼有關的部分，使用<code>CODE</code>標籤。如果代碼不止一行，使用<code>PRE</code>和<code>CODE</code>雙標籤，其中<code>PRE</code>寫在前。如<pre><code>printf("hello my blog!");</code></pre></P>
+
+<h3>斜體標記</h3>
+<p>在涉及到路徑，方式地方，使用斜體<code>I</code>，如<BR>
+<i>C:\Windows\System32\drivers\</i><BR>
+<i>Tools - Options - Indexes - NTFS</i><BR>
+順帶一提，作為連接方式的<code>-</code>保留其兩邊的空格。</p>
+
+<h3>鍵盤標記</h3>
+<p>在涉及到鍵盤，選項按鈕的地方使用鍵<code>KBD</code>，如<BR>
+按下<kbd>Alt</kbd>和<kbd>F4</kbd>以關閉程式<BR>
+選擇<kbd>OK</kbd>然後繼續。</p>
+
+<h3>關於空行</h3>
+<p>如在段落標記一節中所說，基本上所有的標籤之間都必須有一個空行。包括但不限於<ul><li><code>BODY</code>和<code>H1</code></li><li><code>P</code>和<code>P</code></li></ul>以下情況可適當加入空行：<ul><li><code>H3</code>和<code>P</code></li></ul>以下情況不可加空行：<ul><li>從開頭<code>&lt;!DOCTYPE HTML&gt;</code>到<code>&lt;/HEAD&gt;</code></li><li>第一個<code>BLOCKQUOTE</code>和<code>TIME</code></li></ul>以下情況需要加入兩個空行：<ul><li>上一個<code>H3</code>的<code>P</code>和<code>H3</code></li></ul></P>
+
+<h3>關於斷行</h3>
+<p>在涉及到樣式變更時，在末尾加上<code>&lt;BR&gt;</code>。以這種方式結束的行不需要再在尾部加入新空行。</p>
+
+<h3>刪除標記</h3>
+<p><code>S</code>，刪除前一個標點到後一個標點之前的內容。後期我會加入JS讓用戶控制是否顯示刪除標記中的內容。</p>
+
+<h3>超級鏈接</h3>
+<p><code>A</code>，用以對其他網址進行跳轉。</p>
+
+<h3>引用標記</h3>
+<p><code>Q</code>，保留，暫不使用。</p>
+
+<h3>時間標記</h3>
+<p><code>TIME</code>，目前只使用在文章更新日期處，即第一個<code>BLOCKQUOTE</code>後方。</p>
+
+
+<h2>關於標題</h2>
+
+<p>本站所有的標題格式說明如下：｢因為在這裡顯示所有標題會顯得很奇怪，所以我隱藏了他們｣</p>
+<!--
+<H1>第一級標題</H1>
+<H2>第二級標題</H2>
+<H3>第三級標題</H3>
+<H4>第四級標題</H4>
+<H5>第五級標題</H5>
+<H6>第六級標題</H6>
+-->
+<h3>第一級標題</h3>
+<p>每篇文章只有一個，總在文章開頭。為了適應窄屏設備，一般不會太長。</p>
+
+<h3>第二級標題</h3>
+<p>寫次要信息，每篇文章可能有多個，自帶下滑縣。</p>
+
+<h3>第三級標題</h3>
+<p>存在於次標題內，和段落字體大小大約相同，用於分割第三級標題中的內容和強調所分割內容的重點。</p>
+
+<h3>第四，五，六級標題</h3>
+<p>有定義，目前不使用。</p>
+
+
+<h2>關於顏色</h2>
+
+<p>本站顏色使用三位RGB表示法。主要使用<code>#FFF</code>｢白色｣作為背景色，以<code>#444</code>｢淺黑｣作為前景顏色，以<code>#000</code>｢黑｣作為重要字體顏色，以<code>#999</code>｢淺灰｣作為不重要字體顏色。</p>
+
+
+<h2>表格和列表</h2>
+
+<p>本站的表格，列表風格仍在規劃中，目前使用了GITHUB默認的樣式。風格如下：
+<table>
+<thead>
+<tr>
+<th>第一格表頭 </th>
+<th> 第二格表頭</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>內容單元格 第一列第一格 </td>
+<td> 內容單元格第二列第一格</td>
+</tr>
+<tr>
+<td>內容單元格 第一列第二格 多加文字 </td>
+<td> 內容單元格第二列第二格</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>項目一 無序列表</li>
+<li>項目二
+<ol>
+  <li>項目二的子項目一 有序列表</li>
+  <li>項目二的子項目二</li>
+</ol>
+</li>
+</ul>
+</P>
+
+<p>其中，表格用於在列表說明合適的地方，列表多用於選項處。</p>
+
+
+<h2>存儲格式</h2>
+
+<p>所有文章使用UTF-8格式保存，這樣子是為了和ASIC兼容，在文章開頭處寫下以下代碼：<BR>
+<pre><code>&LT;META CHARSET=&QUOT;UTF-8&QUOT;&GT;</code></pre>
+以確保瀏覽器的正確解析。</P>
+
+<p>文件擴展名為<code>HTML</code>。
+
+<p>所有的<code>TABLE</code>轉化為2個空格。</p>
+
+
+<h2>編寫及測試</h2>
+
+<p>本網站中的靜態網頁主要使用Dreamweaver進行編寫，負責草稿編寫，基本編寫，錯誤檢查，風格檢查。雖然也有考慮過使用markdown進行編寫，但是其轉換成的<code>HTML</code>文檔總覺得不如人意。</p>
+
+<p>目前測試使用瀏覽器主要為chrome和IE。</p>
+
+</body>
+</html>

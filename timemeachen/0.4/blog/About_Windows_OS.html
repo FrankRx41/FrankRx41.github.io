@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>About_Windows_OS</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+</head>
+<body>
+<h1>About Windows OS</h1>
+<blockquote>
+<p>我覺得不需要太多的介紹了吧。這年頭，已經很少有人知道不是windows操作系統的電腦了。而作為主流操作系統，其問題卻可以說是，如滔滔江水。我對windows系統的研究，也有幾年了。現在我使用的是windows 8.1 x64。</p>
+</blockquote>
+<h2>Windows常用快捷鍵</h2>
+<blockquote>
+<p>前段時間，我在同學電腦上表演了一波windows的純鍵盤操作，讓那同學看得眼花撩亂。那同學叫我整理一下自己所懂的快捷鍵，好讓他也能夠如此的牛逼。<br />
+其實，這些快捷鍵是我打開電腦後經常使用的，應該來說是使用給自己看，節省自己使用滑鼠的頻率，從而節省自己的生命。說真的，那天如此牛逼的表演，也讓我自己有點吃驚。</p>
+</blockquote>
+<p>以下，以<code>#</code>表示<kbd>Win</kbd>，<code>^</code>表示<kbd>ctrl</kbd>，<code>+</code>表示<kbd>Shift</kbd>，<code>!</code>表示<kbd>Alt</kbd></p>
+<h3>windows系統指令</h3>
+<table>
+<thead>
+<tr>
+	<th>key</th>
+	<th>describe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>#L</td>
+	<td>鎖屏</td>
+</tr>
+<tr>
+	<td>#E</td>
+	<td>打開資源管理器</td>
+</tr>
+<tr>
+	<td>#R</td>
+	<td>運行</td>
+</tr>
+<tr>
+	<td>#C</td>
+	<td>查看時鐘，打開右邊欄 ｢windows8/8.1 專享｣</td>
+</tr>
+<tr>
+	<td>#left</td>
+	<td>左移當前窗口</td>
+</tr>
+<tr>
+	<td>#right</td>
+	<td>右移窗口</td>
+</tr>
+<tr>
+	<td>#up</td>
+	<td>最大化當前窗口</td>
+</tr>
+<tr>
+	<td>!Tab</td>
+	<td>切換當前運行程式</td>
+</tr>
+<tr>
+	<td>!+Tab</td>
+	<td>逆向切換當前運行程式</td>
+</tr>
+</tbody>
+</table>
+<h3>windows程式通用指令</h3>
+<table>
+<thead>
+<tr>
+	<th>key</th>
+	<th>describe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>^Tab</td>
+	<td>切換標籤</td>
+</tr>
+<tr>
+	<td>^+Tab</td>
+	<td>逆向切換標籤</td>
+</tr>
+<tr>
+	<td>^W</td>
+	<td>關閉當前標籤</td>
+</tr>
+<tr>
+	<td>^+T</td>
+	<td>重新打開最近關閉的標籤</td>
+</tr>
+<tr>
+	<td></td>
+</tr>
+<tr>
+	<td>^O</td>
+	<td>打開</td>
+</tr>
+<tr>
+	<td>^S</td>
+	<td>保存</td>
+</tr>
+<tr>
+	<td>^+S</td>
+	<td>另保存為 ｢有些軟體不支援｣</td>
+</tr>
+<tr>
+	<td>^N</td>
+	<td>創建</td>
+</tr>
+<tr>
+	<td></td>
+</tr>
+<tr>
+	<td>^A</td>
+	<td>全部選擇</td>
+</tr>
+<tr>
+	<td>^X</td>
+	<td>剪下</td>
+</tr>
+<tr>
+	<td>^V</td>
+	<td>貼上</td>
+</tr>
+<tr>
+	<td>^Z</td>
+	<td>撤銷</td>
+</tr>
+<tr>
+	<td>^F</td>
+	<td>查找</td>
+</tr>
+<tr>
+	<td>^H</td>
+	<td>替換</td>
+</tr>
+<tr>
+	<td>^G</td>
+	<td>定位</td>
+</tr>
+<tr>
+	<td>^P</td>
+	<td>打印</td>
+</tr>
+<tr>
+	<td></td>
+</tr>
+<tr>
+	<td>del</td>
+	<td>刪除</td>
+</tr>
+<tr>
+	<td>insert</td>
+	<td>插入/改寫模式切換</td>
+</tr>
+<tr>
+	<td></td>
+</tr>
+<tr>
+	<td>F1</td>
+	<td>幫助</td>
+</tr>
+<tr>
+	<td>F2</td>
+	<td>重新命名</td>
+</tr>
+<tr>
+	<td>F5</td>
+	<td>刷新</td>
+</tr>
+<tr>
+	<td>F11</td>
+	<td>全屏</td>
+</tr>
+<tr>
+	<td></td>
+</tr>
+<tr>
+	<td>!F4</td>
+	<td>關閉窗口</td>
+</tr>
+</tbody>
+</table>
+<h3>DOS程式指令</h3>
+<table>
+<thead>
+<tr>
+	<th>key</th>
+	<th>describe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>!X</td>
+	<td>退出進程</td>
+</tr>
+<tr>
+	<td>break</td>
+	<td>中斷進程</td>
+</tr>
+<tr>
+	<td>+del</td>
+	<td>cut</td>
+</tr>
+<tr>
+	<td>^insert</td>
+	<td>copy</td>
+</tr>
+<tr>
+	<td>+insert</td>
+	<td>paste</td>
+</tr>
+</tbody>
+</table>
+<h3>Run中常用指令</h3>
+<table>
+<thead>
+<tr>
+	<th>key</th>
+	<th>describe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>services</td>
+	<td>服務</td>
+</tr>
+<tr>
+	<td>regedit</td>
+	<td>註冊表</td>
+</tr>
+<tr>
+	<td>cmd</td>
+	<td>命令提示字元</td>
+</tr>
+<tr>
+	<td>notepad</td>
+	<td>記事本</td>
+</tr>
+<tr>
+	<td>dxdiag</td>
+	<td>DirectX診斷</td>
+</tr>
+<tr>
+	<td>calc</td>
+	<td>計算器</td>
+</tr>
+</tbody>
+</table>
+<h3>Run中不常用的指令</h3>
+<table>
+<thead>
+<tr>
+	<th>key</th>
+	<th>describe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>gpedit</td>
+	<td>策略組</td>
+</tr>
+<tr>
+	<td>dcomcnfg</td>
+	<td>系統服務</td>
+</tr>
+<tr>
+	<td>winver</td>
+	<td>系統版本信息</td>
+</tr>
+<tr>
+	<td>osk</td>
+	<td>屏幕鍵盤 ｢系統自帶的，非常垃圾，｣</td>
+</tr>
+<tr>
+	<td>psr</td>
+	<td>步驟紀錄器 ｢非常牛逼的軟體，但是我沒怎麼用過｣</td>
+</tr>
+<tr>
+	<td>msconfig</td>
+	<td>系統設置</td>
+</tr>
+<tr>
+	<td>control</td>
+	<td>控制面板</td>
+</tr>
+<tr>
+	<td>powershell</td>
+	<td>類似命令提示字元的工具</td>
+</tr>
+<tr>
+	<td>secpol</td>
+	<td>本地安全政策 ｢基本沒用過｣</td>
+</tr>
+<tr>
+	<td>mstsc</td>
+	<td>遠程連結</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>上面的工具，是我曾經使用過，保留在我<code>Run</code>中的指令。</p>
+</blockquote>
+<h2>我的windows軟體</h2>
+<blockquote>
+<p>如果這個標題讓你想到了360，百度管家之類的軟體，那麼，你絕對不是一個合格的windows程序員。這裡，我列出的是我這台windows 8.1上我裝的軟體。</p>
+</blockquote>
+<h3>壓縮</h3>
+<pre><code>7-Zip
+</code></pre>
+
+<h3>文字編輯</h3>
+<pre><code>cutemarked
+EmEditor
+Hex Workshop v6.8
+Sublime Text
+EditPlus
+</code></pre>
+
+<h3>hash查看</h3>
+<pre><code>File hasher
+</code></pre>
+
+<h3>記事本</h3>
+<pre><code>CintaNotes
+EfficientDiaryPro
+EasyPanel
+</code></pre>
+
+<h3>字幕處理</h3>
+<pre><code>SrtEditPortable
+BDSup2Sub
+</code></pre>
+
+<h3>CHM格式處理</h3>
+<pre><code>CHM Editor
+</code></pre>
+
+<h3>文檔瀏覽</h3>
+<pre><code>explorer++
+</code></pre>
+
+<h3>文檔複製</h3>
+<pre><code>FastCopy
+</code></pre>
+
+<h3>文檔存儲管理</h3>
+<pre><code>DropIt
+</code></pre>
+
+<h3>文檔索引</h3>
+<pre><code>Everything
+DirectoryMonitor
+FileLocatorPro
+</code></pre>
+
+<h3>字詞典</h3>
+<pre><code>StarDict
+EBWin
+</code></pre>
+
+<h3>離線翻譯</h3>
+<pre><code>AgthStart
+DR.eye
+</code></pre>
+
+<h3>文字識別</h3>
+<pre><code>ABBYY FineReader 11
+</code></pre>
+
+<h3>離線語音</h3>
+<pre><code>AHS
+</code></pre>
+
+<h3>窗口/屏幕管理</h3>
+<pre><code>AcerGridVista
+AquaSnap
+Dexpot
+</code></pre>
+
+<h3>圖片處理</h3>
+<pre><code>Premiere Pro CS6
+</code></pre>
+
+<h3>圖標製作</h3>
+<pre><code>Axialis IconWorkshop
+</code></pre>
+
+<h3>視頻編輯</h3>
+<pre><code>Adobe Premiere
+</code></pre>
+
+<h3>PDF查看器</h3>
+<pre><code>Adobe Reader 11
+</code></pre>
+
+<h3>看圖</h3>
+<pre><code>ACD Systems
+</code></pre>
+
+<h3>廣告過濾</h3>
+<pre><code>ADSafe
+</code></pre>
+
+<h3>下載工具</h3>
+<pre><code>AcDown ｢動漫下載｣
+BaiduYun5.3 green
+CSDN博客导出工具
+</code></pre>
+
+<h3>ISO格式處理</h3>
+<pre><code>Alcohol 120%
+AnyToISO
+DAEMON Tools Lite
+</code></pre>
+
+<h3>USB管理</h3>
+<pre><code>USBSafelyRemove
+</code></pre>
+
+<h3>遠程桌面</h3>
+<pre><code>AnyDesk
+</code></pre>
+
+<h3>瀏覽器</h3>
+<pre><code>ChromeLT
+</code></pre>
+
+<h3>網站建設</h3>
+<pre><code>Adobe Dreamweaver CS6
+Apache Software Foundation
+</code></pre>
+
+<h3>批量處理</h3>
+<pre><code>FBMain
+</code></pre>
+
+<h3>系統維護</h3>
+<pre><code>aida64extreme
+ProcessExplorer
+NGRegedit
+regeditx
+PRegMonitor4
+Advanced SystemCare Pro ｢類似於360，不推薦｣
+BatteryCarePortable ｢不推薦｣
+CurrPorts ｢端口查看｣
+</code></pre>
+
+<h2>系統清理</h2>
+<pre><code>BleachBitPortable
+CCleanerplus
+Autoruns
+ec menu
+FileMenuTools
+</code></pre>
+
+<h3>CPU/顯卡性能測試</h3>
+<pre><code>3DMark
+CINEBENCHr15
+cpuz
+FFXIVBenchmark
+</code></pre>
+
+<h3>剪貼版</h3>
+<pre><code>Ditto
+</code></pre>
+
+<h3>顯示器壞點測試</h3>
+<pre><code>DisplayX
+</code></pre>
+
+<h3>硬盤測試</h3>
+<pre><code>AS SSD Benchmark
+ATTO Disk bench
+bench32
+ChipGenius
+</code></pre>
+
+<h3>硬盤管理</h3>
+<pre><code>DiskGenius
+</code></pre>
+
+<h3>熱鍵管理</h3>
+<pre><code>AgataSoft HotKey Manager
+activehotkeys
+AutoHotkey
+</code></pre>
+
+<h3>屏幕錄製</h3>
+<pre><code>ashampoo snap
+银河屏幕录制工具
+</code></pre>
+
+<h3>數據恢復</h3>
+<pre><code>7Data.v3.2
+</code></pre>
+
+<h3>驅動管理</h3>
+<pre><code>360DrvMgr ｢沒有去找更好的｣
+DriverBackup
+</code></pre>
+
+<h3>修改器</h3>
+<pre><code>Cheat Engine v6.4
+</code></pre>
+
+<h3>壓縮文檔密碼破解</h3>
+<pre><code>7zcracker
+RARPasswordUnlocker
+</code></pre>
+
+<h3>種子編輯</h3>
+<pre><code>BEncode Editor
+</code></pre>
+
+<h3>应用程序解包</h3>
+<pre><code>ArcThemALL
+</code></pre>
+
+<h3>網絡黑客</h3>
+<pre><code>BurpLoader
+</code></pre>
+
+<h3>虛擬機</h3>
+<pre><code>Microsoft Virtual PC
+</code></pre>
+
+<h3>IDE</h3>
+<pre><code>VS
+Git
+CodeBlocks
+eclipse
+</code></pre>
+
+<h3>遊戲引擎</h3>
+<pre><code>Epic Games
+cocos2d-x
+</code></pre>
+
+<h3>二維碼識別生成</h3>
+<pre><code>二维码生成器软件版2.0
+</code></pre>
+
+<blockquote>
+<p>其他的還有， Cloud-Foundry這些待在我的硬盤裡但是不怎麼被使用的軟體。這一次整理到了FileMenuTools，下次我再接著整理。</p>
+</blockquote>
+
+</body>
+</html>

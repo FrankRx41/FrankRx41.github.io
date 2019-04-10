@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, minimum-scale=1, user-scalable=yes" />
+<link type="text/css" href="../css/style.css" rel="stylesheet"/>
+<title>Java Complier</title>
+</head>
+
+<body>
+<div class="article">
+<h1>我的JAVA編譯環境</h1>
+<p>今天我完成了我java編譯環境的代碼，把他們放出來吧。</p>
+<p>我放一張我JAVA環境的截圖吧。只要我選擇了對應的菜單，就能夠完成對應的操作。</p>
+<p><img src="../img/java_compiler2.jpg" alt="" width="420" height="290"></p>
+<p>要想做到這樣的效果，需要用到批處理(bat)和註冊表(regedit)相關的知識。</p>
+<p>先聲明，這裡的文章不是給小白看的，如果你連如何打開註冊表都不知道話，請不要浪費時間繼續閱讀。</p>
+<h2>滑鼠菜單</h2>
+<p>this right menu is a 多層的菜單, follow this to make it:</p>
+<p>1.open your regedit (you can use <kbd>WIN</kbd>+<kbd>R</kbd> and type &quot;regedit&quot; and click <kbd>OK</kbd>) </p>
+<p>2.find &quot;.java&quot; in HKCR base key (also named HKEY_CLASSES_ROOT), and mark the value of &quot;(Default)&quot;
+key. (In my PC, it is &quot;javafile&quot;)</p>
+<p>3.goto last find value key (In my PC, goto &quot;javafie&quot;) and open it, and goto &quot;shell&quot; menu. (we can alse say: goto HKCR-your_java_default_key_value-shell)</p>
+<p>4.right click the &quot;shell&quot; and click New-Key. then system will create a new key in &quot;shell&quot;, default named &quot;New Key #1&quot;. we can change his name or not. I change his name to &quot;JavaContext&quot;.</p>
+<p>5.</p>
+<p>6.</p>
+<p>1.打開註冊表，在HKCR，JAVA文件的KEY的shell下｢注意不是.java的目錄下｣，創建一個KEY，取名為JavaContext。</p>
+<p>2.給JavaContext加入一個String Value，重命名為SubCommands，然後給其賦值為</p>
+<p>Java.Appletviewer;Java.Run;Java.Compile;Java.Runwithcmd;</p>
+<p>3.在HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell下，創建一個KEY，重命名為Java.Compile。然後在其之下創建一個KEY，重命名為command，將其default設置為&quot;D:\Program Files\ContextMenu\java\java_compile.cmd&quot; &quot;%1&quot;｢注意有引號｣</p>
+<p>5.然後創建一個java_compile.cmd文檔，放在D:\Program Files\ContextMenu\java\下。然後複製如下代碼至其中。</p><pre>
+@echo off
+cd %~d1%~p1
+if exist %~n1.class (
+  del %~n1.class
+)
+echo on
+@javac %~nx1 -encoding UTF-8
+@pause</pre></p>
+<p>6.設置</p>
+<p>首先需要創建幾個如下的批處理文檔，文件擴展名為cmd或者bat。</p>
+
+<h2>文檔代碼</h2>
+<p>java_appletviewer</p>
+<p>創建一個HTML文件以運行Java applet。</p>
+<pre>
+@echo off
+cd %~d1%~p1
+if exist %~n1.class (
+  del %~n1.class
+)
+echo on
+@javac %~nx1 -encoding UTF-8
+@echo off
+if exist %~n1.class (
+del %~n1.html 2&gt;nul
+  echo.^&lt;html^&gt;	&gt;&gt;%~n1.html
+  echo.^&lt;head^&gt;	&gt;&gt;%~n1.html
+  echo.^&lt;title^&gt;%~n1 appletviewer^&lt;/title^&gt;	&gt;&gt;%~n1.html
+  echo.^&lt;head^&gt;	&gt;&gt;%~n1.html
+  echo.	&gt;&gt;%~n1.html
+  echo.^&lt;body^&gt;	&gt;&gt;%~n1.html
+  echo.^&lt;applet code=^&quot;%~n1.class^&quot; width=640 height=480^&gt;	&gt;&gt;%~n1.html
+  echo.^&lt;/applet^&gt;	&gt;&gt;%~n1.html
+  echo.^&lt;/body^&gt;	&gt;&gt;%~n1.html
+  echo.	&gt;&gt;%~n1.html
+  echo.^&lt;html^&gt;	&gt;&gt;%~n1.html
+  appletviewer %~n1.html
+  del %~n1.html
+)
+pause
+</pre>
+<p>java_compile</p>
+<p>編譯java文件，若編譯失敗，顯示失敗信息。</p>
+<p>注意：該程式會刪除最後一次編譯的文件，有待改進。</p>
+<pre>
+@echo off
+cd %~d1%~p1
+if exist %~n1.class (
+  del %~n1.class
+)
+echo on
+@javac %~nx1 -encoding UTF-8
+@pause</pre>
+<p>java_compile_run</p>
+<p>編譯並且運行，基本與java_compile相同，在編譯成功時，運行程式。</p>
+<pre>
+@echo off
+cd %~d1%~p1
+if exist %~n1.class (
+  del %~n1.class
+)
+echo on
+@javac %~nx1 -encoding UTF-8
+@echo off
+if exist %~n1.class (
+  echo Compile successful
+  java %~n1
+)
+pause</pre>
+
+<p>這寫代碼具體的意思，有興趣可以查batscriptr的語法。我就不多說了。因為講解代碼真的很無聊，就像對牛彈琴一樣。或者就像「你沒必要給還在上幼稚園的孩子說明避孕套的使用方法」一樣的道理。懂的人自然會懂的，不懂的人，和他們說又有什麼用呢？</p>
+
+<h2>使用方法</h2>
+<p>那麼，不談代碼的構成，這些代碼該怎麼用呢？ </p>
+
+<p>至於這個效果是怎麼做出來的，改天，我寫註冊表相關知識的時候，會告訴大家的。敬請期待吧。</p>
+</div>
+
+</body>
+</html>

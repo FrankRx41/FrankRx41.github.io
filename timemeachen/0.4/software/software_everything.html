@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, minimum-scale=1, user-scalable=yes" />
+<link type="text/css" href="../css/style.css" rel="stylesheet"/>
+<title>Everything</title>
+</head>
+
+<body>
+<h1>Everything</h1>
+<p>Everything 應該是我最常用的軟體了。 其出色的文件檢索速度，是我這一種大硬盤用戶
+查找文件的利器。不過呢，使用過程中，也還是難免會有一點問題。</p>
+<h2>使用中遇到的問題和解決方案</h2>
+<h3>每次啟動everything，都要等待一段時間的文件檢索時間。</h3>
+<p>這個問題，我曾經使用過一個老版本來解決，那是一個不自動更新數據庫的版本。不過那個版本很老，很多我常用的新功能都不完善，所以最後我又換回了新版本。
+<p>新版本中我通過<em>Tools - Options - Indexes - NTFS</em>取消了所有<strong>Auto include new fiexed volumes</strong>和<strong>Auto include new removable volumes</strong>前面的勾，並且，對所有的硬盤取消選擇了<strong>Include USN Journal in recent changes</strong>和<strong>Monitor changes</strong>前面的勾。
+<p>這樣子，雖然不能自動監視文件的更新，不過，總比每次啟動，都花費1分鐘左右的時間｢因為我的文件比較多｣來重新建立數據庫要好。</p>
+<p>當需要檢索最近更新的文件時，可以在<em>Tools - Options - Indexes</em>中，選擇<strong>Force Rebuild</strong>。</p>
+<p>我目前不確定選擇 Compress database 會不會對讀取數據庫的時間有影響，只是我的文件太多，而感覺他數據庫是有大小上限的，所以我選擇了這個選項。</p>
+<h3>不能使用MoveWindow API移動Everything的窗口</h3>
+<p>這個問題，經過我多年的研究，終於被解決了。那是因為Everything為了檢索NTFS分區，獲取了管理員權限，而我們一般寫的Window應用程序並沒有這個權限。所以我們發送的MoveWindow消息並不會被Everything響應。</p>
+<p>具體的解決方法是：讓發送的MoveWindow消息的程序以管理員運行，即擁有管理員權限。</p>
+</body>
+</html>

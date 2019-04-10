@@ -1,0 +1,61 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="VIEWPORT" content="WIDTH=DEVICE-WIDTH, INITIAL-SCALE=1.0, USER-SCALABLE=YES">
+<link type="TEXT/CSS" href="../CSS/STYLE.CSS" rel="STYLESHEET"/>
+<title>Everything</title>
+</head>
+
+<body>
+
+<h1>Everything</h1>
+
+<blockquote><p>Everything應該是我最常用的軟體了。 其出色的文件檢索速度，是我這一種大硬盤用戶查找文件的利器。不過呢，使用過程中，也還是難免會有一點問題。</p><TIME>Sun, 2017-11-26</TIME></blockquote>
+
+
+<h2>加速Everything啟動</h2>
+
+<p>每次啟動Everything，都要等待一段時間的文件檢索時間。</p>
+
+<blockquote><p>這個問題，我曾經使用過一個老版本來解決，那是一個不自動更新數據庫的版本。不過那個版本很老，很多我常用的新功能都不完善，所以最後我又換回了新版本。</p></blockquote>
+
+<p>在<i>TOOLS - OPTIONS - INDEXES - NTFS</i>中取消勾選
+<ul><li>Auto include new fiexed volumes</li>
+<li>Auto include new removable volumes</li></ul></P>
+
+<p>並且，對所有的local NTFS volumes中硬盤分區取消勾選
+<ul><li>nclude USN Journal in recent changes</li>
+<li>Monitor changes</li></ul></P>
+
+<blockquote><p>這樣子，雖然不能自動監視文件的更新。但我覺得比每次啟動，都花費1分鐘左右的時間｢因為我的文件比較多｣來重新建立索引數據庫要好。</p></blockquote>
+
+<p>在<i>Tools-Options-Indexes</i>中，勾選
+<ul><li>Compress database</li></ul></P>
+
+<blockquote><p>我不確定該選項會不會對讀取數據庫的時間有影響，只是我的文件太多，而感覺他數據庫是有大小上限的，所以我選擇了這個選項。</p></blockquote>
+
+
+<h2>更新Everything的數據庫</h2>
+
+<blockquote><p>如果按照我上面的設置，Everything便不會自動對硬盤進行索引，當我需要查看硬盤文檔存儲的最新狀態時，就需要要求其進行更新。</p></blockquote>
+
+<p>在<i>Tools-Options-Indexes</i>中，選擇<kbd>Force Rebuild</kbd>。</p>
+
+<p>等待Everything數據庫的重建，這可能會花費一段時間。</p>
+
+
+<h2>控制Everything的窗體</h2>
+
+<blockquote><p>我有一個管理我桌面窗體的程式，他在大部分情況下都能正常的工作，但是，對於Everything的窗體，他沒有任何效果，不管是移動窗體還是改變窗體的大小。即Everything不會響應SendMessage發送的消息。</p></blockquote>
+
+<h3>問題描述</h3>
+
+<p>因為Everything為了檢索NTFS分區，獲取了管理員權限。而一般的Window應用程序並沒有該權限。所以我們發送的窗口控制消息因為權限不足，所以不會被Everything窗體響應。</p>
+
+<h3>解決方法</h3>
+
+<p>讓發送的窗口控制消息的程序以管理員方式運行，即擁有管理員權限。</p>
+
+</body>
+</html>

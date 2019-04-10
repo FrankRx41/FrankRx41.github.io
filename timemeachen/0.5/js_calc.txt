@@ -1,0 +1,21 @@
+<!DOCTYPE>
+<HTML>
+<HEAD>
+
+<TITLE>
+</TITLE>
+
+<BODY>
+<script type="text/javascript"> 
+//<![CDATA[
+    "use strict";
+    
+    var szInputString;
+    var nAns;
+    szInputString = prompt("input your expression");
+    alert("Ans = \n"+eval(szInputString));
+//]]> 
+</script> 
+
+</BODY>
+</HTML>

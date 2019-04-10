@@ -1,0 +1,796 @@
+﻿<!DOCTYPE html>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8" />
+<LINK REL="STYLESHEET" TYPE="TEXT/CSS" HREF="../style.css">
+<SCRIPT SRC="../script.js"></SCRIPT>
+</HEAD>
+
+<BODY>
+
+<H1>C語言WindowsSocket編程</H1>
+
+<H2>聲明</H2>
+<P>本文為轉載翻譯，原文地址為https://www.binarytides.com/winsock-socket-programming-tutorial/</P>
+
+<H3>使用winsock進行套接字編程</H3>
+<P>這是一個在Windows上使用C語言學習套接字編程的快速指南。因為這裡顯示的代碼片段僅適用於Windows系統而"Windows"，。 套接字編程的Windows API稱為winsock。</P>
+  
+<P>套接字是計算機完成的任何網絡通信背後的基本&quot;事物&quot;。 例如，當您在網絡瀏覽器中鍵入www.google.com時，它會打開一個套接字並連接到google.com以獲取該頁面並將其顯示給您。 與任何聊天客戶端（如gtalk或skype）一樣。 任何網絡通信都通過套接字。</P>
+<H3>在你開始之前</H3>
+<P>本教程假定您具有C和指針的基本知識。 同時下載Visual C ++ 2010 Express Edition。</P>
+<H3>初始化Winsock
+  Winsock</H3>
+<P>首先需要像這樣初始化：</P>
+<PRE><CODE>/*
+    Initialise Winsock
+*/
+ 
+#include<stdio.h>
+#include<winsock2.h>
+ 
+#pragma comment(lib,"ws2_32.lib") //Winsock Library
+ 
+int main(int argc , char *argv[])
+{
+    WSADATA wsa;
+     
+    printf("\nInitialising Winsock...");
+    if (WSAStartup(MAKEWORD(2,2),&wsa) != 0)
+    {
+        printf("Failed. Error Code : %d",WSAGetLastError());
+        return 1;
+    }
+     
+    printf("Initialised.");
+ 
+    return 0;
+}</CODE></PRE>
+
+<P>&nbsp;</P>
+<P>winsock2.h是包含在winsock函數中的頭文件。ws2_32.lib是要與程序鏈接以便能夠使用winsock函數的庫文件。</P>
+<P>WSAStartup函數用於啟動或初始化winsock庫。 它需要2個參數; 第一個是我們想要加載的版本，第二個是WSADATA結構，它將在加載winsock後保存附加信息。</P>
+<P>如果發生任何錯誤，則WSAStartup函數將返回非零值，並且可以使用WSAGetLastError獲取有關發生錯誤的更多信息。</P>
+<P>好的，下一步是創建一個套接字。</P>
+<H3>創建一個套接字</H3>
+<P> socket函數用於創建套接字。</P>
+<P> 這是一個代碼示例：</P>
+<PRE><CODE>/*
+    Create a TCP socket
+*/
+ 
+#include<stdio.h>
+#include<winsock2.h>
+ 
+#pragma comment(lib,"ws2_32.lib") //Winsock Library
+ 
+int main(int argc , char *argv[])
+{
+    WSADATA wsa;
+    SOCKET s;
+ 
+    printf("\nInitialising Winsock...");
+    if (WSAStartup(MAKEWORD(2,2),&wsa) != 0)
+    {
+        printf("Failed. Error Code : %d",WSAGetLastError());
+        return 1;
+    }
+     
+    printf("Initialised.\n");
+     
+     
+    if((s = socket(AF_INET , SOCK_STREAM , 0 )) == INVALID_SOCKET)
+    {
+        printf("Could not create socket : %d" , WSAGetLastError());
+    }
+ 
+    printf("Socket created.\n");
+ 
+    return 0;
+}</CODE></PRE>
+<P>函數socket創建一個套接字並返回一個可用於其他網絡命令的套接字描述符。 上面的代碼將創建一個套接字：</P>
+<P>地址系列：AF_INET（這是IP版本4）</P>
+<P>類型：SOCK_STREAM（這意味著面向連接的TCP協議）</P>
+<P>協議：0 [或IPPROTO_TCP，IPPROTO_UDP]</P>
+<P>在<A HREF="https://msdn.microsoft.com/en-us/library/windows/desktop/ms740506(v=vs.85).aspx">這裡</A>閱讀一些文檔是個好主意</P>
+<P>好的，你已經成功創建了一個套接字。 但接下來呢？ 接下來我們將嘗試使用此套接字連接到某個服務器。 我們可以連接到www.google.com</P>
+<P><B>注意</B></P>
+<P>除SOCK_STREAM類型的套接字外，還有另一種稱為SOCK_DGRAM的類型，它表示UDP協議。 這種類型的套接字是非連接套接字。 在本教程中，我們將堅持使用SOCK_STREAM或TCP套接字。</P>
+<H3>連接到服務器</H3>
+<P> 我們通過某個端口號連接到遠程服務器。 所以我們需要2件東西，IP地址和端口號來連接。</P>
+<P>要連接到遠程服務器，我們需要做幾件事情。 首先創建一個sockaddr_in結構，並填寫適當的值。讓我們為自己創建一個：</P>
+<PRE><CODE>struct sockaddr_in server;</CODE></PRE>
+<P>該結構體聲明如下</P>
+<PRE><CODE>// IPv4 AF_INET sockets:
+struct sockaddr_in {
+    short            sin_family;   // e.g. AF_INET, AF_INET6
+    unsigned short   sin_port;     // e.g. htons(3490)
+    struct in_addr   sin_addr;     // see struct in_addr, below
+    char             sin_zero[8];  // zero this if you want to
+};
+ 
+ 
+typedef struct in_addr {
+  union {
+    struct {
+      u_char s_b1,s_b2,s_b3,s_b4;
+    } S_un_b;
+    struct {
+      u_short s_w1,s_w2;
+    } S_un_w;
+    u_long S_addr;
+  } S_un;
+} IN_ADDR, *PIN_ADDR, FAR *LPIN_ADDR;
+ 
+ 
+struct sockaddr {
+    unsigned short    sa_family;    // address family, AF_xxx
+    char              sa_data[14];  // 14 bytes of protocol address
+};</CODE></PRE>
+<P>sockaddr_in有一個叫做in_addr類型的sin_addr的成員，它有一個s_addr，它不過是一長串。 它包含長格式的IP地址。</P>
+<P>函數inet_addr是將IP地址轉換為長格式的非常方便的函數。 這是你如何做到的：</P>
+<PRE><CODE>server.sin_addr.s_addr = inet_addr("74.125.235.20");</CODE></PRE>
+<P>所以你需要知道你連接的遠程服務器的IP地址。 在這裡，我們使用global.bing.com的ip地址作為示例。 稍後我們將看到如何找出給定域名的IP地址。</P>
+<P>譯註：原文使用的是google的IP作為演示，由於谷歌在中國大陸被牆，改為使用必應的IP做演示。</P>
+<P>最後需要的是連接功能。 它需要一個套接字和一個sockaddr結構來連接。 這是一個代碼示例。</P>
+<PRE><CODE>/*
+    Create a TCP socket
+*/
+ 
+#include &lt;stdio.h&gt;
+#include &lt;winsock2.h&gt;
+ 
+#pragma comment(lib,"ws2_32.lib") //Winsock Library
+ 
+int main(int argc , char *argv[])
+{
+    WSADATA wsa;
+    SOCKET s;
+    struct sockaddr_in server;
+ 
+    printf("\nInitialising Winsock...");
+    if (WSAStartup(MAKEWORD(2,2),&amp;wsa) != 0)
+    {
+        printf("Failed. Error Code : %d",WSAGetLastError());
+        return 1;
+    }
+     
+    printf("Initialised.\n");
+     
+    //Create a socket
+    if((s = socket(AF_INET , SOCK_STREAM , 0 )) == INVALID_SOCKET)
+    {
+        printf("Could not create socket : %d" , WSAGetLastError());
+    }
+ 
+    printf("Socket created.\n");
+     
+     
+    server.sin_addr.s_addr = inet_addr("204.79.197.214");
+    server.sin_family = AF_INET;
+    server.sin_port = htons( 80 );
+ 
+    //Connect to remote server
+    if (connect(s , (struct sockaddr *)&amp;server , sizeof(server)) &lt; 0)
+    {
+        puts("connect error");
+        return 1;
+    }
+     
+    puts("Connected");
+ 
+    return 0;
+}</CODE></PRE>
+<P>它不能更簡單。 它創建一個套接字然後連接。 如果你運行該程序，它應該顯示連接。</P>
+<P> 嘗試連接到不同於端口80的端口，並且您應該無法連接，表示端口未連接。</P>
+<P>好的，現在我們已經連線了。 讓我們做下一件事，發送一些數據到遠程服務器。</P>
+<P><B>快速注意</B></P>
+<P>“連接”的概念適用於SOCK_STREAM / TCP類型的套接字。 連接意味著數據的可靠“流”，使得可以存在多個這樣的流，每個流具有其自己的通信。 把它想像成不受其他數據干擾的管道。</P>
+<P>其他插座如UDP，ICMP，ARP沒有“連接”的概念。 這些是非基於連接的通信。 這意味著你不斷發送或接收來自任何人和每個人的數據包。</P>
+<H3>發送數據</H3>
+<P> 功能發送將簡單地發送數據。 它需要套接字描述符，要發送的數據及其大小。</P>
+<P> 以下是將一些數據發送到global.bing.com的ip的一個非常簡單的例子：</P>
+<PRE><CODE>/*
+    Create a TCP socket
+*/
+ 
+#include&lt;stdio.h&gt;
+#include&lt;winsock2.h&gt;
+ 
+#pragma comment(lib,"ws2_32.lib") //Winsock Library
+ 
+int main(int argc , char *argv[])
+{
+    WSADATA wsa;
+    SOCKET s;
+    struct sockaddr_in server;
+    char *message;
+ 
+    printf("\nInitialising Winsock...");
+    if (WSAStartup(MAKEWORD(2,2),&amp;wsa) != 0)
+    {
+        printf("Failed. Error Code : %d",WSAGetLastError());
+        return 1;
+    }
+     
+    printf("Initialised.\n");
+     
+    //Create a socket
+    if((s = socket(AF_INET , SOCK_STREAM , 0 )) == INVALID_SOCKET)
+    {
+        printf("Could not create socket : %d" , WSAGetLastError());
+    }
+ 
+    printf("Socket created.\n");
+     
+     
+    server.sin_addr.s_addr = inet_addr("204.79.197.214");
+    server.sin_family = AF_INET;
+    server.sin_port = htons( 80 );
+ 
+    //Connect to remote server
+    if (connect(s , (struct sockaddr *)&amp;server , sizeof(server)) &lt; 0)
+    {
+        puts("connect error");
+        return 1;
+    }
+     
+    puts("Connected");
+     
+    //Send some data
+    message = "GET / HTTP/1.1\r\n\r\n";
+    if( send(s , message , strlen(message) , 0) &lt; 0)
+    {
+        puts("Send failed");
+        return 1;
+    }
+    puts("Data Send\n");
+ 
+    return 0;
+}</CODE></PRE>
+<P>在上面的例子中，我們首先連接到一個IP地址，然後將字符串消息“<CODE>GET / HTTP/1.1\r\n\r\n</CODE>”發送給它。</P>
+<P> 該消息實際上是用於獲取網站主頁的http命令。</P>
+<P>現在我們已經發送了一些數據，它的時間從服務器接收回复。 所以讓我們做吧。</P>
+<H3>接收數據</H3>
+<P> 函數recv用於在套接字上接收數據。 在下面的例子中，我們將發送與最後一個例子相同的消息並從服務器接收答复。</P>
+<PRE><CODE>/*
+    Create a TCP socket
+*/
+ 
+#include&lt;stdio.h&gt;
+#include&lt;winsock2.h&gt;
+ 
+#pragma comment(lib,"ws2_32.lib") //Winsock Library
+ 
+int main(int argc , char *argv[])
+{
+    WSADATA wsa;
+    SOCKET s;
+    struct sockaddr_in server;
+    char *message , server_reply[5000];
+    int recv_size;
+ 
+    printf("\nInitialising Winsock...");
+    if (WSAStartup(MAKEWORD(2,2),&amp;wsa) != 0)
+    {
+        printf("Failed. Error Code : %d",WSAGetLastError());
+        return 1;
+    }
+     
+    printf("Initialised.\n");
+     
+    //Create a socket
+    if((s = socket(AF_INET , SOCK_STREAM , 0 )) == INVALID_SOCKET)
+    {
+        printf("Could not create socket : %d" , WSAGetLastError());
+    }
+ 
+    printf("Socket created.\n");
+     
+     
+    server.sin_addr.s_addr = inet_addr("180.97.33.108");
+    server.sin_family = AF_INET;
+    server.sin_port = htons( 80 );
+ 
+    //Connect to remote server
+    if (connect(s , (struct sockaddr *)&amp;server , sizeof(server)) &lt; 0)
+    {
+        puts("connect error");
+        return 1;
+    }
+     
+    puts("Connected");
+     
+    //Send some data
+    message = "GET / HTTP/1.1\r\n\r\n";
+    if( send(s , message , strlen(message) , 0) &lt; 0)
+    {
+        puts("Send failed");
+        return 1;
+    }
+    puts("Data Send\n");
+     
+    //Receive a reply from the server
+    if((recv_size = recv(s , server_reply , 5000 , 0)) == SOCKET_ERROR)
+    {
+        puts("recv failed");
+    }
+     
+    puts("Reply received\n");
+ 
+    //Add a NULL terminating character to make it a proper string before printing
+    server_reply[recv_size] = '\0';
+    puts(server_reply);
+ 
+    return 0;
+}</CODE></PRE>
+<P>以上是上述代碼的輸出：</P>
+<PRE><CODE>HTTP/1.1 200 OK
+Accept-Ranges: bytes
+Cache-Control: no-cache
+Connection: Keep-Alive
+Content-Length: 14615
+Content-Type: text/html
+Date: Sat, 26 May 2018 11:25:11 GMT
+Last-Modified: Fri, 11 May 2018 09:27:00 GMT
+P3p: CP=" OTI DSP COR IVA OUR IND COM "
+Pragma: no-cache
+Server: BWS/1.1</CODE></PRE>
+<P>我们可以看到服务器发送了什么回复。 它看起来像Html，以及IT IS HTML。 Google.com回复了我们要求的网页内容。 非常简单！</P>
+<P>现在我们已收到我们的回复，关闭套接字的时间已到。</P>
+<H3>关闭套接字</H3>
+<P> 函数closesocket用于关闭套接字。 还必须调用WSACleanup来卸载winsock库（ws2_32.dll）。</P>
+<PRE><CODE>closesocket(s);
+WSACleanup();</CODE></PRE>
+<P>就這樣而已。</P>
+<H3>讓我們複習</H3>
+<P> 所以在上面的例子中，我們學習瞭如何：</P>
+<P> 1.創建一個套接字</P>
+<P> 2.連接到遠程服務器</P>
+<P> 3.發送一些數據</P>
+<P> 4.收到回复</P>
+<P>當您打開www.google.com時，知道您的網絡瀏覽器也可以做同樣的事情</P>
+<P> 這種套接字活動代表一個<B>客戶端</B>。客戶端是連接到遠程系統以獲取或檢索數據的系統。</P>
+<P>另一種套接字活動稱為<B>服務器</B>。服務器是一個使用套接字接收傳入連接並為其提供數據的系統。這與客戶正好相反。所以www.google.com是一個服務器，您的網絡瀏覽器是一個客戶端。或者更具體地說，www.google.com是一個HTTP服務器，而您的Web瀏覽器是一個HTTP客戶端。</P>
+<P>現在是時候使用套接字來完成一些服務器任務了。但在我們繼續前進之前，有幾個方面的主題應該包括在您需要的時候。</P>
+<H3>獲取主機名/域的IP地址</H3>
+<P> 連接到遠程主機時，必須有其IP地址。函數gethostbyname用於此目的。它將域名作為參數並返回hostent類型的結構。該結構具有ip信息。它存在於netdb.h中。讓我們看看這個結構</P>
+<PRE><CODE>/* Description of data base entry for a single host.  */
+struct hostent
+{
+  char *h_name;         /* Official name of host.  */
+  char **h_aliases;     /* Alias list.  */
+  int h_addrtype;       /* Host address type.  */
+  int h_length;         /* Length of address.  */
+  char **h_addr_list;       /* List of addresses from name server.  */
+};</CODE></PRE>
+<P><CODE>h_addr_list</CODE>具有IP地址。 所以現在讓我們有一些代碼來使用它們。</P>
+<PRE><CODE>/*
+    Get IP address from domain name
+*/
+ 
+#include&lt;stdio.h&gt;
+#include&lt;winsock2.h&gt;
+ 
+#pragma comment(lib,"ws2_32.lib") //Winsock Library
+ 
+int main(int argc , char *argv[])
+{
+    WSADATA wsa;
+    char *hostname = "www.google.com";
+    char ip[100];
+    struct hostent *he;
+    struct in_addr **addr_list;
+    int i;
+     
+    printf("\nInitialising Winsock...");
+    if (WSAStartup(MAKEWORD(2,2),&amp;wsa) != 0)
+    {
+        printf("Failed. Error Code : %d",WSAGetLastError());
+        return 1;
+    }
+     
+    printf("Initialised.\n");
+     
+         
+    if ( (he = gethostbyname( hostname ) ) == NULL) 
+    {
+        //gethostbyname failed
+        printf("gethostbyname failed : %d" , WSAGetLastError());
+        return 1;
+    }
+     
+    //Cast the h_addr_list to in_addr , since h_addr_list also has the ip address in long format only
+    addr_list = (struct in_addr **) he-&gt;h_addr_list;
+     
+    for(i = 0; addr_list[i] != NULL; i++) 
+    {
+        //Return the first one;
+        strcpy(ip , inet_ntoa(*addr_list[i]) );
+    }
+     
+    printf("%s resolved to : %s\n" , hostname , ip);
+    return 0;
+}</CODE></PRE>
+<P>代碼的輸出如下所示：</P>
+<PRE><CODE>www.google.com resolved to : 69.171.229.28</CODE></PRE>
+<P>所以上面的代碼可以用來查找任何域名的IP地址。然後可以使用ip地址來使用套接字進行連接。</P>
+<P>函數<CODE>inet_ntoa</CODE>將長格式的IP地址轉換為點格式。這只是<CODE>inet_addr</CODE>的反面。</P>
+<P>到目前為止，我們已經看到了一些使用的重要結構。讓我們修改它們：</P>
+<P>1. sockaddr_in - 連接信息。由連接，發送，recv等使用<BR>
+  2. in_addr - 長格式的IP地址<BR>
+  3. sockaddr<BR>
+  4. hostent - 主機名的IP地址。由gethostbyname使用</P>
+<H3>服務器概念</H3>
+<P> 好吧，現在到服務器的東西服務器基本上執行以下操作</P>
+<P>1.打開一個插座<BR>
+  2.綁定到一個地址（和端口）。<BR>
+  3.聽取傳入的連接。<BR>
+  4.接受連接<BR>
+5.閱讀/發送</P>
+<P>我們已經學會瞭如何打開一個套接字。所以接下來的事情就是綁定它。</P>
+<H3>綁定(bind)一個套接字</H3>
+<P> 函數綁定可用於將套接字綁定到特定的地址和端口。它需要一個類似於connect函數的sockaddr_in結構。</P>
+<P>讓我們看一個代碼示例：</P>
+<PRE><CODE>/*
+    Bind socket to port 8888 on localhost
+*/
+ 
+#include&lt;stdio.h&gt;
+#include&lt;winsock2.h&gt;
+ 
+#pragma comment(lib,"ws2_32.lib") //Winsock Library
+ 
+int main(int argc , char *argv[])
+{
+    WSADATA wsa;
+    SOCKET s;
+    struct sockaddr_in server;
+ 
+    printf("\nInitialising Winsock...");
+    if (WSAStartup(MAKEWORD(2,2),&amp;wsa) != 0)
+    {
+        printf("Failed. Error Code : %d",WSAGetLastError());
+        return 1;
+    }
+     
+    printf("Initialised.\n");
+     
+    //Create a socket
+    if((s = socket(AF_INET , SOCK_STREAM , 0 )) == INVALID_SOCKET)
+    {
+        printf("Could not create socket : %d" , WSAGetLastError());
+    }
+ 
+    printf("Socket created.\n");
+     
+    //Prepare the sockaddr_in structure
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = INADDR_ANY;
+    server.sin_port = htons( 8888 );
+     
+    //Bind
+    if( bind(s ,(struct sockaddr *)&amp;server , sizeof(server)) == SOCKET_ERROR)
+    {
+        printf("Bind failed with error code : %d" , WSAGetLastError());
+    }
+     
+    puts("Bind done");
+     
+    closesocket(s);
+ 
+    return 0;
+}</CODE></PRE>
+<P>現在該綁定已完成，其時間使套接字偵聽連接。 我們將套接字綁定到特定的IP地址和特定的端口號。 通過這樣做，我們確保所有傳入該端口號的數據都被該應用程序接收。</P>
+<P>這很明顯，你不能有2個套接字綁定到同一個端口。</P>
+<H3>聆聽連接</H3>
+<P>在將套接字綁定到端口後，我們需要做的下一件事是偵聽連接。 為此，我們需要將套接字置於聆聽模式。 函數listen用於將套接字置於聆聽模式。 綁定後只需添加以下行。</P>
+<PRE><CODE>//Listen
+listen(s , 3);</CODE></PRE>
+<P>就這樣。 現在是接受新連接的主要部分。</P>
+<H3> 接受連接</H3>
+<P>函數接受用於此。 這是代碼</P>
+<PRE><CODE>/*
+    Bind socket to port 8888 on localhost
+*/
+ 
+#include&lt;stdio.h&gt;
+#include&lt;winsock2.h&gt;
+ 
+#pragma comment(lib,"ws2_32.lib") //Winsock Library
+ 
+int main(int argc , char *argv[])
+{
+    WSADATA wsa;
+    SOCKET s , new_socket;
+    struct sockaddr_in server , client;
+    int c;
+ 
+    printf("\nInitialising Winsock...");
+    if (WSAStartup(MAKEWORD(2,2),&amp;wsa) != 0)
+    {
+        printf("Failed. Error Code : %d",WSAGetLastError());
+        return 1;
+    }
+     
+    printf("Initialised.\n");
+     
+    //Create a socket
+    if((s = socket(AF_INET , SOCK_STREAM , 0 )) == INVALID_SOCKET)
+    {
+        printf("Could not create socket : %d" , WSAGetLastError());
+    }
+ 
+    printf("Socket created.\n");
+     
+    //Prepare the sockaddr_in structure
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = INADDR_ANY;
+    server.sin_port = htons( 8888 );
+     
+    //Bind
+    if( bind(s ,(struct sockaddr *)&amp;server , sizeof(server)) == SOCKET_ERROR)
+    {
+        printf("Bind failed with error code : %d" , WSAGetLastError());
+    }
+     
+    puts("Bind done");
+     
+ 
+    //Listen to incoming connections
+    listen(s , 3);
+     
+    //Accept and incoming connection
+    puts("Waiting for incoming connections...");
+     
+    c = sizeof(struct sockaddr_in);
+    new_socket = accept(s , (struct sockaddr *)&amp;client, &amp;c);
+    if (new_socket == INVALID_SOCKET)
+    {
+        printf("accept failed with error code : %d" , WSAGetLastError());
+    }
+     
+    puts("Connection accepted");
+ 
+    closesocket(s);
+    WSACleanup();
+ 
+    return 0;
+}</CODE></PRE>
+<P><B>輸出</B></P>
+<P>運行該程序。 它應該顯示</P>
+<PRE><CODE>Initialising Winsock...Initialised.
+Socket created.
+Bind done
+Waiting for incoming connections...</CODE></PRE>
+<P>所以現在這個程序正在等待8888端口上的傳入連接。不要關閉這個程序，讓它繼續運行。</P>
+<P> 現在客戶端可以在此端口上連接到它。 我們將使用telnet客戶端來測試它。 打開一個終端並輸入</P>
+<PRE><CODE> telnet localhost 8888</CODE></PRE>
+<P> 服務器輸出將顯示</P>
+<P>譯註：telnet的使用方法可以參考<A HREF="https://jingyan.baidu.com/article/ae97a646b22fb6bbfd461d19.html">這篇</A>文章</P>
+<PRE><CODE>Connection accepted</CODE></PRE>
+<P>所以我們可以看到連接到服務器的客戶端。 嘗試上述過程，直到完美無缺。</P>
+<P><B>注意</B></P>
+<P>您可以使用傳遞給accept函數的sockaddr_in結構來獲取客戶端的IP地址和連接端口。 這很簡單：</P>
+<PRE><CODE>char *client_ip = inet_ntoa(client.sin_addr);
+int client_port = ntohs(client.sin_port);</CODE></PRE>
+<P>我們接受了傳入的連接，但立即關閉。 這不是很有成效。 傳入連接建立後，可以做很多事情。 畢竟連接是為了溝通的目的而建立的。 因此，讓我們回复客戶。</P>
+<P>這裡是一個例子：</P>
+<PRE><CODE>/*
+    Bind socket to port 8888 on localhost
+*/
+#include&lt;io.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;winsock2.h&gt;
+ 
+#pragma comment(lib,"ws2_32.lib") //Winsock Library
+ 
+int main(int argc , char *argv[])
+{
+    WSADATA wsa;
+    SOCKET s , new_socket;
+    struct sockaddr_in server , client;
+    int c;
+    char *message;
+ 
+    printf("\nInitialising Winsock...");
+    if (WSAStartup(MAKEWORD(2,2),&amp;wsa) != 0)
+    {
+        printf("Failed. Error Code : %d",WSAGetLastError());
+        return 1;
+    }
+     
+    printf("Initialised.\n");
+     
+    //Create a socket
+    if((s = socket(AF_INET , SOCK_STREAM , 0 )) == INVALID_SOCKET)
+    {
+        printf("Could not create socket : %d" , WSAGetLastError());
+    }
+ 
+    printf("Socket created.\n");
+     
+    //Prepare the sockaddr_in structure
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = INADDR_ANY;
+    server.sin_port = htons( 8888 );
+     
+    //Bind
+    if( bind(s ,(struct sockaddr *)&amp;server , sizeof(server)) == SOCKET_ERROR)
+    {
+        printf("Bind failed with error code : %d" , WSAGetLastError());
+    }
+     
+    puts("Bind done");
+ 
+    //Listen to incoming connections
+    listen(s , 3);
+     
+    //Accept and incoming connection
+    puts("Waiting for incoming connections...");
+     
+    c = sizeof(struct sockaddr_in);
+    new_socket = accept(s , (struct sockaddr *)&amp;client, &amp;c);
+    if (new_socket == INVALID_SOCKET)
+    {
+        printf("accept failed with error code : %d" , WSAGetLastError());
+    }
+     
+    puts("Connection accepted");
+ 
+    //Reply to client
+    message = "Hello Client , I have received your connection. But I have to go now, bye\n";
+    send(new_socket , message , strlen(message) , 0);
+     
+    getchar();
+ 
+    closesocket(s);
+    WSACleanup();
+     
+    return 0;
+}</CODE></PRE>
+<P>在1個終端上運行上面的代碼。 並從另一個終端使用telnet連接到此服務器，您應該看到以下內容：</P>
+<PRE><CODE>Hello Client , I have received your connection. But I have to go now, bye</CODE></PRE>
+<P> 所以客戶端（telnet）收到服務器的回复。 我們不得不使用getchar，否則輸出將無需等待而滾出客戶端</P>
+<P>我們可以看到，之後立即關閉連接，只是因為服務器程序在接受和發送回復後結束。 像www.google.com這樣的服務器總是可以接受傳入的連接。</P>
+<P>這意味著服務器應該始終運行。 畢竟它的服務器意味著服務。 所以我們需要保持我們的服務器運行不間斷。 最簡單的方法是將accept放在一個循環中，以便可以始終接收傳入連接。</P>
+<H3>Live服務器</H3>
+<P>所以一個活著的服務器將永遠活著。 讓我們編碼：</P>
+<PRE><CODE>/*
+    Live Server on port 8888
+*/
+#include&lt;io.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;winsock2.h&gt;
+ 
+#pragma comment(lib,"ws2_32.lib") //Winsock Library
+ 
+int main(int argc , char *argv[])
+{
+    WSADATA wsa;
+    SOCKET s , new_socket;
+    struct sockaddr_in server , client;
+    int c;
+    char *message;
+ 
+    printf("\nInitialising Winsock...");
+    if (WSAStartup(MAKEWORD(2,2),&amp;wsa) != 0)
+    {
+        printf("Failed. Error Code : %d",WSAGetLastError());
+        return 1;
+    }
+     
+    printf("Initialised.\n");
+     
+    //Create a socket
+    if((s = socket(AF_INET , SOCK_STREAM , 0 )) == INVALID_SOCKET)
+    {
+        printf("Could not create socket : %d" , WSAGetLastError());
+    }
+ 
+    printf("Socket created.\n");
+     
+    //Prepare the sockaddr_in structure
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = INADDR_ANY;
+    server.sin_port = htons( 8888 );
+     
+    //Bind
+    if( bind(s ,(struct sockaddr *)&amp;server , sizeof(server)) == SOCKET_ERROR)
+    {
+        printf("Bind failed with error code : %d" , WSAGetLastError());
+        exit(EXIT_FAILURE);
+    }
+     
+    puts("Bind done");
+ 
+    //Listen to incoming connections
+    listen(s , 3);
+     
+    //Accept and incoming connection
+    puts("Waiting for incoming connections...");
+     
+    c = sizeof(struct sockaddr_in);
+     
+    while( (new_socket = accept(s , (struct sockaddr *)&amp;client, &amp;c)) != INVALID_SOCKET )
+    {
+        puts("Connection accepted");
+         
+        //Reply to the client
+        message = "Hello Client , I have received your connection. But I have to go now, bye\n";
+        send(new_socket , message , strlen(message) , 0);
+    }
+     
+    if (new_socket == INVALID_SOCKET)
+    {
+        printf("accept failed with error code : %d" , WSAGetLastError());
+        return 1;
+    }
+ 
+    closesocket(s);
+    WSACleanup();
+     
+    return 0;
+}</CODE></PRE>
+<P>我們沒有在那裡做過很多。 只是接受被放在一個循環中。</P>
+<P>現在在1個終端上運行該程序，並打開另外3個終端。 從3個終端中的每個終端執行telnet到服務器端口。</P>
+<P>像這樣運行telnet</P>
+<PRE><CODE>C:\&gt;telnet
+
+Welcome to Microsoft Telnet Client
+Escape Character is 'CTRL+]'
+Microsoft Telnet&gt; open localhost 8888
+
+Hello Client , I have received your connection. But I have to go now, bye</CODE></PRE>
+<P>服務器終端會顯示</P>
+<PRE><CODE>Initialising Winsock...Initialised.
+Socket created.
+Bind done
+Waiting for incoming connections...
+Connection accepted
+Connection accepted</CODE></PRE>
+<P>所以現在服務器不停地運行，並且telnet終端也不間斷地連接。 現在關閉服務器程序。</P>
+<P> 所有telnet終端都會顯示“連接到主機丟失”。</P>
+<P> 目前很好。 但服務器和客戶端之間仍然沒有有效的通信。</P>
+<P>服務器程序在一個循環中接受連接並發送給他們一個回复，之後它就不會執行任何操作。 此外，它一次無法處理超過1個連接。 所以現在是時候處理連接，並且一起處理多個連接。</P>
+<H3>處理連接</H3>
+<P> 為了處理每個連接，我們需要一個單獨的處理代碼來與主服務器一起運行，以接受連接。</P>
+<P> 實現這一點的一種方法是使用線程。 主服務器程序接受連接並創建一個新線程來處理連接的通信，然後服務器返回以接受更多連接。</P>
+<P>現在我們將使用線程為服務器接受的每個連接創建處理程序。 讓我們做朋友。</P>
+<PRE><CODE>1</CODE></PRE>
+<P>運行上述服務器並像以前一樣打開3個終端。 現在服務器將為每個連接到它的客戶端創建一個線程。</P>
+<P>telnet終端會顯示：</P>
+<PRE><CODE>1</CODE></PRE>
+<P>這看起來不錯，但通訊處理程序也很笨拙。 問候結束後。 它應該保持活力，並與客戶保持溝通。</P>
+<P>一種方法是通過使連接處理程序等待來自客戶端的一些消息，只要客戶端已連接即可。 如果客戶端斷開連接處理程序，則結束。</P>
+<P>所以連接處理程序可以像這樣重寫：</P>
+<PRE><CODE>1</CODE></PRE>
+<P>上面的連接處理程序從客戶端獲取一些輸入並使用相同的回复。 簡單！ 以下是telnet輸出的外觀</P>
+<PRE><CODE>1</CODE></PRE>
+<P>所以現在我們有一台可以交流的服務器。現在這很有用。</P>
+<H3>結論</H3>
+<P>在函數名稱和結構方面，winsock api與Linux套接字非常相似。幾乎沒有差異存在，如：</P>
+<P>1. Winsock需要使用WSAStartup函數進行初始化。沒有這樣的事情在Linux中。</P>
+<P>2.頭文件名稱不同。 Winsock需要winsock2.h，而Linux需要socket.h，apra / inet.h，unistd.h等等。</P>
+<P>3.關閉套接字的Winsock函數是closesocket，而在Linux上它接近。<BR>
+  在Winsock上也必須調用WSACleanup以卸載winsock dll。</P>
+<P>4.在winsock上，錯誤號由函數WSAGetLastError（）提取。在Linux上，errno.h文件中的errno變量填充了錯誤號。</P>
+<P>隨著我們的深入，還有更多的差異。</P>
+<P>到目前為止，您一定已經學習了C語言中的套接字編程的基礎知識。您可以嘗試一些實驗，例如編寫聊天客戶端或類似的東西。</P>
+<P>如果您認為本教程需要一些插件或改進，或者上面的任何代碼片段都不工作，請隨時在下面發表評論，以便它得到修復。</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+</BODY>
+</HTML>

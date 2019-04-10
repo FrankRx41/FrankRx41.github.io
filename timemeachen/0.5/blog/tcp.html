@@ -1,0 +1,409 @@
+﻿<!DOCTYPE html>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8" />
+<META CONTENT="width=device-width,user-scalable=no" NAME="viewport">
+<LINK REL="STYLESHEET" TYPE="TEXT/CSS" HREF="../style.css">
+<SCRIPT SRC="../script.js"></SCRIPT>
+</HEAD>
+
+<BODY>
+
+<H1>在winsock中編寫一個簡單的tcp套接字服務器</H1>
+
+<H2>注意，本文為轉載翻譯</H2>
+<P>通過套接字進行通信涉及2個程序在同一台機器上運行或在網絡上的不同機器上運行。首先是一個套接字服務器(server)，另一個是套接字客戶端(client)。Tcp表示傳輸控制協議，它是用於大多數通過互聯網或局域網進行的網絡通信的最常用協議。還有其他重要的協議，如udp，arp，icmp，它們強制使用但數量不多。</P>
+<P>這些協議在技術上講是定義數據在通過網絡發送時如何構成數據包的格式。 所以每個協議都有不同的格式，最重要的是有不同的目的。例如，對於各種內容下載和上傳，使用tcp。對於網絡分析，使用icmp和arp協議等等。每個協議的設計都是為了達到不同的目的。</P>
+<P>所以在這篇文章中，我們將看到如何使用winsock api在Windows上編寫套接字服務器。Winsock是Windows上的套接字API，可用於編寫套接字發言應用程序。代碼應在C中。</P>
+<P>所以套接字服務器是一個運行在一台機器上的應用程序，並期望客戶端連接到它，以便它可以為它們服務。編寫套接字服務器的步驟很簡單。</P>
+<OL>
+  <LI>創建一個套接字。</LI>
+  <LI>綁定到一個IP和端口。</LI>
+  <LI>開始聆聽</LI>
+  <LI>接受傳入的連接並處理它們。</LI>
+</OL>
+<P>以上每個步驟都有相關的功能，我們將很快在代碼中看到。</P>
+<PRE><CODE>/*
+    Bind socket to port 8888 on localhost
+*/
+#include&lt;io.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;winsock2.h&gt;
+  
+#pragma comment(lib,"ws2_32.lib") //Winsock Library
+  
+int main(int argc , char *argv[])
+{
+    WSADATA wsa;
+    SOCKET s , new_socket;
+    struct sockaddr_in server , client;
+    int c;
+    char *message;
+  
+    printf("\nInitialising Winsock...");
+    if (WSAStartup(MAKEWORD(2,2),&amp;wsa) != 0)
+    {
+        printf("Failed. Error Code : %d",WSAGetLastError());
+        return 1;
+    }
+      
+    printf("Initialised.\n");
+      
+    //Create a socket
+    if((s = socket(AF_INET , SOCK_STREAM , 0 )) == INVALID_SOCKET)
+    {
+        printf("Could not create socket : %d" , WSAGetLastError());
+    }
+  
+    printf("Socket created.\n");
+      
+    //Prepare the sockaddr_in structure
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = INADDR_ANY;
+    server.sin_port = htons( 8888 );
+      
+    //Bind
+    if( bind(s ,(struct sockaddr *)&amp;server , sizeof(server)) == SOCKET_ERROR)
+    {
+        printf("Bind failed with error code : %d" , WSAGetLastError());
+    }
+      
+    puts("Bind done");
+  
+    //Listen to incoming connections
+    listen(s , 3);
+      
+    //Accept and incoming connection
+    puts("Waiting for incoming connections...");
+      
+    c = sizeof(struct sockaddr_in);
+    new_socket = accept(s , (struct sockaddr *)&amp;client, &amp;c);
+    if (new_socket == INVALID_SOCKET)
+    {
+        printf("accept failed with error code : %d" , WSAGetLastError());
+    }
+      
+    puts("Connection accepted");
+  
+    //Reply to client
+    message = "Hello Client , I have received your connection. But I have to go now, bye\n";
+    send(new_socket , message , strlen(message) , 0);
+      
+    getchar();
+  
+    closesocket(s);
+    WSACleanup();
+      
+    return 0;
+}</CODE></PRE>
+
+<P>上面的代碼將在端口8888上啟動套接字服務器。從一個控制台運行它，然後在另一個控制台中使用telnet命令連接到它。 telnet的輸出應該是這樣的</P>
+<P>你好客戶端，我已收到你的連接。 但我現在得走了，再見</P>
+<P>服務器將此消息發送給連接的客戶端。該服務器使用以下重要功能構建</P>
+<OL>
+  <LI>socket - create a socket</LI>
+  <LI>bind - bind the socket to a local address and port</LI>
+  <LI>listen - make the socket listen to incoming connections.</LI>
+  <LI>accept - accept any incoming connections.</LI>
+</OL>
+<P><CODE>accept</CODE>函數返回一個新的套接字，用於指示該程序和遠程客戶機程序之間的連接。主套接字可以繼續接收下一個連接。上述程序演示了套接字程序如何工作，但功能非常有限。它可以接受1個傳入連接，之後它就會死機。</P>
+<H3>處理多個連接 - 異步套接字編程</H3>
+<P> 為了使這個服務器有用，它必須能夠接受多個傳入連接，並繼續處理它們直到客戶需要。所以下一次嘗試應該是編寫一個可以處理多個連接並同時處理所有連接的服務器。</P>
+<P>有很多方法可以處理多個客戶端連接。第一個也是最直觀的一個是使用線程。只要客戶端連接，分配一個單獨的線程來處理每個客戶端。然而線程工作太多，難以正確編碼。</P>
+<P>還有其他技術，如投票。輪詢包括監視多個套接字，以查看是否有任何事件發生。例如，服務器可能正在監視5個連接的客戶端的套接字，並且一旦它們中的任何一個發送消息，服務器就會收到事件通知並處理它。這樣它可以處理多個套接字。 winsock api提供了一個名為“select”的函數，它可以監視多個套接字的某些活動。</P>
+<P>由於我們能夠一次處理所有套接字，所以它被稱為異步套接字編程。它也被稱為事件驅動套接字編程或基於<CODE>select</CODE>的複用。</P>
+<P>選擇函數的原型是這樣的</P>
+<PRE><CODE>int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, const struct timeval *timeout);</CODE></PRE>
+<P>第一個參數是一個虛擬參數。 readfds參數是一個指向套接字數組的指針，它應該被監視以便可讀。這意味著如果readfds集中的任何套接字接收到一些數據，它就變得可讀。同樣，writefds套接字將被監控為可寫，並且應監控exceptfds套接字是否有任何錯誤。最後一個參數是timeout參數，它表示select函數在返回之前應等待的時間長度。</P>
+<P>現在select函數返回後，它會用可讀的套接字重新填充相同的readfds數組。 與writefds和exceptfds一樣。這意味著我們必須在循環中繼續調用select函數，並且每次都必須準備好要讀取的readfds，writefds和exceptfds數組的列表。</P>
+<P>套接字數組是fd_set類型的變量。 fd_set基本上是一個看起來像這樣的結構</P>
+<PRE><CODE>typedef struct fd_set {
+  u_int  fd_count;
+  SOCKET fd_array[FD_SETSIZE];
+} fd_set;</CODE></PRE>
+<P>要使用fd_set數組，必須使用以下宏。</P>
+<PRE><CODE>FD_CLR(s, *set) - Removes a socket from an fd_set structure
+FD_ISSET(s, *set) - Checks if a socket is present in an fd_set structure
+FD_SET(s, *set) - Adds a socket to an fd_set structure
+FD_ZERO(*set) - Initializes the set to the null set. This will empty an fd_set structure</CODE></PRE>
+<P>現在這是很多理論。 讓我們來看看使用所有這些理論來完成某些工作的最終代碼。</P>
+<PRE><CODE>/*
+    TCP Echo server example in winsock
+    Live Server on port 8888
+*/
+#include&lt;stdio.h&gt;
+#include&lt;winsock2.h&gt;
+ 
+#pragma comment(lib, "ws2_32.lib") //Winsock Library
+ 
+int main(int argc , char *argv[])
+{
+    WSADATA wsa;
+    SOCKET master , new_socket , client_socket[30] , s;
+    struct sockaddr_in server, address;
+    int max_clients = 30 , activity, addrlen, i, valread;
+    char *message = "ECHO Daemon v1.0 \r\n";
+     
+    //size of our receive buffer, this is string length.
+    int MAXRECV = 1024;
+    //set of socket descriptors
+    fd_set readfds;
+    //1 extra for null character, string termination
+    char *buffer;
+    buffer =  (char*) malloc((MAXRECV + 1) * sizeof(char));
+ 
+    for(i = 0 ; i &lt; 30;i++)
+    {
+        client_socket[i] = 0;
+    }
+ 
+    printf("\nInitialising Winsock...");
+    if (WSAStartup(MAKEWORD(2,2),&amp;wsa) != 0)
+    {
+        printf("Failed. Error Code : %d",WSAGetLastError());
+        exit(EXIT_FAILURE);
+    }
+     
+    printf("Initialised.\n");
+     
+    //Create a socket
+    if((master = socket(AF_INET , SOCK_STREAM , 0 )) == INVALID_SOCKET)
+    {
+        printf("Could not create socket : %d" , WSAGetLastError());
+        exit(EXIT_FAILURE);
+    }
+ 
+    printf("Socket created.\n");
+     
+    //Prepare the sockaddr_in structure
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = INADDR_ANY;
+    server.sin_port = htons( 8888 );
+     
+    //Bind
+    if( bind(master ,(struct sockaddr *)&amp;server , sizeof(server)) == SOCKET_ERROR)
+    {
+        printf("Bind failed with error code : %d" , WSAGetLastError());
+        exit(EXIT_FAILURE);
+    }
+     
+    puts("Bind done");
+ 
+    //Listen to incoming connections
+    listen(master , 3);
+     
+    //Accept and incoming connection
+    puts("Waiting for incoming connections...");
+     
+    addrlen = sizeof(struct sockaddr_in);
+     
+    while(TRUE)
+    {
+        //clear the socket fd set
+        FD_ZERO(&amp;readfds);
+  
+        //add master socket to fd set
+        FD_SET(master, &amp;readfds);
+         
+        //add child sockets to fd set
+        for (  i = 0 ; i &lt; max_clients ; i++) 
+        {
+            s = client_socket[i];
+            if(s &gt; 0)
+            {
+                FD_SET( s , &amp;readfds);
+            }
+        }
+         
+        //wait for an activity on any of the sockets, timeout is NULL , so wait indefinitely
+        activity = select( 0 , &amp;readfds , NULL , NULL , NULL);
+    
+        if ( activity == SOCKET_ERROR ) 
+        {
+            printf("select call failed with error code : %d" , WSAGetLastError());
+            exit(EXIT_FAILURE);
+        }
+          
+        //If something happened on the master socket , then its an incoming connection
+        if (FD_ISSET(master , &amp;readfds)) 
+        {
+            if ((new_socket = accept(master , (struct sockaddr *)&amp;address, (int *)&amp;addrlen))&lt;0)
+            {
+                perror("accept");
+                exit(EXIT_FAILURE);
+            }
+          
+            //inform user of socket number - used in send and receive commands
+            printf("New connection , socket fd is %d , ip is : %s , port : %d \n" , new_socket , inet_ntoa(address.sin_addr) , ntohs(address.sin_port));
+        
+            //send new connection greeting message
+            if( send(new_socket, message, strlen(message), 0) != strlen(message) ) 
+            {
+                perror("send failed");
+            }
+              
+            puts("Welcome message sent successfully");
+              
+            //add new socket to array of sockets
+            for (i = 0; i &lt; max_clients; i++) 
+            {
+                if (client_socket[i] == 0)
+                {
+                    client_socket[i] = new_socket;
+                    printf("Adding to list of sockets at index %d \n" , i);
+                    break;
+                }
+            }
+        }
+          
+        //else its some IO operation on some other socket :)
+
+        for (i = 0; i &lt; max_clients; i++) 
+        {
+            s = client_socket[i];
+            //if client presend in read sockets             
+            if (FD_ISSET( s , &amp;readfds)) 
+            {
+                //get details of the client
+                getpeername(s , (struct sockaddr*)&amp;address , (int*)&amp;addrlen);
+ 
+                //Check if it was for closing , and also read the incoming message
+                //recv does not place a null terminator at the end of the string (whilst printf %s assumes there is one).
+                valread = recv( s , buffer, MAXRECV, 0);
+                 
+                if( valread == SOCKET_ERROR)
+                {
+                    int error_code = WSAGetLastError();
+                    if(error_code == WSAECONNRESET)
+                    {
+                        //Somebody disconnected , get his details and print
+                        printf("Host disconnected unexpectedly , ip %s , port %d \n" , inet_ntoa(address.sin_addr) , ntohs(address.sin_port));
+                      
+                        //Close the socket and mark as 0 in list for reuse
+                        closesocket( s );
+                        client_socket[i] = 0;
+                    }
+                    else
+                    {
+                        printf("recv failed with error code : %d" , error_code);
+                    }
+                }
+                if ( valread == 0)
+                {
+                    //Somebody disconnected , get his details and print
+                    printf("Host disconnected , ip %s , port %d \n" , inet_ntoa(address.sin_addr) , ntohs(address.sin_port));
+                      
+                    //Close the socket and mark as 0 in list for reuse
+                    closesocket( s );
+                    client_socket[i] = 0;
+                }
+                  
+                //Echo back the message that came in
+                else
+                {
+                    //add null character, if you want to use with printf/puts or other string handling functions
+                    buffer[valread] = '\0';
+                    printf("%s:%d - %s \n" , inet_ntoa(address.sin_addr) , ntohs(address.sin_port), buffer);
+                    send( s , buffer , valread , 0 );
+                }
+            }
+        }
+    }
+     
+    closesocket(s);
+    WSACleanup();
+     
+    return 0;
+}</CODE></PRE>
+<P>這看起來像一個大項目嗎？ 編譯並運行它。 它應該顯示這樣的輸出</P>
+<PRE CLASS="console">Initialising Winsock...Initialised.
+Socket created.
+Bind done
+Waiting for incoming connections...</PRE>
+<P>現在套接字服務器已準備好並等待傳入連接。 在這一點上，我們需要使用telnet等客戶端連接到它。但是等等，我們不會使用telnet。 Telnet有一個問題，它總是在字符模式下運行，這會使我們與這個簡單程序的交互失效。 因此，獲得另一個名為putty或ncat的實用程序。Ncat是nmap自帶的netcat版本。從他們的網站下載它。 或者下載puttytel，putty telnet。</P>
+<P>如果您正在使用ncat，請像這樣連接到套接字服務器</P>
+<PRE CLASS="console">C:\&gt;ncat localhost 8888</PRE>
+<P>如果您使用的是puttytel，請啟動它並轉至Connection&gt;Telnet並選擇被動模式。這將使膩子線模式。然後回到會話選項卡並輸入主機名和端口並單擊打開。它將連接到服務器並啟動一個黑色的telnet終端。</P>
+<P>一旦客戶端程序與服務器連接，請嘗試通過先輸入一些消息，然後按回車。服務器將回復相同的消息。</P>
+<PRE CLASS="console">C:\&gt;ncat localhost 8888
+ECHO Daemon v1.0
+hello
+hello
+how are you
+how are you
+i am fine
+i am fine</PRE>
+<P>服務器終端看起來像這樣</P>
+<PRE CLASS="console">Initialising Winsock...Initialised.
+Socket created.
+Bind done
+Waiting for incoming connections...
+New connection , socket fd is 3972 , ip is : 127.0.0.1 , port : 1129
+Welcome message sent successfully
+Adding to list of sockets at index 0
+127.0.0.1:1129 - hello
+
+127.0.0.1:1129 - how are you
+
+127.0.0.1:1129 - i am fine</PRE>
+<P>現在，嘗試打開多個客戶端終端並同時連接到服務器。 服務器將能夠一起處理來自所有客戶端的請求。</P>
+<PRE CLASS="console">Initialising Winsock...Initialised.
+Socket created.
+Bind done
+Waiting for incoming connections...
+New connection , socket fd is 3972 , ip is : 127.0.0.1 , port : 1129
+Welcome message sent successfully
+Adding to list of sockets at index 0
+127.0.0.1:1129 - hello
+
+127.0.0.1:1129 - how are you
+
+127.0.0.1:1129 - i am fine
+
+New connection , socket fd is 3956 , ip is : 127.0.0.1 , port : 1130
+Welcome message sent successfully
+Adding to list of sockets at index 1
+127.0.0.1:1130 - i am the second client
+
+New connection , socket fd is 3944 , ip is : 127.0.0.1 , port : 1131
+Welcome message sent successfully
+Adding to list of sockets at index 2
+127.0.0.1:1131 - and i am the third
+
+127.0.0.1:1131 - ha ha ha</PRE>
+<P>現在這是一個長期的過程。 我會去喝杯咖啡，同時你會檢查程序是否運行正常。</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+</BODY>
+</HTML>
