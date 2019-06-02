@@ -1,0 +1,311 @@
+CPU-Z 文本报告
+-------------------------------------------------------------------------
+
+二进制
+-------------------------------------------------------------------------
+
+CPU-Z 版本			1.82.0.x32
+
+处理器
+-------------------------------------------------------------------------
+
+Number of sockets		1
+Number of threads		2
+
+APICs
+-------------------------------------------------------------------------
+
+Socket 0	
+	-- Core 0	
+		-- Thread 0	0
+		-- Thread 1	1
+
+Timers
+-------------------------------------------------------------------------
+
+	Perf timer		3.580 MHz
+	Sys timer		1.000 KHz
+
+
+Processors Information
+-------------------------------------------------------------------------
+
+Socket 1			ID = 0
+	Number of cores		1 (max 1)
+	Number of threads	2 (max 2)
+	Name			Intel Atom
+	Codename		
+	Specification		Intel(R) Atom(TM) CPU N270   @ 1.60GHz
+	Package 		Socket 437 FCBGA8
+	CPUID			6.C.2
+	Extended CPUID		6.1C
+	Core Stepping		C0
+	Technology		45 nm
+	Core Speed		1596.4 MHz
+	Instructions sets	MMX, SSE, SSE2, SSE3, SSSE3
+	L1 Data cache		24 KBytes, 6-way set associative, 64-byte line size
+	L1 Instruction cache	32 KBytes, 8-way set associative, 64-byte line size
+	L2 cache		512 KBytes, 8-way set associative, 64-byte line size
+	Max CPUID level		0000000Ah
+	Max CPUID ext. level	80000008h
+	Cache descriptor	Level 1, D, 24 KB, 2 thread(s)
+	Cache descriptor	Level 1, I, 32 KB, 2 thread(s)
+	Cache descriptor	Level 2, U, 512 KB, 2 thread(s)
+	FID/VID Control		yes
+
+
+
+	Clock Speed 0		n.a. (Core #0)
+
+
+Thread dumps
+-------------------------------------------------------------------------
+
+CPU Thread 0	
+	APIC ID			0
+	Topology		Processor ID 0, Core ID 0, Thread ID 0
+
+	CPUID		 
+	0x00000000		0x0000000A	0x756E6547	0x6C65746E	0x49656E69
+	0x00000001		0x000106C2	0x00020800	0x0040C39D	0xBFE9FBFF
+	0x00000002		0x4FBA5901	0x0E3080C0	0x00000000	0x00000000
+	0x00000003		0x00000000	0x00000000	0x00000000	0x00000000
+	0x00000004		0x00004121	0x0140003F	0x0000003F	0x00000001
+	0x00000004		0x00004122	0x01C0003F	0x0000003F	0x00000001
+	0x00000004		0x00004143	0x01C0003F	0x000003FF	0x00000001
+	0x00000005		0x00000040	0x00000040	0x00000003	0x00020220
+	0x00000006		0x00000001	0x00000002	0x00000001	0x00000000
+	0x00000007		0x00000000	0x00000000	0x00000000	0x00000000
+	0x00000008		0x00000000	0x00000000	0x00000000	0x00000000
+	0x00000009		0x00000000	0x00000000	0x00000000	0x00000000
+	0x0000000A		0x07280203	0x00000000	0x00000000	0x00002501
+	0x80000000		0x80000008	0x00000000	0x00000000	0x00000000
+	0x80000001		0x00000000	0x00000000	0x00000001	0x00100000
+	0x80000002		0x20202020	0x20202020	0x746E4920	0x52286C65
+	0x80000003		0x74412029	0x54286D6F	0x4320294D	0x4E205550
+	0x80000004		0x20303732	0x20402020	0x30362E31	0x007A4847
+	0x80000005		0x00000000	0x00000000	0x00000000	0x00000000
+	0x80000006		0x00000000	0x00000000	0x02008040	0x00000000
+	0x80000007		0x00000000	0x00000000	0x00000000	0x00000000
+	0x80000008		0x00002020	0x00000000	0x00000000	0x00000000
+
+
+CPU Thread 1	
+	APIC ID			1
+	Topology		Processor ID 0, Core ID 0, Thread ID 1
+
+	CPUID		 
+	0x00000000		0x0000000A	0x756E6547	0x6C65746E	0x49656E69
+	0x00000001		0x000106C2	0x01020800	0x0040C39D	0xBFE9FBFF
+	0x00000002		0x4FBA5901	0x0E3080C0	0x00000000	0x00000000
+	0x00000003		0x00000000	0x00000000	0x00000000	0x00000000
+	0x00000004		0x00004121	0x0140003F	0x0000003F	0x00000001
+	0x00000004		0x00004122	0x01C0003F	0x0000003F	0x00000001
+	0x00000004		0x00004143	0x01C0003F	0x000003FF	0x00000001
+	0x00000005		0x00000040	0x00000040	0x00000003	0x00020220
+	0x00000006		0x00000001	0x00000002	0x00000001	0x00000000
+	0x00000007		0x00000000	0x00000000	0x00000000	0x00000000
+	0x00000008		0x00000000	0x00000000	0x00000000	0x00000000
+	0x00000009		0x00000000	0x00000000	0x00000000	0x00000000
+	0x0000000A		0x07280203	0x00000000	0x00000000	0x00002501
+	0x80000000		0x80000008	0x00000000	0x00000000	0x00000000
+	0x80000001		0x00000000	0x00000000	0x00000001	0x00100000
+	0x80000002		0x20202020	0x20202020	0x746E4920	0x52286C65
+	0x80000003		0x74412029	0x54286D6F	0x4320294D	0x4E205550
+	0x80000004		0x20303732	0x20402020	0x30362E31	0x007A4847
+	0x80000005		0x00000000	0x00000000	0x00000000	0x00000000
+	0x80000006		0x00000000	0x00000000	0x02008040	0x00000000
+	0x80000007		0x00000000	0x00000000	0x00000000	0x00000000
+	0x80000008		0x00002020	0x00000000	0x00000000	0x00000000
+
+
+
+
+内存 SPD
+-------------------------------------------------------------------------
+
+
+监控
+-------------------------------------------------------------------------
+
+主板型号		Centerm Term-945 Series (0x000007E0 - 0x4E6DE7B0)
+
+LPCIO
+-------------------------------------------------------------------------
+
+Hardware Monitors
+-------------------------------------------------------------------------
+
+
+DMI
+-------------------------------------------------------------------------
+
+DMI BIOS		
+	vendor			Phoenix Technologies LTD
+	version			NAPA0001.86C.0059.D.1005070854
+	date			05/07/10
+	ROM size		1024 KB
+
+DMI System Information		
+	manufacturer		Intel Corporation
+	product			Calistoga & ICH7M Chipset
+	version			Not Applicable
+	serial			I945-BIOS-06-01-00
+	UUID			{00000000-0000-0000-0000-000000000000}
+	SKU			unknown
+	family			unknown
+
+DMI Baseboard		
+	vendor			Intel Corporation
+	model			Centerm Term-945 Series
+	revision		Not Applicable
+	serial			I945-Baseboard-00-00-01
+
+DMI System Enclosure		
+	manufacturer		No Enclosure
+	chassis type		1X
+	chassis serial		None
+
+DMI Processor		
+	manufacturer		Intel
+	model			unknown
+	clock speed		1600.0 MHz
+
+DMI Port Connector		
+	designation		J19 (internal)
+	designation		COM 1 (external)
+	port type		Serial Port 16550A
+	connector		9 Pin Dual Inline (pin 10 cut)
+	connector		DB-9 male
+
+DMI Port Connector		
+	designation		J1A1 (internal)
+	designation		Keyboard (external)
+	port type		Keyboard Port
+	connector		Circular DIN-8 male
+
+DMI Port Connector		
+	designation		J1A1 (internal)
+	designation		PS/2 Mouse (external)
+	port type		Mouse Port
+	connector		Circular DIN-8 male
+
+DMI Extension Slot		
+	designation		PCI Slot J8B1
+	type			PCI
+	width			32 bits
+
+DMI Extension Slot		
+	designation		PCI Slot J9B1
+	type			PCI
+	width			32 bits
+
+DMI Extension Slot		
+	designation		PEG Slot J6C1
+	type			A5
+	width			32 bits
+
+DMI Extension Slot		
+	designation		PCI Express Slot J7C1
+	type			A5
+	width			32 bits
+
+DMI Extension Slot		
+	designation		PCI Express Slot J8C1
+	type			A5
+	width			32 bits
+
+DMI OEM Strings		
+	string[0]		This is the Intel Calistoga
+	string[1]		Chipset CRB Platform
+
+DMI Physical Memory Array		
+	location		Motherboard
+	usage			System Memory
+	correction		None
+	max capacity		3072 MBytes
+	max# of devices		2
+
+DMI Memory Device		
+	designation		M1
+	format			SODIMM
+	type			unknown
+	total width		32 bits
+	data width		32 bits
+	size			1024 MBytes
+
+DMI Memory Device		
+	designation		M2
+	format			SODIMM
+	type			unknown
+
+
+存储
+-------------------------------------------------------------------------
+
+USB Devices
+-------------------------------------------------------------------------
+
+
+显卡
+-------------------------------------------------------------------------
+
+Number of adapters		0
+
+Graphic APIs
+-------------------------------------------------------------------------
+
+
+Display Adapters
+-------------------------------------------------------------------------
+
+Win32_VideoController		AdapterRAM = 0x4000000 (67108864)
+Win32_VideoController		AdapterRAM = 0x4000000 (67108864)
+
+Monitor 0	
+	Model			 ()
+	ID			MS_9001
+	Serial			
+	Manufacturing Date	Week 0, Year 2002
+	Size			142.0 inches
+	Max Resolution		1440 x 900 @ 59 Hz
+	Horizontal Freq. Range	0-0 kHz
+	Vertical Freq. Range	0-0 Hz
+	Max Pixel Clock		0 MHz
+	Gamma Factor		3.5
+
+Monitor 1	
+	Model			 ()
+	ID			MS_9001
+	Serial			
+	Manufacturing Date	Week 0, Year 2002
+	Size			142.0 inches
+	Max Resolution		1440 x 900 @ 59 Hz
+	Horizontal Freq. Range	0-0 kHz
+	Vertical Freq. Range	0-0 Hz
+	Max Pixel Clock		0 MHz
+	Gamma Factor		3.5
+
+Monitor 2	
+	Model			 ()
+	ID			MS_9001
+	Serial			
+	Manufacturing Date	Week 0, Year 2002
+	Size			142.0 inches
+	Max Resolution		1440 x 900 @ 59 Hz
+	Horizontal Freq. Range	0-0 kHz
+	Vertical Freq. Range	0-0 Hz
+	Max Pixel Clock		0 MHz
+	Gamma Factor		3.5
+
+
+软件
+-------------------------------------------------------------------------
+
+Windows 版本			Microsoft Windows XP Professional  Service Pack 3 (Build 2600) 
+DirectX 版本			9.0c
+
+
+寄存器空间
+-------------------------------------------------------------------------
+
