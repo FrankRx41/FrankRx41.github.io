@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<HTML>
+<script src="jquery.js"></script>
+<HEAD>
+</HEAD>
+
+<BODY>
+<article></article>
+<script>
+    $.get("list.txt", function(response) {
+        var list = response;
+        $("article").append("<pre>" + list + "</pre>");
+
+        var json = [];
+        var to = list;
+        var toSplit = to.split("\n");
+
+        $("article").append(toSplit.length);
+
+        $("article").append("<hr/>");
+
+
+
+        for (var i = 0; i < toSplit.length; i++) {
+            var s2 = toSplit[i].split(" ");
+
+            var d = s2[0];
+            var index = s2[1];
+
+            $("article").append(d + index);
+            var a = '<a href="index.html?date='+ d +'&index='+index + '">' + d + '</a>';
+            $("article").append(a);
+            $("article").append("<hr/>");
+        }
+
+
+
+    });
+</script>
+
+</BODY>
+<!-- Md2Html5 ver 0.40 -->
+</HTML>

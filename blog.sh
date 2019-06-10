@@ -1,6 +1,6 @@
 git status
 git add .
-git commit -m "frankrx41.github.io"
+git commit -m "new frame test"
 #git push -f origin Master
 #git push -f
 git push
